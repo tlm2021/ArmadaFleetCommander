@@ -7,4 +7,6 @@
     <string name="default_squadron_hull">5</string>
     <string name="default_squadron_points">20</string>
     <string name="title_activity_squadron_list">SquadronListActivity</string>
+    <string name="title_activity_fleet_builder">FleetBuilderActivity</string>
+    <string name="add_squadron">Add Squadron</string>
 </resources>

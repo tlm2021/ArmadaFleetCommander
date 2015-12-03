@@ -1,7 +1,6 @@
-package com.travismosley.armadafleetcommander.data.helpers;
+package com.travismosley.data.database.helper;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,33 +12,41 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
- * Created by Travis on 1/12/2015.
+ * A class for initialing, opening, and fetching a database that is packaged
+ * with the APK.
  */
-public class ArmadaDatabaseHelper extends SQLiteOpenHelper{
 
-    private static final String LOG_TAG = ArmadaDatabaseHelper.class.getSimpleName();
+public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
 
-    private static String DB_PATH = "/data/data/com.travismosley.armadafleetcommander/databases/";
-    private static String DB_NAME = "armada_fleet_commander.db";
-    private SQLiteDatabase dbArmada;
-    private final Context myContext;
+    private static final String LOG_TAG = PackagedDatabaseHelper.class.getSimpleName();
 
-    public ArmadaDatabaseHelper(Context context){
-        super(context, DB_NAME, null, 1);
-        this.myContext = context;
+    private final Context mContext;
+    private String mDbPath;
+    private SQLiteDatabase mDb;
+
+    public PackagedDatabaseHelper(Context context, String dbName){
+        super(context, dbName, null, 1);
+        mContext = context;
+        mDbPath = getDatabasePath();
+    }
+
+    private String getDatabasePath(){
+
+        // Builds and returns the path to the db in the data dir
+        return mContext.getDatabasePath(getDatabaseName()).getPath();
     }
 
     public void createDataBase() throws IOException {
 
-        File file = new File(DB_PATH + DB_NAME);
+        File file = new File(mDbPath);
         if(file.exists())
             file.delete();
 
         if (checkDataBase()) {
-            Log.i(LOG_TAG, "Found and loaded " + DB_PATH + DB_NAME + " successfully.");// do nothing - database exists
+            // Do nothing - database exists
+            Log.i(LOG_TAG, "Found and loaded " + mDbPath + " successfully.");
         } else {
             // By calling this method and empty database will be created into the default system path
             // of your application so we are gonna be able to overwrite that database with our database.
@@ -56,30 +63,27 @@ public class ArmadaDatabaseHelper extends SQLiteOpenHelper{
     private boolean checkDataBase(){
         SQLiteDatabase checkDB = null;
         try{
-            String myPath = DB_PATH + DB_NAME;
+            String myPath = mDbPath;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         }catch(SQLiteException e){
             // database doesn't exist yet
-            Log.i(LOG_TAG, "Couldn't find " + DB_PATH + DB_NAME + ". Will copy from APK.");
+            Log.i(LOG_TAG, "Couldn't find " + mDbPath + ". Will copy from APK.");
         }
 
         if (checkDB != null){
             checkDB.close();
         }
-        return checkDB != null ? true : false;
+        return checkDB != null;
     }
 
     private void copyDataBase() throws IOException{
         // Open your local db as the input stream
-        InputStream myInput = myContext.getAssets().open(DB_NAME);
-
-        // Path to the just created empty db
-        String outFileName = DB_PATH + DB_NAME;
+        InputStream myInput = mContext.getAssets().open(getDatabaseName());
 
         // Open the empty db as the output stream
-        OutputStream myOutput = new FileOutputStream(outFileName);
+        OutputStream myOutput = new FileOutputStream(mDbPath);
 
-        Log.i(LOG_TAG, "Copying " + DB_NAME + " from APK to " + DB_PATH + DB_NAME);
+        Log.i(LOG_TAG, "Copying " + getDatabaseName() + " from APK to " + mDbPath);
 
         // transfer bytes from inputfile to outputfile
         byte[] buffer = new byte[1024];
@@ -94,17 +98,31 @@ public class ArmadaDatabaseHelper extends SQLiteOpenHelper{
         myInput.close();
     }
 
-    public void openDataBase() throws SQLException{
+    public void openDataBase() throws SQLException {
         // Open the database
-        String myPath = DB_PATH + DB_NAME;
-        dbArmada = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        Log.i(LOG_TAG, "Successfully opened " + DB_PATH + DB_NAME);
+        mDb = SQLiteDatabase.openDatabase(mDbPath, null, SQLiteDatabase.OPEN_READONLY);
+        mDb = SQLiteDatabase.openDatabase(mDbPath, null, SQLiteDatabase.OPEN_READONLY);
+        Log.i(LOG_TAG, "Successfully opened " + mDbPath);
+    }
+
+    public SQLiteDatabase getDatabase(){
+        try {
+            createDataBase();
+        } catch (IOException e) {
+            throw new Error("Error creating the database;");
+        }
+        try {
+            openDataBase();
+        } catch (SQLException e) {
+            throw new Error("Error loading the database!");
+        }
+        return mDb;
     }
 
     @Override
     public synchronized void close(){
-        if(dbArmada != null)
-            dbArmada.close();
+        if(mDb != null)
+            mDb.close();
 
         super.close();
     }
@@ -115,12 +133,4 @@ public class ArmadaDatabaseHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){}
 
-    // Add your public helper methods to access and get content from the database.
-    // You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
-    // to you to create adapters for your views.
-
-    public Cursor fetchSquadronTitles(){
-        return dbArmada.rawQuery("SELECT * FROM squadron_view", new String[]{});
-    }
 }
-

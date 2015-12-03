@@ -1,19 +1,15 @@
-package com.travismosley.armadafleetcommander;
+package com.travismosley.armadafleetcommander.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.travismosley.armadafleetcommander.data.helpers.ArmadaDatabaseHelper;
-
-import java.io.IOError;
-import java.io.IOException;
-import java.sql.SQLException;
+import com.travismosley.armadafleetcommander.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,12 +24,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                launchFleetBuilder();
             }
         });
 
+    }
 
+    public void launchFleetBuilder(){
+        Intent intent = new Intent(this, FleetBuilderActivity.class);
+        this.startActivity(intent);
     }
 
     @Override

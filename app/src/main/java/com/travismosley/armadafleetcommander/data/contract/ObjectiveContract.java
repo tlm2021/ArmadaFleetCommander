@@ -1,9 +1,9 @@
-package com.travismosley.armadafleetcommander.data.contracts;
+package com.travismosley.armadafleetcommander.data.contract;
 
 import android.provider.BaseColumns;
 
 /**
- * Created by Travis on 30/11/2015.
+ * Contract for fetching Objective card information from the Db
  */
 
 public final class ObjectiveContract {
