@@ -40,7 +40,6 @@
             android:text="@string/default_squadron_speed"
             android:id="@+id/list_item_squadron_speed"
             android:layout_gravity="center_vertical"
-            android:numeric="integer"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
 
@@ -51,7 +50,6 @@
             android:text="@string/default_squadron_hull"
             android:id="@+id/list_item_squadron_hull"
             android:layout_gravity="center_vertical"
-            android:numeric="integer"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
 
@@ -61,7 +59,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/list_item_squadron_points"
             android:layout_gravity="center_vertical|right"
-            android:numeric="integer"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="@string/default_squadron_points" />

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A Facade class for extracting Armada informating from the database as
+ * A Facade class for extracting Armada information from the database as
  * internal classes. Helps out with encapsulation and type conversion;
  */
 
@@ -49,7 +49,6 @@ public class ArmadaDatabaseFacade{
         for (int i = 0; i < cursor.getCount(); i++) {
             Squadron squad = new Squadron();
             cursor.moveToPosition(i);
-
             squad.mSquadronId = getInt(SquadronEntry.COLUMN_NAME_ID, cursor);
             squad.mTitle = getString(SquadronEntry.COLUMN_NAME_TITLE, cursor);
             squad.mClass = getString(SquadronEntry.COLUMN_NAME_CLASS_TITLE, cursor);
@@ -60,6 +59,7 @@ public class ArmadaDatabaseFacade{
             squadrons.add(squad);
         }
 
+        cursor.close();
         return squadrons;
     }
 
