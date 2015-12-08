@@ -1,6 +1,7 @@
 package com.travismosley.armadafleetcommander.adaptor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,25 +19,25 @@ import java.util.List;
 public class SquadronsAdapter extends ArrayAdapter<Squadron> {
     /* Adapts a Squadron objects for a ListView */
 
-    private final Context context;
-    private List<Squadron> squadrons;
+    private final Context mContext;
+    private List<Squadron> mSquadrons;
 
     public SquadronsAdapter(Context context, List<Squadron> squadrons) {
         super(context, -1, squadrons);
-        this.context = context;
-        this.squadrons = squadrons;
+        mContext = context;
+        mSquadrons = squadrons;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Squadron squad = squadrons.get(position);
+        Squadron squad = mSquadrons.get(position);
         View squadView;
 
         // Recycle the view if possible
         if (convertView != null) {
             squadView = convertView;
         } else {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             squadView = inflater.inflate(R.layout.list_item_squadron, parent, false);
         }
 
@@ -59,6 +60,10 @@ public class SquadronsAdapter extends ArrayAdapter<Squadron> {
         // Set the point value
         TextView pointsView = (TextView) squadView.findViewById(R.id.list_item_squadron_points);
         pointsView.setText(Integer.toString(squad.mPointCost));
+
+        if (squad.isUnique()){
+            squadView.setBackgroundColor(Color.parseColor("#FFFFC9AF"));
+        }
 
         return squadView;
 

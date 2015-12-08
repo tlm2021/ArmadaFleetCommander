@@ -18,6 +18,10 @@ public class Squadron implements Parcelable {
 
     public Squadron(){}
 
+    public boolean isUnique(){
+        return mUnique;
+    }
+
     protected Squadron(Parcel in) {
         mSquadronId = in.readInt();
         mTitle = in.readString();

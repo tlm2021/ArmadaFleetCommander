@@ -14,11 +14,13 @@ import java.util.List;
  */
 public class Fleet implements Parcelable {
 
+    public int mFactionId;
     public int mPointLimit;
     public List<Squadron> mSquadrons;
     public List<Ship> mShips;
 
-    public Fleet() {
+    public Fleet(int factionId) {
+        mFactionId = factionId;
         mPointLimit = 400;
         mSquadrons = new ArrayList<>();
         mShips = new ArrayList<>();
@@ -26,6 +28,15 @@ public class Fleet implements Parcelable {
 
     public void addSquadron(Squadron squadron){
         mSquadrons.add(squadron);
+    }
+
+    public boolean hasSquadron(int squadronId){
+        for (int i = 0; i < mSquadrons.size(); i++){
+            if (mSquadrons.get(i).mSquadronId == squadronId){
+                return true;
+            }
+        }
+        return false;
     }
 
     protected Fleet(Parcel in) {

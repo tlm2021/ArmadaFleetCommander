@@ -9,9 +9,20 @@
     tools:context=".fragment.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_marginTop="48dp"
+        android:id="@+id/btn_build_rebel"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/title_rebel" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_imperial"
+        android:id="@+id/btn_build_imperial"
+        android:layout_below="@+id/btn_build_rebel"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

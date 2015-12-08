@@ -3,9 +3,12 @@ package com.travismosley.armadafleetcommander.data;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQuery;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.travismosley.armadafleetcommander.data.contract.SquadronContract.SquadronEntry;
+import com.travismosley.armadafleetcommander.data.query.SquadronQueryBuilder;
 import com.travismosley.armadafleetcommander.game.components.Squadron;
 import com.travismosley.logging.database.ColumnIndexLogger;
 
@@ -20,19 +23,26 @@ import java.util.List;
 public class ArmadaDatabaseFacade{
 
     private static final String LOG_TAG = ArmadaDatabaseFacade.class.getSimpleName();
-    private SQLiteDatabase mArmadaDb;
+    private ArmadaDatabaseHelper mArmadaDbHelper;
     private final ColumnIndexLogger mIdxLogger = new ColumnIndexLogger(LOG_TAG);
 
     public ArmadaDatabaseFacade(Context context) {
+        mArmadaDbHelper = new ArmadaDatabaseHelper(context);
+    }
 
-        ArmadaDatabaseHelper dbHelper = new ArmadaDatabaseHelper(context);
-        mArmadaDb = dbHelper.getDatabase();
+    public List<Squadron> getSquadronsForFaction(int factionId){
+        SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
+        return getSquadronsForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
     public List<Squadron> getSquadrons() {
+        SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
+        return getSquadronsForQuery(queryBuilder.queryAll());
+    }
 
-        Cursor cursor = mArmadaDb.rawQuery("SELECT * FROM " + SquadronEntry.TABLE_NAME,
-                null);
+    private List<Squadron> getSquadronsForQuery(String query){
+        SQLiteDatabase db = mArmadaDbHelper.getDatabase();
+        Cursor cursor = db.rawQuery(query, null);
         List<Squadron> squadrons = new ArrayList<>();
 
         Log.d(LOG_TAG, "Found " + cursor.getCount() + " squadrons.");
@@ -60,6 +70,7 @@ public class ArmadaDatabaseFacade{
         }
 
         cursor.close();
+        db.close();
         return squadrons;
     }
 
@@ -74,6 +85,6 @@ public class ArmadaDatabaseFacade{
     }
 
     private boolean getBoolean(String columnTitle, Cursor cursor){
-        return getInt(columnTitle, cursor) == 0;
+        return getInt(columnTitle, cursor) != 0;
     }
 }

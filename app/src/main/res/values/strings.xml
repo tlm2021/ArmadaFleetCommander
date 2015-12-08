@@ -9,4 +9,6 @@
     <string name="title_activity_squadron_list">SquadronListActivity</string>
     <string name="title_activity_fleet_builder">FleetBuilderActivity</string>
     <string name="add_squadron">Add Squadron</string>
+    <string name="title_imperial">Imperial</string>
+    <string name="title_rebel">Rebel</string>
 </resources>

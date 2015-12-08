@@ -10,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.travismosley.armadafleetcommander.R;
+import com.travismosley.armadafleetcommander.fragment.MainActivityFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements MainActivityFragment.OnFleetBuilderRequestedCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,20 +21,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchFleetBuilder();
-            }
-        });
-
     }
 
-    public void launchFleetBuilder(){
+    private void launchFleetBuilder(int factionId){
         Intent intent = new Intent(this, FleetBuilderActivity.class);
+        intent.putExtra("KEY_FACTION_ID", factionId);
         this.startActivity(intent);
+    }
+
+    public void onFleetBuilderRequested(int factionId){
+        launchFleetBuilder(factionId);
     }
 
     @Override

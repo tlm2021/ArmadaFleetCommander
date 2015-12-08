@@ -18,17 +18,19 @@ public class FleetBuilderActivity extends AppCompatActivity
     implements SquadronSelectorFragment.OnSquadronSelectedListener,
                FleetBuilderFragment.OnAddSquadronClickedListener {
 
+    private final static String LOG_TAG = FleetBuilderActivity.class.getSimpleName();
+
     public Fleet mFleet;
     private FleetBuilderFragment mFleetFrag;
-
-    private final static String LOG_TAG = FleetBuilderActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fleet_builder);
 
-        mFleet = new Fleet();
+        Bundle args = getIntent().getExtras();
+        mFleet = new Fleet(args.getInt("KEY_FACTION_ID"));
+
         mFleetFrag = createFleetFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fleet_builder_fragment_container, mFleetFrag).commit();
@@ -58,7 +60,12 @@ public class FleetBuilderActivity extends AppCompatActivity
 
         // Initialize the squadron fragment
         SquadronSelectorFragment squadronFragment = new SquadronSelectorFragment();
-        squadronFragment.setArguments(getIntent().getExtras());
+        Bundle args = getIntent().getExtras();
+        if (args == null){
+            args = new Bundle();
+        }
+        args.putParcelable("KEY_FLEET", mFleet);
+        squadronFragment.setArguments(args);
 
         // Replace the current fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

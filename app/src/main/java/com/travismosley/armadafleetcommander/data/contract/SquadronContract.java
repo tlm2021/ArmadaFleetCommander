@@ -18,7 +18,7 @@ public class SquadronContract {
         public static final String COLUMN_NAME_CLASS_TITLE = "class_title";
         public static final String COLUMN_NAME_SPEED = "speed";
         public static final String COLUMN_NAME_HULL = "hull";
-        public static final String COLUMN_NAME_FACTION_TITLE = "faction_title";
+        public static final String COLUMN_NAME_FACTION_ID = "faction_id";
     }
 
 }

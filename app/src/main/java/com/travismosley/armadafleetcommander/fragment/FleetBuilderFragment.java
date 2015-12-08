@@ -29,7 +29,7 @@ public class FleetBuilderFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFleet = getArguments().getParcelable("KEY_FLEET");
         setRetainInstance(true);
@@ -68,7 +68,9 @@ public class FleetBuilderFragment extends Fragment {
 
         // Get a SquadronAdapater, and set it on the list
         ListView fleetList = (ListView) fleetFragment.findViewById(R.id.listView_selected_squadrons);
-        fleetList.setAdapter(new SquadronsAdapter(getActivity(), mFleet.mSquadrons));
+        fleetList.setAdapter(
+                new SquadronsAdapter(getActivity(),
+                mFleet.mSquadrons));
 
         return fleetFragment;
     }
