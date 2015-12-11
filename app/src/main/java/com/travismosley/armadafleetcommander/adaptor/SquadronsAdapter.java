@@ -42,27 +42,29 @@ public class SquadronsAdapter extends ArrayAdapter<Squadron> {
         }
 
         // Set the squadron name
-        TextView nameView = (TextView) squadView.findViewById(R.id.list_item_squadron_title);
+        TextView nameView = (TextView) squadView.findViewById(R.id.squadron_title);
         nameView.setText(squad.mTitle);
 
         // Set the squadron class name
-        TextView classView = (TextView) squadView.findViewById(R.id.list_item_squadron_class);
+        TextView classView = (TextView) squadView.findViewById(R.id.squadron_class);
         classView.setText(squad.mClass);
 
         // Set the hull value
-        TextView hullView = (TextView) squadView.findViewById(R.id.list_item_squadron_hull);
+        TextView hullView = (TextView) squadView.findViewById(R.id.squadron_hull);
         hullView.setText((Integer.toString(squad.mHull)));
 
         // Set the speed value
-        TextView speedView = (TextView) squadView.findViewById(R.id.list_item_squadron_speed);
+        TextView speedView = (TextView) squadView.findViewById(R.id.squadron_speed);
         speedView.setText(Integer.toString(squad.mSpeed));
 
         // Set the point value
-        TextView pointsView = (TextView) squadView.findViewById(R.id.list_item_squadron_points);
+        TextView pointsView = (TextView) squadView.findViewById(R.id.squadron_points);
         pointsView.setText(Integer.toString(squad.mPointCost));
 
         if (squad.isUnique()){
-            squadView.setBackgroundColor(Color.parseColor("#FFFFC9AF"));
+            squadView.setBackgroundColor(Color.parseColor("#FFFFC9"));
+        } else {
+            squadView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         return squadView;

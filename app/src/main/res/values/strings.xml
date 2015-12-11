@@ -11,4 +11,10 @@
     <string name="add_squadron">Add Squadron</string>
     <string name="title_imperial">Imperial</string>
     <string name="title_rebel">Rebel</string>
+    <string name="squad_points_allowed_default">133</string>
+    <string name="squad_points_used_default">56</string>
+    <string name="squad_points_divider_default">/</string>
+    <string name="squad_selector_title_default">Select A Squadron...</string>
+    <string name="key_fleet">KEY_FLEET</string>
+    <string name="key_faction_id">KEY_FACTION_ID</string>
 </resources>

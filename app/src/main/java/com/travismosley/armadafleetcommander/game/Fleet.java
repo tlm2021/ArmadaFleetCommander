@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simple container class for Fleet properties
+ * Class encapsulating a fleet, it's contents, and other properties
  */
+
 public class Fleet implements Parcelable {
 
     public int mFactionId;
@@ -26,17 +27,46 @@ public class Fleet implements Parcelable {
         mShips = new ArrayList<>();
     }
 
+    public int squadronPointLimit(){
+        // You can only spend 1/3 the max points on squadrons.
+        return Math.round(mPointLimit / 3f);
+    }
+
+    public int squadronPoints(){
+        int total = 0;
+        for (int i=0; i < mSquadrons.size(); i++){
+            total += mSquadrons.get(i).mPointCost;
+        }
+        return total;
+    }
+
     public void addSquadron(Squadron squadron){
         mSquadrons.add(squadron);
     }
 
-    public boolean hasSquadron(int squadronId){
+    public boolean hasSquadron(Squadron squadron){
+        // Check if this fleet already has a squadron with the same id
         for (int i = 0; i < mSquadrons.size(); i++){
-            if (mSquadrons.get(i).mSquadronId == squadronId){
+            if (mSquadrons.get(i).mSquadronId == squadron.mSquadronId){
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean canAddSquadron(Squadron squadron){
+
+        // Can't have two instances of the same squadron
+        if (squadron.isUnique() && this.hasSquadron(squadron)){
+            return false;
+        }
+
+        // Check if the squadron fits under the point limit
+        if (this.squadronPoints() + squadron.mPointCost > this.squadronPointLimit()){
+            return false;
+        }
+
+        return true;
     }
 
     protected Fleet(Parcel in) {

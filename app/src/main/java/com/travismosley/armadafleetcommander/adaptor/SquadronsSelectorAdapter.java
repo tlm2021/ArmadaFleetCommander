@@ -29,8 +29,8 @@ public class SquadronsSelectorAdapter extends SquadronsAdapter {
         Squadron squad = mSquadrons.get(position);
         View squadView = super.getView(position, convertView, parent);
 
-        // If the fleet already has the squadron, and the squadron is unique, don't let the user re-add it
-        if (squad.isUnique() && mFleet.hasSquadron(squad.mSquadronId)){
+        // Check if the user is allowed to add the squadron
+        if (!mFleet.canAddSquadron(squad)){
             squadView.setBackgroundColor(Color.parseColor("#717171"));
         }
 

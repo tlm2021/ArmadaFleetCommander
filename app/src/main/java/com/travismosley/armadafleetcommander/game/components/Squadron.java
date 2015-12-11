@@ -32,6 +32,10 @@ public class Squadron implements Parcelable {
         mPointCost = in.readInt();
     }
 
+    public int pointCost(){
+        return mPointCost;
+    }
+
     @Override
     public int describeContents() {
         return 0;

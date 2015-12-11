@@ -31,7 +31,7 @@ public class FleetBuilderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFleet = getArguments().getParcelable("KEY_FLEET");
+        mFleet = getArguments().getParcelable(getString(R.string.key_fleet));
         setRetainInstance(true);
     }
 
@@ -76,7 +76,7 @@ public class FleetBuilderFragment extends Fragment {
     }
 
     public void addSquadron(Squadron squadron){
-        mFleet.mSquadrons.add(squadron);
+        mFleet.addSquadron(squadron);
     }
 
 

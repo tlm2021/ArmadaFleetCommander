@@ -29,7 +29,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         setContentView(R.layout.activity_fleet_builder);
 
         Bundle args = getIntent().getExtras();
-        mFleet = new Fleet(args.getInt("KEY_FACTION_ID"));
+        mFleet = new Fleet(args.getInt(getString(R.string.key_faction_id)));
 
         mFleetFrag = createFleetFragment();
         getSupportFragmentManager().beginTransaction()
@@ -43,7 +43,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         if (args == null){
             args = new Bundle();
         }
-        args.putParcelable("KEY_FLEET", mFleet);
+        args.putParcelable(getString(R.string.key_fleet), mFleet);
         fleetFragment.setArguments(args);
         return fleetFragment;
     }
@@ -64,7 +64,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         if (args == null){
             args = new Bundle();
         }
-        args.putParcelable("KEY_FLEET", mFleet);
+        args.putParcelable(getString(R.string.key_fleet), mFleet);
         squadronFragment.setArguments(args);
 
         // Replace the current fragment
