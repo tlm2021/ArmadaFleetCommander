@@ -27,7 +27,9 @@ public class SquadronQueryBuilder {
     };
 
     private final static String mGroupBy = null;
-    private final static String mOrderBy = SquadronEntry.COLUMN_NAME_CLASS_TITLE;
+    private final static String mOrderBy = SquadronEntry.COLUMN_NAME_CLASS_TITLE + "," +
+                                           SquadronEntry.COLUMN_NAME_IS_UNIQUE + "," +
+                                           SquadronEntry.COLUMN_NAME_TITLE;
 
     public SquadronQueryBuilder(){
         mQueryBuilder = new SQLiteQueryBuilder();

@@ -36,6 +36,10 @@ public class Squadron implements Parcelable {
         return mPointCost;
     }
 
+    public String toString(){
+        return "Squadron<" + mTitle + ", " + mPointCost + ">";
+    }
+
     @Override
     public int describeContents() {
         return 0;

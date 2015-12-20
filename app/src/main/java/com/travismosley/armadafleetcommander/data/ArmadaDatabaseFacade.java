@@ -3,14 +3,12 @@ package com.travismosley.armadafleetcommander.data;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQuery;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.travismosley.armadafleetcommander.data.contract.SquadronContract.SquadronEntry;
 import com.travismosley.armadafleetcommander.data.query.SquadronQueryBuilder;
 import com.travismosley.armadafleetcommander.game.components.Squadron;
-import com.travismosley.logging.database.ColumnIndexLogger;
+import com.travismosley.android.data.database.logging.ColumnIndexLogger;
 
 import java.util.ArrayList;
 import java.util.List;

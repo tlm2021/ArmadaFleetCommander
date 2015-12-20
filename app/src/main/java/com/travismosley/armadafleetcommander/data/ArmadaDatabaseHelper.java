@@ -2,7 +2,7 @@ package com.travismosley.armadafleetcommander.data;
 
 import android.content.Context;
 
-import com.travismosley.data.database.helper.PackagedDatabaseHelper;
+import com.travismosley.android.data.database.helper.PackagedDatabaseHelper;
 
 /**
  * This class helps initialize and open the database;

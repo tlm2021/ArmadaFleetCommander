@@ -1,4 +1,4 @@
-package com.travismosley.logging.database;
+package com.travismosley.android.data.database.logging;
 
 import android.database.Cursor;
 import android.util.Log;

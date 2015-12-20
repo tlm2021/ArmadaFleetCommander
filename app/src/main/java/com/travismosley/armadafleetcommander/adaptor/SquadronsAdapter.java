@@ -2,6 +2,7 @@ package com.travismosley.armadafleetcommander.adaptor;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class SquadronsAdapter extends ArrayAdapter<Squadron> {
     /* Adapts a Squadron objects for a ListView */
+
+    private final static String LOG_TAG = SquadronsAdapter.class.getSimpleName();
 
     private final Context mContext;
     private List<Squadron> mSquadrons;
@@ -68,6 +71,11 @@ public class SquadronsAdapter extends ArrayAdapter<Squadron> {
         }
 
         return squadView;
+    }
 
+    public void removeSquadronAtPos(int position){
+        Log.d(LOG_TAG, "Removing squadron at position " + position);
+        mSquadrons.remove(position);
+        notifyDataSetChanged();
     }
 }

@@ -3,12 +3,15 @@ package com.travismosley.armadafleetcommander.fragment;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.travismosley.android.ui.event.SwipeEvent;
+import com.travismosley.android.ui.listener.OnSwipeListener;
 import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.adaptor.SquadronsAdapter;
 import com.travismosley.armadafleetcommander.game.Fleet;
@@ -20,12 +23,47 @@ import com.travismosley.armadafleetcommander.game.components.Squadron;
 
 public class FleetBuilderFragment extends Fragment {
 
+    private final static String LOG_TAG = FleetBuilderFragment.class.getSimpleName();
+
     public Fleet mFleet;
-    OnAddSquadronClickedListener mAddSquadronCallback;
+    private SquadronsAdapter mSquadronsAdaptor;
+
+    OnAddSquadronListener mAddSquadronCallback;
+
+    private class SwipeListener extends OnSwipeListener{
+
+        // Listen for swipe events and trigger the appropriate actions
+        // These should return false if we don't do any event handling, true otherwise
+        public boolean onSwipeUp(View v, SwipeEvent event){
+            Log.d(LOG_TAG, "Running onSwipeUp");
+            return false;}
+        public boolean onSwipeDown(View v, SwipeEvent event){
+            Log.d(LOG_TAG, "Running onSwipeDown");
+            return false;
+        };
+        public boolean onSwipeLeft(View v, SwipeEvent event){
+            Log.d(LOG_TAG, "Running onSwipeLeft");
+            return false;
+        };
+
+        public boolean onSwipeRight(View v, SwipeEvent event){
+
+            Log.d(LOG_TAG, "Running onSwipeRight");
+            // The view will be our squadron list
+            ListView view = (ListView) v;
+
+            // Get the position of the item swiped and remove it
+            int swipePos = view.pointToPosition((int) event.sourceX(), (int) event.sourceY());
+            if (swipePos >= 0){
+                removeSquadron(swipePos);
+            }
+            return true;
+        }
+    }
 
     // onAddSquadronClicked callback
-    public interface OnAddSquadronClickedListener{
-        void onAddSquadronClicked();
+    public interface OnAddSquadronListener{
+        void onAddSquadron();
     }
 
     @Override
@@ -41,10 +79,10 @@ public class FleetBuilderFragment extends Fragment {
 
         // Make sure the attaching activity has implemented the interface
         try{
-            mAddSquadronCallback = (OnAddSquadronClickedListener) activity;
+            mAddSquadronCallback = (OnAddSquadronListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnAddSquadronClickedListener");
+                    + " must implement OnAddSquadronListener");
         }
     }
 
@@ -62,21 +100,30 @@ public class FleetBuilderFragment extends Fragment {
         btnAddSquadron.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View btn){
-                mAddSquadronCallback.onAddSquadronClicked();
+                mAddSquadronCallback.onAddSquadron();
             }
         });
 
         // Get a SquadronAdapater, and set it on the list
         ListView fleetList = (ListView) fleetFragment.findViewById(R.id.listView_selected_squadrons);
-        fleetList.setAdapter(
-                new SquadronsAdapter(getActivity(),
-                mFleet.mSquadrons));
+        mSquadronsAdaptor = new SquadronsAdapter(getActivity(), mFleet.mSquadrons);
+        fleetList.setAdapter(mSquadronsAdaptor);
+
+        fleetList.setOnTouchListener(new SwipeListener());
 
         return fleetFragment;
     }
 
     public void addSquadron(Squadron squadron){
+
+        Log.d(LOG_TAG, "Adding squadron " + squadron);
         mFleet.addSquadron(squadron);
+    }
+
+    public void removeSquadron(int position){
+
+        Log.d(LOG_TAG, "Calling removeSquadron");
+        mSquadronsAdaptor.removeSquadronAtPos(position);
     }
 
 

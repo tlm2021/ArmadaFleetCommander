@@ -33,6 +33,7 @@ public class Fleet implements Parcelable {
     }
 
     public int squadronPoints(){
+        // Sums up the total points spent on squadrons so far
         int total = 0;
         for (int i=0; i < mSquadrons.size(); i++){
             total += mSquadrons.get(i).mPointCost;
@@ -56,18 +57,20 @@ public class Fleet implements Parcelable {
 
     public boolean canAddSquadron(Squadron squadron){
 
-        // Can't have two instances of the same squadron
+        // Can't have two instances of a unique squadron
         if (squadron.isUnique() && this.hasSquadron(squadron)){
             return false;
         }
 
         // Check if the squadron fits under the point limit
-        if (this.squadronPoints() + squadron.mPointCost > this.squadronPointLimit()){
+        else if (this.squadronPoints() + squadron.mPointCost > this.squadronPointLimit()){
             return false;
         }
 
         return true;
     }
+
+    /* Parcel support */
 
     protected Fleet(Parcel in) {
         mPointLimit = in.readInt();

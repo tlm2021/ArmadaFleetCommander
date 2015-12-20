@@ -1,4 +1,4 @@
-package com.travismosley.data.database.helper;
+package com.travismosley.android.data.database.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

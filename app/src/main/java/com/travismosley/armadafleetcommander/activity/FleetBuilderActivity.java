@@ -16,7 +16,7 @@ import com.travismosley.armadafleetcommander.game.components.Squadron;
 
 public class FleetBuilderActivity extends AppCompatActivity
     implements SquadronSelectorFragment.OnSquadronSelectedListener,
-               FleetBuilderFragment.OnAddSquadronClickedListener {
+               FleetBuilderFragment.OnAddSquadronListener {
 
     private final static String LOG_TAG = FleetBuilderActivity.class.getSimpleName();
 
@@ -51,12 +51,11 @@ public class FleetBuilderActivity extends AppCompatActivity
     public void onSquadronSelected(Squadron squadron){
 
         mFleetFrag.addSquadron(squadron);
-
         getSupportFragmentManager().popBackStackImmediate();
     }
 
     // Open up the squadron list when needed
-    public void onAddSquadronClicked(){
+    public void onAddSquadron(){
 
         // Initialize the squadron fragment
         SquadronSelectorFragment squadronFragment = new SquadronSelectorFragment();
