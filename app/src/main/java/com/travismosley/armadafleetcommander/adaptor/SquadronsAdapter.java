@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -24,9 +26,12 @@ public class SquadronsAdapter extends ArrayAdapter<Squadron> {
 
     private final Context mContext;
     private List<Squadron> mSquadrons;
+    private int mNextToAnimateIn;
 
     public SquadronsAdapter(Context context, List<Squadron> squadrons) {
         super(context, -1, squadrons);
+
+        Log.d(LOG_TAG, "Initialize for " + squadrons);
         mContext = context;
         mSquadrons = squadrons;
     }
@@ -73,7 +78,13 @@ public class SquadronsAdapter extends ArrayAdapter<Squadron> {
         return squadView;
     }
 
-    public void removeSquadronAtPos(int position){
+    public void addSquadron(Squadron squadron) {
+        Log.d(LOG_TAG, "addSquadron on " + squadron);
+        mSquadrons.add(squadron);
+        notifyDataSetChanged();
+    }
+
+    public void removeSquadron(int position){
         Log.d(LOG_TAG, "Removing squadron at position " + position);
         mSquadrons.remove(position);
         notifyDataSetChanged();

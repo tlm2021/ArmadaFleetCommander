@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.travismosley.android.ui.event.SwipeEvent;
+import com.travismosley.android.ui.event.SwipeEvent.Direction;
 
 /**
  * An abstract class for configuring and detecting swipe event callbacks
@@ -14,8 +15,8 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
     private static final String LOG_TAG = OnSwipeListener.class.getSimpleName();
 
     // The distance a swipe must be to register as a swipe
-    public int mHorizontalThreshold = 50;
-    public int mVerticalThreshold = 50;
+    public int mHorizontalThreshold = 400;
+    public int mVerticalThreshold = 400;
 
     // Tolerance is the angle (in degrees) the swipe motion can deviate from perfect
     // and still register has a horizontal or vertical swipe.
@@ -23,6 +24,9 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
     // These angles cannot be greater than 45
     private int mVerticalTolerance = 45;
     private int mHorizontalTolerance = 45;
+
+    private int mMaxVerticalDeviation = 100;
+    private int mMaxHorizontalDeviation = 100;
 
     private SwipeEvent mCurrentSwipe;
 
@@ -55,11 +59,14 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
         switch(event.getActionMasked()){
             case (MotionEvent.ACTION_DOWN):
 
+                // One a down action, initialize a new SwipeEvent
                 Log.d(LOG_TAG, "Saw ACTION_DOWN");
                 mCurrentSwipe = new SwipeEvent(event);
                 return true;
 
             case (MotionEvent.ACTION_MOVE):
+
+                // On a move action, update our SwipeEvent
                 Log.d(LOG_TAG, "Saw ACTION_MOVE");
                 mCurrentSwipe.updateFrom(event);
                 return true;
@@ -67,43 +74,52 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
             case (MotionEvent.ACTION_UP):
 
                 Log.d(LOG_TAG, "Saw ACTION_UP");
-
                 Log.d(LOG_TAG, "Processing " + mCurrentSwipe);
 
                 // Get the swipe direction, and start working out what to call
-                SwipeEvent.Direction swipeDir = mCurrentSwipe.direction();
-                if (swipeDir == SwipeEvent.Direction.NONE) {
-                    return false;
+                Direction swipeDir = mCurrentSwipe.direction();
 
-                } else if (swipeDir == SwipeEvent.Direction.UP || swipeDir == SwipeEvent.Direction.DOWN) {
-                    // This is a vertical swipe. Test accordingly
-                    // Check it hits our swipe length threshold and angle tolerance
-                    if (mCurrentSwipe.length() < mVerticalThreshold ||
-                            mCurrentSwipe.deviationAngle() > mVerticalTolerance) {
+                switch (swipeDir){
+
+                    case NONE:
                         return false;
-                    }
 
-                    // Call the appropriate callback
-                    if (swipeDir == SwipeEvent.Direction.UP) {
-                        return this.onSwipeUp(view, mCurrentSwipe);
-
-                    } else {
-                        return this.onSwipeDown(view, mCurrentSwipe);
-                    }
-                } else {
-                    // This is a horizontal swipe. Test accordingly
-                    if (mCurrentSwipe.length() < mHorizontalThreshold ||
-                            mCurrentSwipe.deviationAngle() > mHorizontalTolerance) {
+                    case UP:
+                    case DOWN:
+                        // This is a vertical swipe. Test accordingly
+                        // Check it hits our swipe length threshold and angle tolerance
+                        if (mCurrentSwipe.length() < mVerticalThreshold ||
+                                mCurrentSwipe.deviationAngle() > mVerticalTolerance ||
+                                mCurrentSwipe.maxDeviationX() > mMaxVerticalDeviation) {
                         return false;
-                    }
+                        }
 
-                    // Call the appropriate callback
-                    if (swipeDir == SwipeEvent.Direction.LEFT) {
-                        return this.onSwipeLeft(view, mCurrentSwipe);
+                        // Call the appropriate callback
+                        if (swipeDir == Direction.UP) {
+                            return this.onSwipeUp(view, mCurrentSwipe);
 
-                    } else {
-                        return this.onSwipeRight(view, mCurrentSwipe);
-                    }
+                        } else {
+                            return this.onSwipeDown(view, mCurrentSwipe);
+                        }
+
+                    case LEFT:
+                    case RIGHT:
+
+                        // This is a horizontal swipe. Test accordingly
+                        // Check it hits our swipe length threshold and angle tolerance
+                        if (mCurrentSwipe.length() < mHorizontalThreshold ||
+                                mCurrentSwipe.deviationAngle() > mHorizontalTolerance ||
+                                mCurrentSwipe.maxDeviationY() > mMaxHorizontalDeviation) {
+                            return false;
+                        }
+
+                        // Call the appropriate callback
+                        if (swipeDir == Direction.LEFT) {
+                            return this.onSwipeLeft(view, mCurrentSwipe);
+
+                        } else {
+                            return this.onSwipeRight(view, mCurrentSwipe);
+                        }
                 }
         }
         return false;

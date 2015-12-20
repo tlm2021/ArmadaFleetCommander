@@ -16,7 +16,6 @@ import com.travismosley.armadafleetcommander.data.ArmadaDatabaseFacade;
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.components.Squadron;
 
-import org.w3c.dom.Text;
 
 /**
  * A fragment for selecting squadrons

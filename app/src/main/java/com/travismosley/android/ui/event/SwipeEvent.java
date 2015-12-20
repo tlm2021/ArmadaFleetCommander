@@ -18,6 +18,9 @@ public class SwipeEvent {
     private float mX;
     private float mY;
 
+    private float maxDeviationX;
+    private float maxDeviationY;
+
     private Vector2D mSwipeVector;
     private long mDuration;
 
@@ -39,17 +42,21 @@ public class SwipeEvent {
         // Get a vector for the swipe event
         mSwipeVector = new Vector2D(mX-mSourceX, mY-mSourceY);
 
+        if (Math.abs(mSwipeVector.x) > maxDeviationX){
+            maxDeviationX = Math.abs(mSwipeVector.x);
+        }
+
+        if (Math.abs(mSwipeVector.y) > maxDeviationY){
+            maxDeviationY = Math.abs(mSwipeVector.y);
+        }
+
         // Set how long the Swipe motion took
         mDuration = event.getEventTime() - event.getDownTime();
     }
 
-    public float x (){
-        return mX;
-    }
+    public float x (){ return mX; }
 
-    public float y (){
-        return mY;
-    }
+    public float y (){ return mY; }
 
     public float sourceX(){
         return mSourceX;
@@ -58,6 +65,10 @@ public class SwipeEvent {
     public float sourceY(){
         return mSourceY;
     }
+
+    public float maxDeviationX() { return maxDeviationX; }
+
+    public float maxDeviationY(){ return maxDeviationY; }
 
     public Direction direction(){
 
