@@ -5,8 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.travismosley.armadafleetcommander.data.contract.ShipContract.ShipEntry;
 import com.travismosley.armadafleetcommander.data.contract.SquadronContract.SquadronEntry;
+import com.travismosley.armadafleetcommander.data.query.ShipQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.SquadronQueryBuilder;
+import com.travismosley.armadafleetcommander.game.components.Ship;
 import com.travismosley.armadafleetcommander.game.components.Squadron;
 import com.travismosley.android.data.database.logging.ColumnIndexLogger;
 
@@ -28,14 +31,14 @@ public class ArmadaDatabaseFacade{
         mArmadaDbHelper = new ArmadaDatabaseHelper(context);
     }
 
-    public List<Squadron> getSquadronsForFaction(int factionId){
-        SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
-        return getSquadronsForQuery(queryBuilder.queryWhereFactionId(factionId));
-    }
-
     public List<Squadron> getSquadrons() {
         SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
         return getSquadronsForQuery(queryBuilder.queryAll());
+    }
+
+    public List<Squadron> getSquadronsForFaction(int factionId){
+        SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
+        return getSquadronsForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
     private List<Squadron> getSquadronsForQuery(String query){
@@ -70,6 +73,47 @@ public class ArmadaDatabaseFacade{
         cursor.close();
         db.close();
         return squadrons;
+    }
+
+    public List<Ship> getShips() {
+        ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
+        return getShipsForQuery(queryBuilder.queryAll());
+    }
+
+    private List<Ship> getShipsForQuery(String query) {
+        SQLiteDatabase db = mArmadaDbHelper.getDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        List<Ship> ships = new ArrayList<>();
+
+        Log.d(LOG_TAG, "Found " + cursor.getCount() + " squadrons.");
+
+        Log.d(LOG_TAG, "Column Indices:");
+        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_ID, cursor);
+        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_TITLE, cursor);
+        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_CLASS_TITLE, cursor);
+        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_HULL, cursor);
+        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_SPEED, cursor);
+        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_POINT_COST, cursor);
+
+        for (int i = 0; i < cursor.getCount(); i++) {
+            Ship ship = new Ship();
+            cursor.moveToPosition(i);
+            ship.mShipId = getInt(ShipEntry.COLUMN_NAME_ID, cursor);
+            ship.mTitle = getString(ShipEntry.COLUMN_NAME_TITLE, cursor);
+            ship.mClass = getString(ShipEntry.COLUMN_NAME_CLASS_TITLE, cursor);
+            ship.mHull = getInt(ShipEntry.COLUMN_NAME_HULL, cursor);
+            ship.mSpeed = getInt(ShipEntry.COLUMN_NAME_SPEED, cursor);
+            ship.mPointCost = getInt(ShipEntry.COLUMN_NAME_POINT_COST, cursor);
+            ships.add(ship);
+        }
+        cursor.close();
+        db.close();
+        return ships;
+    }
+
+    public List<Ship> getShipsForFaction(int factionId){
+        ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
+        return getShipsForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
     // Some helper methods for fetching values from the cursor

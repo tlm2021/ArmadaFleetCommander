@@ -25,6 +25,8 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
     private int mVerticalTolerance = 45;
     private int mHorizontalTolerance = 45;
 
+    // A maximum deviation from the start point during the motion, not just the final angle
+    // TODO: What I really want this to be is a band on either side of the swipe center line
     private int mMaxVerticalDeviation = 100;
     private int mMaxHorizontalDeviation = 100;
 
@@ -32,7 +34,7 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
 
     private void testToleranceAngle(int angle){
         if (Math.abs(angle) >= 45){
-            throw new IllegalArgumentException("Tolerance angles must be between 0-89 degrees");
+            throw new IllegalArgumentException("Tolerance angles must be between 0-45 degrees");
         }
     }
 

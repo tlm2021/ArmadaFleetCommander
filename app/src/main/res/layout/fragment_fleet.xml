@@ -5,17 +5,165 @@
     android:id="@+id/fragment_fleet"
     tools:context=".fragment.FleetBuilderFragment">
 
-    <ListView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView_selected_squadrons"
-        android:layout_above="@+id/btn_add_squadron" />
+        android:id="@+id/lyt_fleet_overview"
+        android:padding="10dp">
 
-    <Button
-        android:layout_width="fill_parent"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txt_fleet_name"
+            android:text="@string/fleet_name_default"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/fleet_points_allowed_default"
+            android:id="@+id/txt_fleet_point_allowed"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txt_fleet_point_divider"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/txt_fleet_point_allowed"
+            android:textIsSelectable="true"
+            android:text="@string/fleet_points_divider_default" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/txt_fleet_points_used_default"
+            android:id="@+id/txt_fleet_points_used"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@id/txt_fleet_point_divider"
+            android:phoneNumber="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_squadron"
-        android:id="@+id/btn_add_squadron"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/lyt_fleet_overview"
+        android:id="@+id/lyt_fleet_ships">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lyt_ships_overview"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/ship_list_title"
+                android:id="@+id/txt_ships_title"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_add_ship"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="+" />
+        </RelativeLayout>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:id="@+id/list_ships"
+            android:layout_below="@+id/lyt_ships_overview"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentEnd="true"
+            android:stackFromBottom="false"
+            android:textFilterEnabled="false" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lyt_fleet_ships"
+        android:id="@+id/lyt_fleet_squadrons">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lyt_squadrons_overview"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/squadron_list_title"
+                android:id="@+id/txt_squadrons_title"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:phoneNumber="true" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_add_squadron"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="+" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/squadron_points_allowed_default"
+                android:id="@+id/txt_squad_points_allowed"
+                android:layout_toStartOf="@+id/btn_add_squadron"
+                android:layout_centerVertical="true"
+                android:paddingEnd="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/squadron_points_divider_default"
+                android:id="@+id/txt_squad_points_divider"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/txt_squad_points_allowed" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/squadron_points_used_default"
+                android:id="@+id/txt_squad_points_used"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/txt_squad_points_divider"
+                android:layout_alignParentEnd="false" />
+        </RelativeLayout>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_squadrons"
+            android:layout_below="@+id/lyt_squadrons_overview"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentEnd="false"
+            android:footerDividersEnabled="false" />
+    </RelativeLayout>
+
 </RelativeLayout>

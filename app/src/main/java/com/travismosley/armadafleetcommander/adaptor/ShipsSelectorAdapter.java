@@ -6,33 +6,34 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.travismosley.armadafleetcommander.game.Fleet;
+import com.travismosley.armadafleetcommander.game.components.Ship;
 import com.travismosley.armadafleetcommander.game.components.Squadron;
 
 import java.util.List;
 
 /**
- * A SquadronAdaptor for the selection UI, which has special handling for unique squadrons,
+ * A ShipsAdaptor for the selection UI, which has special handling for unique squadrons,
  * that are already in the fleet.
  */
-public class SquadronsSelectorAdapter extends SquadronsAdapter {
+public class ShipsSelectorAdapter extends ShipsAdapter {
     private Fleet mFleet;
 
-    public SquadronsSelectorAdapter(Context context, List<Squadron> squadrons, Fleet fleet) {
-        super(context, squadrons);
+    public ShipsSelectorAdapter(Context context, List<Ship> ships, Fleet fleet) {
+        super(context, ships);
         mFleet = fleet;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Squadron squad = mSquadrons.get(position);
-        View squadView = super.getView(position, convertView, parent);
+        Ship ship = this.mShips.get(position);
+        View shipView = super.getView(position, convertView, parent);
 
         // Check if the user is allowed to add the squadron
-        if (!mFleet.canAddSquadron(squad)){
-            squadView.setBackgroundColor(Color.parseColor("#717171"));
+        if (!mFleet.canAddShip(ship)){
+            shipView.setBackgroundColor(Color.parseColor("#717171"));
         }
 
-        return squadView;
+        return shipView;
 
     }
 }

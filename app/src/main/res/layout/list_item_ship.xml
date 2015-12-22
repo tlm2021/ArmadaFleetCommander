@@ -14,15 +14,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/squadron_title_default"
-            android:id="@+id/squadron_title" />
+            android:text="@string/ship_title_default"
+            android:id="@+id/txt_ship_title" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/squadron_class_default"
-            android:id="@+id/squadron_class" />
+            android:text="@string/ship_class_default"
+            android:id="@+id/txt_ship_class" />
 
     </LinearLayout>
 
@@ -38,8 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/squadron_speed_default"
-            android:id="@+id/squadron_speed"
+            android:text="@string/ship_speed_default"
+            android:id="@+id/txt_ship_speed"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
@@ -48,8 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/squadron_hull_default"
-            android:id="@+id/squadron_hull"
+            android:text="@string/ship_hull_default"
+            android:id="@+id/txt_ship_hull"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
@@ -58,11 +58,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/squadron_points"
+            android:id="@+id/txt_ship_points"
             android:layout_gravity="center_vertical|right"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="@string/squadron_points_default" />
+            android:text="@string/ship_points_default" />
     </LinearLayout>
 
 </RelativeLayout>

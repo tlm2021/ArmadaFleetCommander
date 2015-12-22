@@ -11,30 +11,32 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.travismosley.armadafleetcommander.R;
+import com.travismosley.armadafleetcommander.adaptor.ShipsSelectorAdapter;
 import com.travismosley.armadafleetcommander.adaptor.SquadronsSelectorAdapter;
 import com.travismosley.armadafleetcommander.data.ArmadaDatabaseFacade;
 import com.travismosley.armadafleetcommander.game.Fleet;
+import com.travismosley.armadafleetcommander.game.components.Ship;
 import com.travismosley.armadafleetcommander.game.components.Squadron;
 
 
 /**
  * A fragment for selecting squadrons
  */
-public class SquadronSelectorFragment extends ListFragment {
+public class ShipSelectorFragment extends ListFragment {
 
-    private final String LOG_TAG = SquadronSelectorFragment.class.getSimpleName();
+    private final String LOG_TAG = ShipSelectorFragment.class.getSimpleName();
     private Fleet mFleet;
 
-    OnSquadronSelectedListener mCallback;
+    OnShipSelectedListener mCallback;
 
-    public interface OnSquadronSelectedListener{
-        void onSquadronSelected(Squadron squadron);
+    public interface OnShipSelectedListener{
+        void onShipSelected(Ship ship);
     }
 
     private ArmadaDatabaseFacade mArmadaDb;
 
     // Public constructor
-    public SquadronSelectorFragment() {
+    public ShipSelectorFragment() {
     }
 
     @Override
@@ -48,22 +50,14 @@ public class SquadronSelectorFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View squadSelectorView = inflater.inflate(R.layout.fragment_squadron_selector, container, false);
+        View shipSelectorView = inflater.inflate(R.layout.fragment_component_selector, container, false);
 
-        // Show the currently used squad points
-        TextView squadPointsText = (TextView) squadSelectorView.findViewById(R.id.squad_points_used);
-        squadPointsText.setText(String.valueOf(mFleet.squadronPoints()));
-
-        // Show the max allowed squad points
-        TextView squadPointsLimit = (TextView) squadSelectorView.findViewById(R.id.squad_points_allowed);
-        squadPointsLimit.setText(String.valueOf(mFleet.squadronPointLimit()));
-
-        setListAdapter(new SquadronsSelectorAdapter(
+        setListAdapter(new ShipsSelectorAdapter(
                 getActivity(),
-                mArmadaDb.getSquadronsForFaction(mFleet.mFactionId),
+                mArmadaDb.getShipsForFaction(mFleet.mFactionId),
                 mFleet));
 
-        return squadSelectorView;
+        return shipSelectorView;
     }
 
     @Override
@@ -71,10 +65,10 @@ public class SquadronSelectorFragment extends ListFragment {
         super.onAttach(activity);
         // Make sure the attaching activity has implemented the interface
         try{
-            mCallback = (OnSquadronSelectedListener) activity;
+            mCallback = (ShipSelectorFragment.OnShipSelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnSquadronSelectedListener");
+                    + " must implement OnShipSelectedListener");
         }
     }
 
@@ -83,12 +77,12 @@ public class SquadronSelectorFragment extends ListFragment {
         super.onListItemClick(view, v, position, id);
         Log.i(LOG_TAG, "Called onListItemClick");
 
-        Squadron squad = (Squadron) this.getListAdapter().getItem(position);
+        Ship ship = (Ship) this.getListAdapter().getItem(position);
 
-        // We only to add the squadron if they selected a non-unique squadron,
+        // We only to add the ship if they selected a non-unique squadron,
         // Or a unique one that isn't already in the fleet
-        if (mFleet.canAddSquadron(squad)){
-            mCallback.onSquadronSelected(squad);
+        if (mFleet.canAddShip(ship)){
+            mCallback.onShipSelected(ship);
         }
     }
 

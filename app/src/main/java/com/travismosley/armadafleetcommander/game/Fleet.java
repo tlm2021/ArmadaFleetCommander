@@ -33,12 +33,37 @@ public class Fleet implements Parcelable {
     }
 
     public int squadronPoints(){
-        // Sums up the total points spent on squadrons so far
+
+        // Get the total points spent on squadrons
         int total = 0;
         for (int i=0; i < mSquadrons.size(); i++){
             total += mSquadrons.get(i).mPointCost;
         }
         return total;
+    }
+
+    public int shipPoints(){
+
+        // Get the total points spent on ships
+        int total = 0;
+        for (int i=0; i<mShips.size(); i++){
+            total += mShips.get(i).mPointCost;
+        }
+        return total;
+    }
+
+    public int fleetPoints(){
+
+        // Get the total fleet points spent
+        return squadronPoints() + shipPoints();
+    }
+
+    public int remainingFleetPoints(){
+        return mPointLimit - fleetPoints();
+    }
+
+    public int remainingSquadronPoints(){
+        return Math.min(remainingFleetPoints(), squadronPointLimit() - squadronPoints());
     }
 
     public void addSquadron(Squadron squadron){
@@ -63,7 +88,17 @@ public class Fleet implements Parcelable {
         }
 
         // Check if the squadron fits under the point limit
-        else if (this.squadronPoints() + squadron.mPointCost > this.squadronPointLimit()){
+        else if (squadron.mPointCost > remainingSquadronPoints()){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean canAddShip(Ship ship){
+
+        // Check if the squadron fits under the point limit
+        if (ship.mPointCost > this.remainingFleetPoints()){
             return false;
         }
 

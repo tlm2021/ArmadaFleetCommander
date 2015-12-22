@@ -10,9 +10,9 @@ import java.util.List;
  * Simple container class for Ship properties
  */
 public class Ship implements Parcelable {
-    public int mInstanceId;
     public int mShipId;
     public String mTitle;
+    public String mClass;
     public boolean mUnique;
     public int mHull;
     public int mSpeed;
@@ -20,10 +20,12 @@ public class Ship implements Parcelable {
 
     public List<String> mUpgrades;
 
+    public Ship(){}
+
     protected Ship(Parcel in) {
-        mInstanceId = in.readInt();
         mShipId = in.readInt();
         mTitle = in.readString();
+        mClass = in.readString();
         mUnique = in.readByte() != 0x00;
         mHull = in.readInt();
         mSpeed = in.readInt();
@@ -43,9 +45,9 @@ public class Ship implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mInstanceId);
         dest.writeInt(mShipId);
         dest.writeString(mTitle);
+        dest.writeString(mClass);
         dest.writeByte((byte) (mUnique ? 0x01 : 0x00));
         dest.writeInt(mHull);
         dest.writeInt(mSpeed);

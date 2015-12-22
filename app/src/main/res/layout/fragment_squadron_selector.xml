@@ -14,34 +14,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/squad_selector_title_default"
+            android:text="@string/squadron_selector_title_default"
             android:id="@+id/selector_title" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:id="@+id/lyt_squadron_points">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/squad_points_used_default"
+                android:text="@string/squadron_points_used_default"
                 android:id="@+id/squad_points_used" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/squad_points_divider_default"
+                android:text="@string/squadron_points_divider_default"
                 android:id="@+id/squad_points_divider" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/squad_points_allowed_default"
+                android:text="@string/squadron_points_allowed_default"
                 android:id="@+id/squad_points_allowed" />
         </LinearLayout>
     </RelativeLayout>
