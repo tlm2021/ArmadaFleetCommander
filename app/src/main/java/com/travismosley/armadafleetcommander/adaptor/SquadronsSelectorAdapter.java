@@ -29,7 +29,7 @@ public class SquadronsSelectorAdapter extends SquadronsAdapter {
         Squadron squad = getComponentForPosition(position);
 
         // Check if the user is allowed to add the squadron
-        if (!mFleet.canAddSquadron(squad)){
+        if (!mFleet.canAddComponent(squad)){
             squadView.setBackgroundColor(Color.parseColor("#717171"));
         }
 

@@ -10,6 +10,7 @@ import com.travismosley.android.ui.event.SwipeEvent.Direction;
 /**
  * An abstract class for configuring and detecting swipe event callbacks
  */
+
 public abstract class OnSwipeListener implements View.OnTouchListener {
 
     private static final String LOG_TAG = OnSwipeListener.class.getSimpleName();
@@ -27,8 +28,8 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
 
     // A maximum deviation from the start point during the motion, not just the final angle
     // TODO: What I really want this to be is a band on either side of the swipe center line
-    private int mMaxVerticalDeviation = 100;
-    private int mMaxHorizontalDeviation = 100;
+    private int mMaxVerticalDeviation = 150;
+    private int mMaxHorizontalDeviation = 150;
 
     private SwipeEvent mCurrentSwipe;
 
@@ -68,14 +69,22 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
 
             case (MotionEvent.ACTION_MOVE):
 
-                // On a move action, update our SwipeEvent
                 Log.d(LOG_TAG, "Saw ACTION_MOVE");
+                if (mCurrentSwipe == null){
+                    return false;
+                }
+
+                // On a move action, update our SwipeEvent
                 mCurrentSwipe.updateFrom(event);
-                return true;
+                return false;
 
             case (MotionEvent.ACTION_UP):
 
                 Log.d(LOG_TAG, "Saw ACTION_UP");
+                if (mCurrentSwipe == null){
+                    return false;
+                }
+
                 Log.d(LOG_TAG, "Processing " + mCurrentSwipe);
 
                 // Get the swipe direction, and start working out what to call
@@ -93,7 +102,7 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
                         if (mCurrentSwipe.length() < mVerticalThreshold ||
                                 mCurrentSwipe.deviationAngle() > mVerticalTolerance ||
                                 mCurrentSwipe.maxDeviationX() > mMaxVerticalDeviation) {
-                        return false;
+                        return true;
                         }
 
                         // Call the appropriate callback
@@ -123,6 +132,10 @@ public abstract class OnSwipeListener implements View.OnTouchListener {
                             return this.onSwipeRight(view, mCurrentSwipe);
                         }
                 }
+            case (MotionEvent.ACTION_CANCEL):
+                Log.d(LOG_TAG, "Saw ACTION_CANCEL");
+                mCurrentSwipe = null;
+                return false;
         }
         return false;
     }

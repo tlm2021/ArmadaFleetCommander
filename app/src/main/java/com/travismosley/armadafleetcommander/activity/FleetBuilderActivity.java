@@ -31,8 +31,9 @@ public class FleetBuilderActivity extends AppCompatActivity
 
         @Override
         public void onComponentSelected(Ship ship) {
-            mFleetFrag.addShip(ship);
-            getSupportFragmentManager().popBackStackImmediate();
+            if (mFleetFrag.addComponent(ship)) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
         }
     }
 
@@ -40,8 +41,9 @@ public class FleetBuilderActivity extends AppCompatActivity
 
         @Override
         public void onComponentSelected(Squadron squadron) {
-            mFleetFrag.addSquadron(squadron);
-            getSupportFragmentManager().popBackStackImmediate();
+            if (mFleetFrag.addComponent(squadron)) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
         }
     }
 

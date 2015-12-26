@@ -28,7 +28,7 @@ public class ShipsSelectorAdapter extends ShipsAdapter {
         Ship ship = getComponentForPosition(position);
 
         // Check if the user is allowed to add the squadron
-        if (!mFleet.canAddShip(ship)){
+        if (!mFleet.canAddComponent(ship)){
             shipView.setBackgroundColor(Color.parseColor("#717171"));
         }
 

@@ -47,16 +47,16 @@ public class FleetBuilderFragment extends Fragment {
         // These should return false if we don't do any event handling, true otherwise
         public boolean onSwipeUp(View v, SwipeEvent event){
             Log.d(LOG_TAG, "Running onSwipeUp");
-            return false;}
+            return true;}
 
         public boolean onSwipeDown(View v, SwipeEvent event){
             Log.d(LOG_TAG, "Running onSwipeDown");
-            return false;
+            return true;
         }
 
         public boolean onSwipeLeft(View v, SwipeEvent event){
             Log.d(LOG_TAG, "Running onSwipeLeft");
-            return false;
+            return true;
         }
 
         public boolean onSwipeRight(View v, SwipeEvent event){
@@ -80,16 +80,16 @@ public class FleetBuilderFragment extends Fragment {
         // These should return false if we don't do any event handling, true otherwise
         public boolean onSwipeUp(View v, SwipeEvent event){
             Log.d(LOG_TAG, "Running onSwipeUp");
-            return true;}
+            return false;}
 
         public boolean onSwipeDown(View v, SwipeEvent event){
             Log.d(LOG_TAG, "Running onSwipeDown");
-            return true;
+            return false;
         }
 
         public boolean onSwipeLeft(View v, SwipeEvent event){
             Log.d(LOG_TAG, "Running onSwipeLeft");
-            return true;
+            return false;
         }
 
         public boolean onSwipeRight(View v, SwipeEvent event){
@@ -189,11 +189,24 @@ public class FleetBuilderFragment extends Fragment {
         return mFleetFragment;
     }
 
-    public void addSquadron(Squadron squadron){
+    public boolean addComponent(Squadron squadron){
 
-        Log.d(LOG_TAG, "addSquadron for " + squadron);
-        mSquadronsAdaptor.addComponent(squadron);
+        Log.d(LOG_TAG, "addComponent for " + squadron);
+        if (mFleet.canAddComponent(squadron)) {
+            mSquadronsAdaptor.addComponent(squadron);
+            return true;
+        }
+        return false;
+    }
 
+    public boolean addComponent(Ship ship) {
+
+        Log.d(LOG_TAG, "addComponent for " + ship);
+        if (mFleet.canAddComponent(ship)) {
+            mShipsAdaptor.addComponent(ship);
+            return true;
+        }
+        return false;
     }
 
     public void removeSquadron(final int position){
@@ -221,14 +234,7 @@ public class FleetBuilderFragment extends Fragment {
         });
 
         // Start the animation
-        mSquadListView.getChildAt(position).startAnimation(anim);
-    }
-
-    public void addShip(Ship ship) {
-
-        Log.d(LOG_TAG, "addShip for " + ship);
-        mShipsAdaptor.addComponent(ship);
-
+        mSquadListView.getChildAt(position - mSquadListView.getFirstVisiblePosition()).startAnimation(anim);
     }
 
     public void removeShip(final int position){

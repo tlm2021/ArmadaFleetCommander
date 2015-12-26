@@ -74,7 +74,8 @@ public class Fleet implements Parcelable {
         mSquadrons.add(squadron);
     }
 
-    public boolean hasSquadron(Squadron squadron){
+    public boolean hasComponent(Squadron squadron){
+
         // Check if this fleet already has a squadron with the same id
         for (int i = 0; i < mSquadrons.size(); i++){
             if (mSquadrons.get(i).id() == squadron.id()){
@@ -84,10 +85,10 @@ public class Fleet implements Parcelable {
         return false;
     }
 
-    public boolean canAddSquadron(Squadron squadron){
+    public boolean canAddComponent(Squadron squadron){
 
         // Can't have two instances of a unique squadron
-        if (squadron.isUnique() && this.hasSquadron(squadron)){
+        if (squadron.isUnique() && hasComponent(squadron)){
             return false;
         }
 
@@ -99,7 +100,7 @@ public class Fleet implements Parcelable {
         return true;
     }
 
-    public boolean canAddShip(Ship ship){
+    public boolean canAddComponent(Ship ship){
 
         // Check if the squadron fits under the point limit
         return ship.pointCost() <= this.remainingFleetPoints();
