@@ -14,6 +14,7 @@ import java.util.List;
  * A SquadronAdaptor for the selection UI, which has special handling for unique squadrons,
  * that are already in the fleet.
  */
+
 public class SquadronsSelectorAdapter extends SquadronsAdapter {
     private Fleet mFleet;
 
@@ -24,8 +25,8 @@ public class SquadronsSelectorAdapter extends SquadronsAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Squadron squad = mSquadrons.get(position);
         View squadView = super.getView(position, convertView, parent);
+        Squadron squad = getComponentForPosition(position);
 
         // Check if the user is allowed to add the squadron
         if (!mFleet.canAddSquadron(squad)){

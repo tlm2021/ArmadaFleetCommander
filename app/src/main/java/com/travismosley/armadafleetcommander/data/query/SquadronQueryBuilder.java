@@ -3,11 +3,10 @@ package com.travismosley.armadafleetcommander.data.query;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
-import com.travismosley.armadafleetcommander.data.contract.SquadronContract.SquadronEntry;
-import com.travismosley.armadafleetcommander.game.components.Squadron;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.SquadronTable;
 
 /**
- * A helper class around SQLiteQUeryBuilder to simplify buildling queries for
+ * A helper class around SQLiteQUeryBuilder to simplify building queries for
  * getting information about Squadrons.
  */
 public class SquadronQueryBuilder {
@@ -16,24 +15,24 @@ public class SquadronQueryBuilder {
 
     private SQLiteQueryBuilder mQueryBuilder;
     private String[] mColumns = {
-            SquadronEntry.COLUMN_NAME_ID,
-            SquadronEntry.COLUMN_NAME_TITLE,
-            SquadronEntry.COLUMN_NAME_CLASS_TITLE,
-            SquadronEntry.COLUMN_NAME_IS_UNIQUE,
-            SquadronEntry.COLUMN_NAME_HULL,
-            SquadronEntry.COLUMN_NAME_POINT_COST,
-            SquadronEntry.COLUMN_NAME_SPEED,
-            SquadronEntry.COLUMN_NAME_FACTION_ID,
+            SquadronTable.COLUMN_NAME_ID,
+            SquadronTable.COLUMN_NAME_TITLE,
+            SquadronTable.COLUMN_NAME_CLASS_TITLE,
+            SquadronTable.COLUMN_NAME_IS_UNIQUE,
+            SquadronTable.COLUMN_NAME_HULL,
+            SquadronTable.COLUMN_NAME_POINT_COST,
+            SquadronTable.COLUMN_NAME_SPEED,
+            SquadronTable.COLUMN_NAME_FACTION_ID,
     };
 
     private final static String mGroupBy = null;
-    private final static String mOrderBy = SquadronEntry.COLUMN_NAME_CLASS_TITLE + "," +
-                                           SquadronEntry.COLUMN_NAME_IS_UNIQUE + "," +
-                                           SquadronEntry.COLUMN_NAME_TITLE;
+    private final static String mOrderBy = SquadronTable.COLUMN_NAME_CLASS_TITLE + "," +
+            SquadronTable.COLUMN_NAME_IS_UNIQUE + "," +
+            SquadronTable.COLUMN_NAME_TITLE;
 
     public SquadronQueryBuilder(){
         mQueryBuilder = new SQLiteQueryBuilder();
-        mQueryBuilder.setTables(SquadronEntry.TABLE_NAME);
+        mQueryBuilder.setTables(SquadronTable.TABLE_NAME);
     }
 
     private String queryWhere(String whereClause){
@@ -56,7 +55,7 @@ public class SquadronQueryBuilder {
     }
 
     public String queryWhereFactionId(int factionId){
-        return queryWhere(SquadronEntry.COLUMN_NAME_FACTION_ID + "=" + String.valueOf(factionId));
+        return queryWhere(SquadronTable.COLUMN_NAME_FACTION_ID + "=" + String.valueOf(factionId));
     }
 
 }

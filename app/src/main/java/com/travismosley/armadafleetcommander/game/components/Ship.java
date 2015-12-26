@@ -3,61 +3,42 @@ package com.travismosley.armadafleetcommander.game.components;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.travismosley.android.data.database.cursor.Cursor;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
 
 /**
- * Simple container class for Ship properties
+ * Class encapsulating an Armada Ship
  */
-public class Ship implements Parcelable {
-    public int mShipId;
-    public String mTitle;
-    public String mClass;
-    public boolean mUnique;
-    public int mHull;
-    public int mSpeed;
-    public int mPointCost;
-
-    public List<String> mUpgrades;
+public class Ship extends Vehicle {
 
     public Ship(){}
 
-    protected Ship(Parcel in) {
-        mShipId = in.readInt();
-        mTitle = in.readString();
-        mClass = in.readString();
-        mUnique = in.readByte() != 0x00;
-        mHull = in.readInt();
-        mSpeed = in.readInt();
-        mPointCost = in.readInt();
-        if (in.readByte() == 0x01) {
-            mUpgrades = new ArrayList<>();
-            in.readList(mUpgrades, String.class.getClassLoader());
-        } else {
-            mUpgrades = null;
-        }
+    @Override
+    public String typeName(){
+        return Ship.class.getSimpleName();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void populate(Cursor cursor){
+
+        // Base component attributes
+        mId = cursor.getInt(ShipTable.COLUMN_NAME_ID);
+        mTitle = cursor.getString(ShipTable.COLUMN_NAME_TITLE);
+        mPointCost = cursor.getInt(ShipTable.COLUMN_NAME_POINT_COST);
+
+        // Vehicle attributes
+        mClass = cursor.getString(ShipTable.COLUMN_NAME_CLASS_TITLE);
+        mHull = cursor.getInt(ShipTable.COLUMN_NAME_HULL);
+        mMaxSpeed = cursor.getInt(ShipTable.COLUMN_NAME_SPEED);
+    }
+
+    // Parcel support
+    protected Ship(Parcel in) {
+        super(in);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mShipId);
-        dest.writeString(mTitle);
-        dest.writeString(mClass);
-        dest.writeByte((byte) (mUnique ? 0x01 : 0x00));
-        dest.writeInt(mHull);
-        dest.writeInt(mSpeed);
-        dest.writeInt(mPointCost);
-        if (mUpgrades == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(mUpgrades);
-        }
+        super.writeToParcel(dest, flags);
     }
 
     @SuppressWarnings("unused")

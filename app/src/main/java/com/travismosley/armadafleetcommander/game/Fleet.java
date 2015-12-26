@@ -16,7 +16,7 @@ import java.util.List;
 public class Fleet implements Parcelable {
 
     public int mFactionId;
-    public int mPointLimit;
+    private int mPointLimit;
     public List<Squadron> mSquadrons;
     public List<Ship> mShips;
 
@@ -25,6 +25,10 @@ public class Fleet implements Parcelable {
         mPointLimit = 400;
         mSquadrons = new ArrayList<>();
         mShips = new ArrayList<>();
+    }
+
+    public int fleetPointLimit(){
+        return mPointLimit;
     }
 
     public int squadronPointLimit(){
@@ -37,7 +41,7 @@ public class Fleet implements Parcelable {
         // Get the total points spent on squadrons
         int total = 0;
         for (int i=0; i < mSquadrons.size(); i++){
-            total += mSquadrons.get(i).mPointCost;
+            total += mSquadrons.get(i).pointCost();
         }
         return total;
     }
@@ -47,7 +51,7 @@ public class Fleet implements Parcelable {
         // Get the total points spent on ships
         int total = 0;
         for (int i=0; i<mShips.size(); i++){
-            total += mShips.get(i).mPointCost;
+            total += mShips.get(i).pointCost();
         }
         return total;
     }
@@ -59,7 +63,7 @@ public class Fleet implements Parcelable {
     }
 
     public int remainingFleetPoints(){
-        return mPointLimit - fleetPoints();
+        return fleetPointLimit() - fleetPoints();
     }
 
     public int remainingSquadronPoints(){
@@ -73,7 +77,7 @@ public class Fleet implements Parcelable {
     public boolean hasSquadron(Squadron squadron){
         // Check if this fleet already has a squadron with the same id
         for (int i = 0; i < mSquadrons.size(); i++){
-            if (mSquadrons.get(i).mSquadronId == squadron.mSquadronId){
+            if (mSquadrons.get(i).id() == squadron.id()){
                 return true;
             }
         }
@@ -88,7 +92,7 @@ public class Fleet implements Parcelable {
         }
 
         // Check if the squadron fits under the point limit
-        else if (squadron.mPointCost > remainingSquadronPoints()){
+        else if (squadron.pointCost() > remainingSquadronPoints()){
             return false;
         }
 
@@ -98,11 +102,7 @@ public class Fleet implements Parcelable {
     public boolean canAddShip(Ship ship){
 
         // Check if the squadron fits under the point limit
-        if (ship.mPointCost > this.remainingFleetPoints()){
-            return false;
-        }
-
-        return true;
+        return ship.pointCost() <= this.remainingFleetPoints();
     }
 
     /* Parcel support */

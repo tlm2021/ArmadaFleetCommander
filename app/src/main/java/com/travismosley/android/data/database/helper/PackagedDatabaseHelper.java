@@ -25,6 +25,7 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
     private final Context mContext;
     private String mDbPath;
     private SQLiteDatabase mDb;
+    private SQLiteDatabase.CursorFactory mCursorFactory;
 
     public PackagedDatabaseHelper(Context context, String dbName){
         super(context, dbName, null, 1);
@@ -64,7 +65,7 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase checkDB = null;
         try{
             String myPath = mDbPath;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(myPath, mCursorFactory, SQLiteDatabase.OPEN_READONLY);
         }catch(SQLiteException e){
             // database doesn't exist yet
             Log.i(LOG_TAG, "Couldn't find " + mDbPath + ". Will copy from APK.");
@@ -100,8 +101,7 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
 
     public void openDataBase() throws SQLException {
         // Open the database
-        mDb = SQLiteDatabase.openDatabase(mDbPath, null, SQLiteDatabase.OPEN_READONLY);
-        mDb = SQLiteDatabase.openDatabase(mDbPath, null, SQLiteDatabase.OPEN_READONLY);
+        mDb = SQLiteDatabase.openDatabase(mDbPath, mCursorFactory, SQLiteDatabase.OPEN_READONLY);
         Log.i(LOG_TAG, "Successfully opened " + mDbPath);
     }
 
@@ -132,5 +132,9 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){}
+
+    public void setCursorFactory(SQLiteDatabase.CursorFactory cursorFactory){
+        mCursorFactory = cursorFactory;
+    }
 
 }

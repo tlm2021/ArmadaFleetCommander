@@ -1,8 +1,8 @@
 package com.travismosley.armadafleetcommander.fragment;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +41,7 @@ public class FleetBuilderFragment extends Fragment {
     OnAddSquadronListener mAddSquadronCallback;
     OnAddShipListener mAddShipCallback;
 
-    private class SwipeListener extends OnSwipeListener{
+    private class SquadSwipeListener extends OnSwipeListener{
 
         // Listen for swipe events and trigger the appropriate actions
         // These should return false if we don't do any event handling, true otherwise
@@ -69,6 +69,39 @@ public class FleetBuilderFragment extends Fragment {
             int swipePos = view.pointToPosition((int) event.sourceX(), (int) event.sourceY());
             if (swipePos >= 0){
                 removeSquadron(swipePos);
+            }
+            return true;
+        }
+    }
+
+    private class ShipSwipeListener extends OnSwipeListener{
+
+        // Listen for swipe events and trigger the appropriate actions
+        // These should return false if we don't do any event handling, true otherwise
+        public boolean onSwipeUp(View v, SwipeEvent event){
+            Log.d(LOG_TAG, "Running onSwipeUp");
+            return true;}
+
+        public boolean onSwipeDown(View v, SwipeEvent event){
+            Log.d(LOG_TAG, "Running onSwipeDown");
+            return true;
+        }
+
+        public boolean onSwipeLeft(View v, SwipeEvent event){
+            Log.d(LOG_TAG, "Running onSwipeLeft");
+            return true;
+        }
+
+        public boolean onSwipeRight(View v, SwipeEvent event){
+
+            Log.d(LOG_TAG, "Running onSwipeRight");
+            // The view will be our squadron list
+            ListView view = (ListView) v;
+
+            // Get the position of the item swiped and remove it
+            int swipePos = view.pointToPosition((int) event.sourceX(), (int) event.sourceY());
+            if (swipePos >= 0){
+                removeShip(swipePos);
             }
             return true;
         }
@@ -112,6 +145,7 @@ public class FleetBuilderFragment extends Fragment {
     }
 
     public FleetBuilderFragment(){
+
     }
 
     @Override
@@ -119,6 +153,7 @@ public class FleetBuilderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate our view
         mFleetFragment = inflater.inflate(R.layout.fragment_fleet, container, false);
+        updateFleetPoints();
 
         // Add the click listener for the add_squadron button
         Button btnAddSquadron = (Button) mFleetFragment.findViewById(R.id.btn_add_squadron);
@@ -133,11 +168,11 @@ public class FleetBuilderFragment extends Fragment {
         mSquadronsAdaptor = new SquadronsAdapter(getActivity(), mFleet.mSquadrons);
 
         mSquadListView.setAdapter(mSquadronsAdaptor);
-        mSquadListView.setOnTouchListener(new SwipeListener());
+        mSquadListView.setOnTouchListener(new SquadSwipeListener());
 
         // Add the click listener for the add_squadron button
         Button btnAddShip = (Button) mFleetFragment.findViewById(R.id.btn_add_ship);
-        btnAddSquadron.setOnClickListener(new Button.OnClickListener() {
+        btnAddShip.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View btn) {
                 mAddShipCallback.onAddShip();
@@ -149,7 +184,7 @@ public class FleetBuilderFragment extends Fragment {
         mShipsAdaptor = new ShipsAdapter(getActivity(), mFleet.mShips);
 
         mShipListView.setAdapter(mShipsAdaptor);
-        mShipListView.setOnTouchListener(new SwipeListener());
+        mShipListView.setOnTouchListener(new ShipSwipeListener());
 
         return mFleetFragment;
     }
@@ -157,7 +192,7 @@ public class FleetBuilderFragment extends Fragment {
     public void addSquadron(Squadron squadron){
 
         Log.d(LOG_TAG, "addSquadron for " + squadron);
-        mSquadronsAdaptor.addSquadron(squadron);
+        mSquadronsAdaptor.addComponent(squadron);
 
     }
 
@@ -176,7 +211,7 @@ public class FleetBuilderFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mSquadronsAdaptor.removeSquadron(position);
+                mSquadronsAdaptor.removeComponent(position);
                 updateFleetPoints();
             }
 
@@ -189,10 +224,10 @@ public class FleetBuilderFragment extends Fragment {
         mSquadListView.getChildAt(position).startAnimation(anim);
     }
 
-    public void addShip(Ship ship){
+    public void addShip(Ship ship) {
 
         Log.d(LOG_TAG, "addShip for " + ship);
-        mShipsAdaptor.addShip(ship);
+        mShipsAdaptor.addComponent(ship);
 
     }
 
@@ -211,7 +246,7 @@ public class FleetBuilderFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mShipsAdaptor.removeShip(position);
+                mShipsAdaptor.removeComponent(position);
                 updateFleetPoints();
             }
 
@@ -228,7 +263,7 @@ public class FleetBuilderFragment extends Fragment {
 
         // Set the fleet point values
         TextView maxFleetPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_fleet_point_allowed);
-        maxFleetPointsView.setText(String.valueOf(mFleet.mPointLimit));
+        maxFleetPointsView.setText(String.valueOf(mFleet.fleetPointLimit()));
 
         TextView usedFleetPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_fleet_points_used);
         usedFleetPointsView.setText(String.valueOf(mFleet.fleetPoints()));
@@ -240,5 +275,4 @@ public class FleetBuilderFragment extends Fragment {
         TextView usedSquadPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_squad_points_used);
         usedSquadPointsView.setText(String.valueOf(mFleet.squadronPoints()));
     }
-
 }

@@ -28,4 +28,5 @@
     <string name="ship_speed_default">4</string>
     <string name="ship_hull_default">4</string>
     <string name="ship_points_default">39</string>
+    <string name="key_fragment_id">KEY_FRAGMENT_ID</string>
 </resources>

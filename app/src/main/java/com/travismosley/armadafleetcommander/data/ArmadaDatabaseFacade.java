@@ -1,17 +1,18 @@
 package com.travismosley.armadafleetcommander.data;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.travismosley.armadafleetcommander.data.contract.ShipContract.ShipEntry;
-import com.travismosley.armadafleetcommander.data.contract.SquadronContract.SquadronEntry;
+import com.travismosley.android.data.database.cursor.Cursor;
+import com.travismosley.android.data.database.cursor.CursorFactory;
+import com.travismosley.android.data.database.logging.ColumnIndexLogger;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.SquadronTable;
 import com.travismosley.armadafleetcommander.data.query.ShipQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.SquadronQueryBuilder;
 import com.travismosley.armadafleetcommander.game.components.Ship;
 import com.travismosley.armadafleetcommander.game.components.Squadron;
-import com.travismosley.android.data.database.logging.ColumnIndexLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class ArmadaDatabaseFacade{
 
     public ArmadaDatabaseFacade(Context context) {
         mArmadaDbHelper = new ArmadaDatabaseHelper(context);
+        mArmadaDbHelper.setCursorFactory(new CursorFactory());
     }
 
     public List<Squadron> getSquadrons() {
@@ -43,30 +45,24 @@ public class ArmadaDatabaseFacade{
 
     private List<Squadron> getSquadronsForQuery(String query){
         SQLiteDatabase db = mArmadaDbHelper.getDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = (Cursor) db.rawQuery(query, null);
         List<Squadron> squadrons = new ArrayList<>();
 
         Log.d(LOG_TAG, "Found " + cursor.getCount() + " squadrons.");
 
         Log.d(LOG_TAG, "Column Indices:");
-        mIdxLogger.logIndex(SquadronEntry.COLUMN_NAME_ID, cursor);
-        mIdxLogger.logIndex(SquadronEntry.COLUMN_NAME_TITLE, cursor);
-        mIdxLogger.logIndex(SquadronEntry.COLUMN_NAME_CLASS_TITLE, cursor);
-        mIdxLogger.logIndex(SquadronEntry.COLUMN_NAME_IS_UNIQUE, cursor);
-        mIdxLogger.logIndex(SquadronEntry.COLUMN_NAME_HULL, cursor);
-        mIdxLogger.logIndex(SquadronEntry.COLUMN_NAME_SPEED, cursor);
-        mIdxLogger.logIndex(SquadronEntry.COLUMN_NAME_POINT_COST, cursor);
+        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_ID, cursor);
+        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_TITLE, cursor);
+        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_CLASS_TITLE, cursor);
+        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_IS_UNIQUE, cursor);
+        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_HULL, cursor);
+        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_SPEED, cursor);
+        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_POINT_COST, cursor);
 
         for (int i = 0; i < cursor.getCount(); i++) {
             Squadron squad = new Squadron();
             cursor.moveToPosition(i);
-            squad.mSquadronId = getInt(SquadronEntry.COLUMN_NAME_ID, cursor);
-            squad.mTitle = getString(SquadronEntry.COLUMN_NAME_TITLE, cursor);
-            squad.mClass = getString(SquadronEntry.COLUMN_NAME_CLASS_TITLE, cursor);
-            squad.mUnique = getBoolean(SquadronEntry.COLUMN_NAME_IS_UNIQUE, cursor);
-            squad.mHull = getInt(SquadronEntry.COLUMN_NAME_HULL, cursor);
-            squad.mSpeed = getInt(SquadronEntry.COLUMN_NAME_SPEED, cursor);
-            squad.mPointCost = getInt(SquadronEntry.COLUMN_NAME_POINT_COST, cursor);
+            squad.populate(cursor);
             squadrons.add(squad);
         }
 
@@ -82,30 +78,26 @@ public class ArmadaDatabaseFacade{
 
     private List<Ship> getShipsForQuery(String query) {
         SQLiteDatabase db = mArmadaDbHelper.getDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = (Cursor) db.rawQuery(query, null);
         List<Ship> ships = new ArrayList<>();
 
         Log.d(LOG_TAG, "Found " + cursor.getCount() + " squadrons.");
 
         Log.d(LOG_TAG, "Column Indices:");
-        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_ID, cursor);
-        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_TITLE, cursor);
-        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_CLASS_TITLE, cursor);
-        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_HULL, cursor);
-        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_SPEED, cursor);
-        mIdxLogger.logIndex(ShipEntry.COLUMN_NAME_POINT_COST, cursor);
+        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_ID, cursor);
+        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_TITLE, cursor);
+        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_CLASS_TITLE, cursor);
+        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_HULL, cursor);
+        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_SPEED, cursor);
+        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_POINT_COST, cursor);
 
         for (int i = 0; i < cursor.getCount(); i++) {
             Ship ship = new Ship();
             cursor.moveToPosition(i);
-            ship.mShipId = getInt(ShipEntry.COLUMN_NAME_ID, cursor);
-            ship.mTitle = getString(ShipEntry.COLUMN_NAME_TITLE, cursor);
-            ship.mClass = getString(ShipEntry.COLUMN_NAME_CLASS_TITLE, cursor);
-            ship.mHull = getInt(ShipEntry.COLUMN_NAME_HULL, cursor);
-            ship.mSpeed = getInt(ShipEntry.COLUMN_NAME_SPEED, cursor);
-            ship.mPointCost = getInt(ShipEntry.COLUMN_NAME_POINT_COST, cursor);
+            ship.populate(cursor);
             ships.add(ship);
         }
+
         cursor.close();
         db.close();
         return ships;
@@ -118,15 +110,4 @@ public class ArmadaDatabaseFacade{
 
     // Some helper methods for fetching values from the cursor
 
-    private String getString(String columnTitle, Cursor cursor){
-        return cursor.getString(cursor.getColumnIndex(columnTitle));
-    }
-
-    private int getInt(String columnTitle, Cursor cursor){
-        return cursor.getInt(cursor.getColumnIndex(columnTitle));
-    }
-
-    private boolean getBoolean(String columnTitle, Cursor cursor){
-        return getInt(columnTitle, cursor) != 0;
-    }
 }
