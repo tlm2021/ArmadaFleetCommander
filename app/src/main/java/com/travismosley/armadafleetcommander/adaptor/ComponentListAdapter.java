@@ -1,11 +1,15 @@
 package com.travismosley.armadafleetcommander.adaptor;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.travismosley.armadafleetcommander.game.components.GameComponent;
 
@@ -61,5 +65,33 @@ public abstract class ComponentListAdapter<ComponentType extends GameComponent> 
         Log.d(LOG_TAG, "Removing component at position " + position);
         mComponents.remove(position);
         notifyDataSetChanged();
+    }
+
+    public void correctWidth(TextView textView)
+    {
+
+        Paint paint = new Paint();
+        Rect bounds = new Rect();
+
+        paint.setTypeface(textView.getTypeface());
+        float textSize = textView.getTextSize();
+        paint.setTextSize(textSize);
+        String text = textView.getText().toString();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        textView.measure(0, 0);
+
+        while (bounds.width() > textView.getMeasuredWidth())
+        {
+            if (textSize <= 0){
+                throw new RuntimeException("Failed to find correct text size.");
+            }
+
+            textSize--;
+            paint.setTextSize(textSize);
+            paint.getTextBounds(text, 0, text.length(), bounds);
+        }
+
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
     }
 }
