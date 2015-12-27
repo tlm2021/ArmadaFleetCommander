@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetcommander.game.components;
+package com.travismosley.armadafleetcommander.game.component;
 
 import android.os.Parcel;
 
@@ -6,6 +6,8 @@ import android.os.Parcel;
  * Base class for shared attributes for all Vehicles
  */
 public abstract class Vehicle extends GameComponent {
+
+    private final static String LOG_TAG = Vehicle.class.getSimpleName();
 
     protected String mClass;
     protected int mHull;

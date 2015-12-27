@@ -1,15 +1,21 @@
-package com.travismosley.armadafleetcommander.game.components;
+package com.travismosley.armadafleetcommander.game.component;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
+import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
+
+import java.util.List;
 
 /**
  * Class encapsulating an Armada Ship
  */
 public class Ship extends Vehicle {
+
+    private final static String LOG_TAG = Ship.class.getSimpleName();
+    private List<UpgradeSlot> mUpgradeSlots;
 
     public Ship(){}
 
@@ -29,6 +35,14 @@ public class Ship extends Vehicle {
         mClass = cursor.getString(ShipTable.COLUMN_NAME_CLASS_TITLE);
         mHull = cursor.getInt(ShipTable.COLUMN_NAME_HULL);
         mMaxSpeed = cursor.getInt(ShipTable.COLUMN_NAME_SPEED);
+    }
+
+    public void setUpgradeSlots(List<UpgradeSlot> upgradeSlots){
+        mUpgradeSlots = upgradeSlots;
+    }
+
+    public List<UpgradeSlot> upgradeSlots(){
+        return mUpgradeSlots;
     }
 
     // Parcel support

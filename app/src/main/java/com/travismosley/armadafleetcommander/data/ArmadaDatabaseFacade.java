@@ -8,11 +8,14 @@ import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.android.data.database.cursor.CursorFactory;
 import com.travismosley.android.data.database.logging.ColumnIndexLogger;
 import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipUpgradeSlotsTable;
 import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.SquadronTable;
 import com.travismosley.armadafleetcommander.data.query.ShipQueryBuilder;
+import com.travismosley.armadafleetcommander.data.query.ShipUpgradeQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.SquadronQueryBuilder;
-import com.travismosley.armadafleetcommander.game.components.Ship;
-import com.travismosley.armadafleetcommander.game.components.Squadron;
+import com.travismosley.armadafleetcommander.game.component.Ship;
+import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +98,8 @@ public class ArmadaDatabaseFacade{
             Ship ship = new Ship();
             cursor.moveToPosition(i);
             ship.populate(cursor);
+            ship.setUpgradeSlots(getUpgradeSlotsForShip(ship.id()));
+
             ships.add(ship);
         }
 
@@ -106,6 +111,34 @@ public class ArmadaDatabaseFacade{
     public List<Ship> getShipsForFaction(int factionId){
         ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
         return getShipsForQuery(queryBuilder.queryWhereFactionId(factionId));
+    }
+
+    private List<UpgradeSlot> getUpgradeSlotsForQuery(String query){
+        SQLiteDatabase db = mArmadaDbHelper.getDatabase();
+        Cursor cursor = (Cursor) db.rawQuery(query, null);
+        List<UpgradeSlot> upgradeSlots = new ArrayList<>();
+
+        Log.d(LOG_TAG, "Found " + cursor.getCount() + " upgrade slots.");
+        Log.d(LOG_TAG, "Column Indices:");
+        mIdxLogger.logIndex(ShipUpgradeSlotsTable.COLUMN_NAME_SHIP_ID, cursor);
+        mIdxLogger.logIndex(ShipUpgradeSlotsTable.COLUMN_NAME_UPGRADE_TYPE_ID, cursor);
+        mIdxLogger.logIndex(ShipUpgradeSlotsTable.COLUMN_NAME_UPGRADE_TYPE_NAME, cursor);
+
+        for (int i = 0; i < cursor.getCount(); i++) {
+            UpgradeSlot upgradeSlot = new UpgradeSlot();
+            cursor.moveToPosition(i);
+            upgradeSlot.populate(cursor);
+            upgradeSlots.add(upgradeSlot);
+        }
+
+        cursor.close();
+        db.close();
+        return upgradeSlots;
+    }
+
+    public List<UpgradeSlot> getUpgradeSlotsForShip(int shipId){
+        ShipUpgradeQueryBuilder queryBuilder = new ShipUpgradeQueryBuilder();
+        return getUpgradeSlotsForQuery(queryBuilder.queryWhereShipId(shipId));
     }
 
     // Some helper methods for fetching values from the cursor

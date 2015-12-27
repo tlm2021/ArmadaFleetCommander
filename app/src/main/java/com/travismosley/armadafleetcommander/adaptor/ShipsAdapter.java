@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.travismosley.armadafleetcommander.R;
-import com.travismosley.armadafleetcommander.game.components.Ship;
+import com.travismosley.armadafleetcommander.game.component.Ship;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class ShipsAdapter extends ComponentListAdapter<Ship> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View shipView = super.getView(position, convertView, parent);
-        Ship ship = getComponentForPosition(position);
+        Ship ship = getItem(position);
 
         // Set the squadron name
         TextView nameView = (TextView) shipView.findViewById(R.id.txt_ship_title);

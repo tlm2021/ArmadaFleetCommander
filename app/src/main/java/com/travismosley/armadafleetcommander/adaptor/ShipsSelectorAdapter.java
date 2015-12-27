@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.travismosley.armadafleetcommander.game.Fleet;
-import com.travismosley.armadafleetcommander.game.components.Ship;
+import com.travismosley.armadafleetcommander.game.component.Ship;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class ShipsSelectorAdapter extends ShipsAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View shipView = super.getView(position, convertView, parent);
-        Ship ship = getComponentForPosition(position);
+        Ship ship = getItem(position);
 
         // Check if the user is allowed to add the squadron
         if (!mFleet.canAddComponent(ship)){

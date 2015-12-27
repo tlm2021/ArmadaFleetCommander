@@ -3,34 +3,29 @@ package com.travismosley.armadafleetcommander.data.query;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
-import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipUpgradeSlotsTable;
 
 /**
- * A helper class around SQLiteQUeryBuilder to simplify building queries for
+ * A helper class around SQLiteQueryBuilder to simplify building queries for
  * getting information about Squadrons.
  */
-public class ShipQueryBuilder {
+public class ShipUpgradeQueryBuilder {
 
-    private final String LOG_TAG = ShipQueryBuilder.class.getSimpleName();
+    private final String LOG_TAG = ShipUpgradeQueryBuilder.class.getSimpleName();
 
     private SQLiteQueryBuilder mQueryBuilder;
     private String[] mColumns = {
-            ShipTable.COLUMN_NAME_ID,
-            ShipTable.COLUMN_NAME_TITLE,
-            ShipTable.COLUMN_NAME_CLASS_TITLE,
-            ShipTable.COLUMN_NAME_HULL,
-            ShipTable.COLUMN_NAME_POINT_COST,
-            ShipTable.COLUMN_NAME_SPEED,
-            ShipTable.COLUMN_NAME_FACTION_ID,
+            ShipUpgradeSlotsTable.COLUMN_NAME_SHIP_ID,
+            ShipUpgradeSlotsTable.COLUMN_NAME_UPGRADE_TYPE_ID,
+            ShipUpgradeSlotsTable.COLUMN_NAME_UPGRADE_TYPE_NAME
     };
 
     private final static String mGroupBy = null;
-    private final static String mOrderBy = ShipTable.COLUMN_NAME_CLASS_TITLE + "," +
-            ShipTable.COLUMN_NAME_TITLE;
+    private final static String mOrderBy = ShipUpgradeSlotsTable.COLUMN_NAME_SHIP_ID;
 
-    public ShipQueryBuilder(){
+    public ShipUpgradeQueryBuilder(){
         mQueryBuilder = new SQLiteQueryBuilder();
-        mQueryBuilder.setTables(ShipTable.TABLE_NAME);
+        mQueryBuilder.setTables(ShipUpgradeSlotsTable.TABLE_NAME);
     }
 
     private String queryWhere(String whereClause){
@@ -52,8 +47,8 @@ public class ShipQueryBuilder {
         return queryWhere(null);
     }
 
-    public String queryWhereFactionId(int factionId){
-        return queryWhere(ShipTable.COLUMN_NAME_FACTION_ID + "=" + String.valueOf(factionId));
+    public String queryWhereShipId(int shipId){
+        return queryWhere(ShipUpgradeSlotsTable.COLUMN_NAME_SHIP_ID + "=" + String.valueOf(shipId));
     }
 
 }

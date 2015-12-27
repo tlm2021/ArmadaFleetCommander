@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.travismosley.armadafleetcommander.R;
-import com.travismosley.armadafleetcommander.game.components.Squadron;
+import com.travismosley.armadafleetcommander.game.component.Squadron;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class SquadronsAdapter extends ComponentListAdapter<Squadron> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View squadView = super.getView(position, convertView, parent);
-        Squadron squad = getComponentForPosition(position);
+        Squadron squad = getItem(position);
 
         // Set the squadron name
         TextView nameView = (TextView) squadView.findViewById(R.id.squadron_title);

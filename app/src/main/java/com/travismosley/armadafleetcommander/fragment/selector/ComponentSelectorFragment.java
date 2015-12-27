@@ -12,7 +12,7 @@ import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.data.ArmadaDatabaseFacade;
 import com.travismosley.armadafleetcommander.fragment.listener.OnComponentSelectedListener;
 import com.travismosley.armadafleetcommander.game.Fleet;
-import com.travismosley.armadafleetcommander.game.components.GameComponent;
+import com.travismosley.armadafleetcommander.game.component.GameComponent;
 
 /**
  * A fragment for selecting squadrons

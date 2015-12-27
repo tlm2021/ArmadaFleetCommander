@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.travismosley.armadafleetcommander.game.components.GameComponent;
+import com.travismosley.armadafleetcommander.game.component.GameComponent;
 
 import java.util.List;
 
@@ -24,16 +24,16 @@ public abstract class ComponentListAdapter<ComponentType extends GameComponent> 
 
     private final static String LOG_TAG = ComponentListAdapter.class.getSimpleName();
 
-    private final Context mContext;
     private List<ComponentType> mComponents;
 
     public ComponentListAdapter(Context context, List<ComponentType> componentList) {
         super(context, -1, componentList);
 
         Log.d(LOG_TAG, "Initialize for " + componentList);
-        mContext = context;
         mComponents = componentList;
     }
+
+
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View componentView;
@@ -42,7 +42,7 @@ public abstract class ComponentListAdapter<ComponentType extends GameComponent> 
         if (convertView != null) {
             componentView = convertView;
         } else {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             componentView = inflater.inflate(getItemLayoutId(), parent, false);
         }
 
@@ -51,7 +51,8 @@ public abstract class ComponentListAdapter<ComponentType extends GameComponent> 
 
     protected abstract int getItemLayoutId();
 
-    protected ComponentType getComponentForPosition(int position){
+    @Override
+    public ComponentType getItem(int position){
         return mComponents.get(position);
     }
 

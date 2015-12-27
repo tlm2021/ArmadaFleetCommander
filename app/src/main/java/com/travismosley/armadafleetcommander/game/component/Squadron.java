@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetcommander.game.components;
+package com.travismosley.armadafleetcommander.game.component;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,18 +11,20 @@ import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContrac
  */
 public class Squadron extends Vehicle {
 
+    private final static String LOG_TAG = Squadron.class.getSimpleName();
+
     protected boolean mUnique;
 
     public Squadron(){}
 
     @Override
-    public String typeName(){
-        return Squadron.class.getSimpleName();
+    public boolean isUnique(){
+        return mUnique;
     }
 
     @Override
-    public boolean isUnique(){
-        return mUnique;
+    public String typeName(){
+        return Squadron.class.getSimpleName();
     }
 
     public void populate(Cursor cursor){

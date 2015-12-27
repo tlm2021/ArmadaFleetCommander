@@ -3,8 +3,8 @@ package com.travismosley.armadafleetcommander.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.travismosley.armadafleetcommander.game.components.Ship;
-import com.travismosley.armadafleetcommander.game.components.Squadron;
+import com.travismosley.armadafleetcommander.game.component.Ship;
+import com.travismosley.armadafleetcommander.game.component.Squadron;
 
 import java.util.ArrayList;
 import java.util.List;

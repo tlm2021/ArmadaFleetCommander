@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetcommander.game.components;
+package com.travismosley.armadafleetcommander.game.component;
 
 import android.os.Parcel;
 import android.os.Parcelable;

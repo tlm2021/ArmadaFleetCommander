@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,11 +17,12 @@ import android.widget.TextView;
 import com.travismosley.android.ui.event.SwipeEvent;
 import com.travismosley.android.ui.listener.OnSwipeListener;
 import com.travismosley.armadafleetcommander.R;
+import com.travismosley.armadafleetcommander.adaptor.ComponentListAdapter;
 import com.travismosley.armadafleetcommander.adaptor.ShipsAdapter;
 import com.travismosley.armadafleetcommander.adaptor.SquadronsAdapter;
 import com.travismosley.armadafleetcommander.game.Fleet;
-import com.travismosley.armadafleetcommander.game.components.Ship;
-import com.travismosley.armadafleetcommander.game.components.Squadron;
+import com.travismosley.armadafleetcommander.game.component.Ship;
+import com.travismosley.armadafleetcommander.game.component.Squadron;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -40,6 +42,7 @@ public class FleetBuilderFragment extends Fragment {
 
     OnAddSquadronListener mAddSquadronCallback;
     OnAddShipListener mAddShipCallback;
+    OnShipClickedListener mOnShipClickedCallback;
 
     private class SquadSwipeListener extends OnSwipeListener{
 
@@ -117,6 +120,11 @@ public class FleetBuilderFragment extends Fragment {
         void onAddShip();
     }
 
+    // onShipClicked callback
+    public interface OnShipClickedListener{
+        void onShipClicked(Ship ship);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,11 +150,16 @@ public class FleetBuilderFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnAddShipListener");
         }
+
+        try{
+            mOnShipClickedCallback = (OnShipClickedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnShipClickedListener");
+        }
     }
 
-    public FleetBuilderFragment(){
-
-    }
+    public FleetBuilderFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -185,6 +198,13 @@ public class FleetBuilderFragment extends Fragment {
 
         mShipListView.setAdapter(mShipsAdaptor);
         mShipListView.setOnTouchListener(new ShipSwipeListener());
+        mShipListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Ship ship = (Ship) mShipListView.getItemAtPosition(position);
+                mOnShipClickedCallback.onShipClicked(ship);
+            }
+        });
 
         return mFleetFragment;
     }
@@ -211,58 +231,40 @@ public class FleetBuilderFragment extends Fragment {
 
     public void removeSquadron(final int position){
         Log.d(LOG_TAG, "removeSquadron for position " + position);
-
-        // create the animation
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_out_right);
-        anim.setDuration(250);
-
-        // Add a listener to update the squadron list when done
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mSquadronsAdaptor.removeComponent(position);
-                updateFleetPoints();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-        // Start the animation
-        mSquadListView.getChildAt(position - mSquadListView.getFirstVisiblePosition()).startAnimation(anim);
+        transitionOutComponent(position, mSquadListView);
     }
 
     public void removeShip(final int position){
         Log.d(LOG_TAG, "removeShip for position " + position);
+        transitionOutComponent(position, mShipListView);
+    }
+
+    private void transitionOutComponent(final int position, final ListView listView){
 
         // create the animation
         Animation anim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_out_right);
         anim.setDuration(250);
 
+        final ComponentListAdapter adapter = (ComponentListAdapter) listView.getAdapter();
+
         // Add a listener to update the squadron list when done
         anim.setAnimationListener(new Animation.AnimationListener() {
+
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
+            public void onAnimationStart(Animation animation) {}
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mShipsAdaptor.removeComponent(position);
+                adapter.removeComponent(position);
                 updateFleetPoints();
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
 
         // Start the animation
-        mShipListView.getChildAt(position).startAnimation(anim);
+        listView.getChildAt(position).startAnimation(anim);
     }
 
     public void updateFleetPoints(){

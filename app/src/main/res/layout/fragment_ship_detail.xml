@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.travismosley.armadafleetcommander.fragment.ShipDetailFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lyt_header"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/ship_title_default"
+            android:id="@+id/txt_ship_title"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentEnd="false"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/ship_class_default"
+            android:id="@+id/txt_ship_class"
+            android:layout_below="@+id/txt_ship_title"
+            android:layout_alignParentStart="false"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/img_ship"
+        android:layout_below="@+id/lyt_header"
+        android:layout_alignParentStart="false"
+        android:scaleType="fitStart"
+        android:src="@mipmap/cr90_placeholder"
+        android:adjustViewBounds="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/upgrade_header"
+        android:id="@+id/txt_upgrade_header"
+        android:layout_below="@+id/img_ship"
+        android:layout_alignParentStart="true"
+        android:padding="10dp" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_upgrades"
+        android:layout_below="@+id/txt_upgrade_header"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.travismosley.armadafleetcommander.adaptor.ShipsSelectorAdapter;
-import com.travismosley.armadafleetcommander.game.components.Ship;
+import com.travismosley.armadafleetcommander.game.component.Ship;
 
 
 /**
