@@ -30,6 +30,7 @@ public class ShipsAdapter extends ComponentListAdapter<Ship> {
         // Set the squadron name
         TextView nameView = (TextView) shipView.findViewById(R.id.txt_ship_title);
         nameView.setText(ship.title());
+        correctWidth(nameView);
 
         // Set the squadron class name
         TextView classView = (TextView) shipView.findViewById(R.id.txt_ship_class);
