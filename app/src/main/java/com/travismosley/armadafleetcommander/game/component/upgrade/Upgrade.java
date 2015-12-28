@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.UpgradeTable;
 import com.travismosley.armadafleetcommander.game.component.GameComponent;
 
 import java.util.ArrayList;
@@ -40,17 +40,13 @@ public class Upgrade extends GameComponent {
     }
 
     public void populate(Cursor cursor){
-
-        // Base component attributes
-        mId = cursor.getInt(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_ID);
-        mTitle = cursor.getString(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TITLE);
-        mPointCost = cursor.getInt(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_POINT_COST);
+        super.populate(cursor);
 
         // Upgrade attributes
-        mUnique = cursor.getBoolean(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_IS_UNIQUE);
-        mText = cursor.getString(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TEXT);
-        mUpgradeTypeId = cursor.getInt(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TYPE_ID);
-        mUpgradeTypeName = cursor.getString(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TYPE_NAME);
+        mUnique = cursor.getBoolean(UpgradeTable.IS_UNIQUE);
+        mText = cursor.getString(UpgradeTable.TEXT);
+        mUpgradeTypeId = cursor.getInt(UpgradeTable.TYPE_ID);
+        mUpgradeTypeName = cursor.getString(UpgradeTable.TYPE_NAME);
     }
 
     // Parcel support

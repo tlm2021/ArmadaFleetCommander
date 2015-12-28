@@ -2,6 +2,9 @@ package com.travismosley.armadafleetcommander.game.component;
 
 import android.os.Parcel;
 
+import com.travismosley.android.data.database.cursor.Cursor;
+import com.travismosley.armadafleetcommander.data.contract.table.VehicleTableContract;
+
 /**
  * Base class for shared attributes for all Vehicles
  */
@@ -14,6 +17,15 @@ public abstract class Vehicle extends GameComponent {
     protected int mMaxSpeed;
 
     public Vehicle(){}
+
+    public void populate(Cursor cursor) {
+        super.populate(cursor);
+
+        // Vehicle attributes
+        mClass = cursor.getString(VehicleTableContract.CLASS_TITLE);
+        mHull = cursor.getInt(VehicleTableContract.HULL);
+        mMaxSpeed = cursor.getInt(VehicleTableContract.SPEED);
+    }
 
     public String vehicleClass(){
         return mClass;

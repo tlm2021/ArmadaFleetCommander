@@ -5,7 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.travismosley.armadafleetcommander.adaptor.SquadronsSelectorAdapter;
+import com.travismosley.armadafleetcommander.adaptor.selector.SquadronsSelectorAdapter;
+import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
 
 
@@ -17,7 +18,12 @@ public class SquadronSelectorFragment extends ComponentSelectorFragment<Squadron
     private final String LOG_TAG = SquadronSelectorFragment.class.getSimpleName();
 
     // Public constructor
-    public SquadronSelectorFragment() {
+    public SquadronSelectorFragment() {}
+
+    public static SquadronSelectorFragment newInstance(Fleet fleet){
+        SquadronSelectorFragment squadronSelector = new SquadronSelectorFragment();
+        squadronSelector.setArguments(getBundleForNewInstance(fleet));
+        return squadronSelector;
     }
 
     @Override

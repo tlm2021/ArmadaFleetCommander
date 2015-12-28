@@ -12,14 +12,17 @@ import com.travismosley.armadafleetcommander.fragment.listener.OnComponentSelect
 import com.travismosley.armadafleetcommander.fragment.selector.ComponentSelectorFragment;
 import com.travismosley.armadafleetcommander.fragment.selector.ShipSelectorFragment;
 import com.travismosley.armadafleetcommander.fragment.selector.SquadronSelectorFragment;
+import com.travismosley.armadafleetcommander.fragment.selector.UpgradeSelectorFragment;
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
 
 public class FleetBuilderActivity extends AppCompatActivity
         implements FleetBuilderFragment.OnAddSquadronListener,
                    FleetBuilderFragment.OnAddShipListener,
-                   FleetBuilderFragment.OnShipClickedListener {
+                   FleetBuilderFragment.OnShipClickedListener,
+                   ShipDetailFragment.OnUpgradeSlotClickedListener {
 
     private final static String LOG_TAG = FleetBuilderActivity.class.getSimpleName();
 
@@ -80,9 +83,9 @@ public class FleetBuilderActivity extends AppCompatActivity
         Log.d(LOG_TAG, "onAddSquadron");
 
         // Initialize the squadron fragment
-        SquadronSelectorFragment squadronFragment = new SquadronSelectorFragment();
+        SquadronSelectorFragment squadronFragment = SquadronSelectorFragment.newInstance(mFleet);
         squadronFragment.setSelectionListener(mSquadronSelectedListener);
-        transitionToSelector(squadronFragment);
+        transitionToFragment(squadronFragment);
     }
 
     // Open up the squadron list when needed
@@ -90,21 +93,23 @@ public class FleetBuilderActivity extends AppCompatActivity
         Log.d(LOG_TAG, "onAddShip");
 
         // Initialize the squadron fragment
-        ShipSelectorFragment shipFragment = new ShipSelectorFragment();
+        ShipSelectorFragment shipFragment = ShipSelectorFragment.newInstance(mFleet);
         shipFragment.setSelectionListener(mShipSelectedListener);
-        transitionToSelector(shipFragment);
+        transitionToFragment(shipFragment);
+    }
+
+    // Open up the upgrade list when needed
+    public void onUpgradeSlotClicked(UpgradeSlot slot){
+        Log.d(LOG_TAG, "onUpgradeSlotClicked");
+
+        UpgradeSelectorFragment upgradeSelector = UpgradeSelectorFragment.newInstance(slot, mFleet);
+        transitionToFragment(upgradeSelector);
     }
 
     public void onShipClicked(Ship ship){
         Log.d(LOG_TAG, "onShipClicked for " + ship);
-        ShipDetailFragment shipDetailFragment = new ShipDetailFragment();
 
-        Bundle args = getIntent().getExtras();
-        if (args == null){
-            args = new Bundle();
-        }
-        args.putParcelable(getString(R.string.key_ship), ship);
-        shipDetailFragment.setArguments(args);
+        ShipDetailFragment shipDetailFragment = ShipDetailFragment.newInstance(ship);
 
         // Replace the current fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -115,23 +120,14 @@ public class FleetBuilderActivity extends AppCompatActivity
         transaction.commit();
     }
 
-    public void transitionToSelector(ComponentSelectorFragment selectorFragment){
-
-        Bundle args = getIntent().getExtras();
-        if (args == null){
-            args = new Bundle();
-        }
-        args.putParcelable(getString(R.string.key_fleet), mFleet);
-        selectorFragment.setArguments(args);
+    public void transitionToFragment(ComponentSelectorFragment fragment){
 
         // Replace the current fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fleet_builder_fragment_container, selectorFragment);
+        transaction.replace(R.id.fleet_builder_fragment_container, fragment);
 
         // Let the user use the back button, and return
         transaction.addToBackStack(null);
         transaction.commit();
-
     }
-
 }

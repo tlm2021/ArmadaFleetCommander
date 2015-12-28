@@ -28,19 +28,10 @@ public class Squadron extends Vehicle {
     }
 
     public void populate(Cursor cursor){
-
-        // Base component attributes
-        mId = cursor.getInt(SquadronTable.COLUMN_NAME_ID);
-        mTitle = cursor.getString(SquadronTable.COLUMN_NAME_TITLE);
-        mPointCost = cursor.getInt(SquadronTable.COLUMN_NAME_POINT_COST);
-
-        // Vehicle attributes
-        mClass = cursor.getString(SquadronTable.COLUMN_NAME_CLASS_TITLE);
-        mHull = cursor.getInt(SquadronTable.COLUMN_NAME_HULL);
-        mMaxSpeed = cursor.getInt(SquadronTable.COLUMN_NAME_SPEED);
+        super.populate(cursor);
 
         // Squadron attribute
-        mUnique = cursor.getBoolean(SquadronTable.COLUMN_NAME_IS_UNIQUE);
+        mUnique = cursor.getBoolean(SquadronTable.IS_UNIQUE);
     }
 
     // Parcel support

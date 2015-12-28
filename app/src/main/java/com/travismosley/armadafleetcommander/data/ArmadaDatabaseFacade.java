@@ -10,11 +10,14 @@ import com.travismosley.android.data.database.logging.ColumnIndexLogger;
 import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
 import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipUpgradeSlotsTable;
 import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.SquadronTable;
+import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.UpgradeTable;
 import com.travismosley.armadafleetcommander.data.query.ShipQueryBuilder;
-import com.travismosley.armadafleetcommander.data.query.ShipUpgradeQueryBuilder;
+import com.travismosley.armadafleetcommander.data.query.ShipUpgradeSlotQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.SquadronQueryBuilder;
+import com.travismosley.armadafleetcommander.data.query.UpgradeQueryBuilder;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
 
 import java.util.ArrayList;
@@ -36,6 +39,8 @@ public class ArmadaDatabaseFacade{
         mArmadaDbHelper.setCursorFactory(new CursorFactory());
     }
 
+    /* Squadron Queries */
+
     public List<Squadron> getSquadrons() {
         SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
         return getSquadronsForQuery(queryBuilder.queryAll());
@@ -54,13 +59,13 @@ public class ArmadaDatabaseFacade{
         Log.d(LOG_TAG, "Found " + cursor.getCount() + " squadrons.");
 
         Log.d(LOG_TAG, "Column Indices:");
-        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_ID, cursor);
-        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_TITLE, cursor);
-        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_CLASS_TITLE, cursor);
-        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_IS_UNIQUE, cursor);
-        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_HULL, cursor);
-        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_SPEED, cursor);
-        mIdxLogger.logIndex(SquadronTable.COLUMN_NAME_POINT_COST, cursor);
+        mIdxLogger.logIndex(SquadronTable._ID, cursor);
+        mIdxLogger.logIndex(SquadronTable.TITLE, cursor);
+        mIdxLogger.logIndex(SquadronTable.CLASS_TITLE, cursor);
+        mIdxLogger.logIndex(SquadronTable.IS_UNIQUE, cursor);
+        mIdxLogger.logIndex(SquadronTable.HULL, cursor);
+        mIdxLogger.logIndex(SquadronTable.SPEED, cursor);
+        mIdxLogger.logIndex(SquadronTable.POINT_COST, cursor);
 
         for (int i = 0; i < cursor.getCount(); i++) {
             Squadron squad = new Squadron();
@@ -73,6 +78,8 @@ public class ArmadaDatabaseFacade{
         db.close();
         return squadrons;
     }
+
+    /* Ship Queries */
 
     public List<Ship> getShips() {
         ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
@@ -87,12 +94,12 @@ public class ArmadaDatabaseFacade{
         Log.d(LOG_TAG, "Found " + cursor.getCount() + " squadrons.");
 
         Log.d(LOG_TAG, "Column Indices:");
-        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_ID, cursor);
-        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_TITLE, cursor);
-        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_CLASS_TITLE, cursor);
-        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_HULL, cursor);
-        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_SPEED, cursor);
-        mIdxLogger.logIndex(ShipTable.COLUMN_NAME_POINT_COST, cursor);
+        mIdxLogger.logIndex(ShipTable._ID, cursor);
+        mIdxLogger.logIndex(ShipTable.TITLE, cursor);
+        mIdxLogger.logIndex(ShipTable.CLASS_TITLE, cursor);
+        mIdxLogger.logIndex(ShipTable.HULL, cursor);
+        mIdxLogger.logIndex(ShipTable.SPEED, cursor);
+        mIdxLogger.logIndex(ShipTable.POINT_COST, cursor);
 
         for (int i = 0; i < cursor.getCount(); i++) {
             Ship ship = new Ship();
@@ -113,6 +120,8 @@ public class ArmadaDatabaseFacade{
         return getShipsForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
+    /* Upgrade Slot Queries */
+
     private List<UpgradeSlot> getUpgradeSlotsForQuery(String query){
         SQLiteDatabase db = mArmadaDbHelper.getDatabase();
         Cursor cursor = (Cursor) db.rawQuery(query, null);
@@ -120,9 +129,9 @@ public class ArmadaDatabaseFacade{
 
         Log.d(LOG_TAG, "Found " + cursor.getCount() + " upgrade slots.");
         Log.d(LOG_TAG, "Column Indices:");
-        mIdxLogger.logIndex(ShipUpgradeSlotsTable.COLUMN_NAME_SHIP_ID, cursor);
-        mIdxLogger.logIndex(ShipUpgradeSlotsTable.COLUMN_NAME_UPGRADE_TYPE_ID, cursor);
-        mIdxLogger.logIndex(ShipUpgradeSlotsTable.COLUMN_NAME_UPGRADE_TYPE_NAME, cursor);
+        mIdxLogger.logIndex(ShipUpgradeSlotsTable.SHIP_ID, cursor);
+        mIdxLogger.logIndex(ShipUpgradeSlotsTable.UPGRADE_TYPE_ID, cursor);
+        mIdxLogger.logIndex(ShipUpgradeSlotsTable.UPGRADE_TYPE_NAME, cursor);
 
         for (int i = 0; i < cursor.getCount(); i++) {
             UpgradeSlot upgradeSlot = new UpgradeSlot();
@@ -137,10 +146,43 @@ public class ArmadaDatabaseFacade{
     }
 
     public List<UpgradeSlot> getUpgradeSlotsForShip(int shipId){
-        ShipUpgradeQueryBuilder queryBuilder = new ShipUpgradeQueryBuilder();
+        ShipUpgradeSlotQueryBuilder queryBuilder = new ShipUpgradeSlotQueryBuilder();
         return getUpgradeSlotsForQuery(queryBuilder.queryWhereShipId(shipId));
     }
 
-    // Some helper methods for fetching values from the cursor
+    /* Upgrade Queries */
+
+    public List<Upgrade> getUpgradesForTypeAndFaction(int typeId, int factionId){
+        UpgradeQueryBuilder queryBuilder = new UpgradeQueryBuilder();
+        return getUpgradesForQuery(queryBuilder.queryWhereTypeIdAndFactionId(typeId, factionId));
+    }
+
+    private List<Upgrade> getUpgradesForQuery(String query){
+        SQLiteDatabase db = mArmadaDbHelper.getDatabase();
+        Cursor cursor = (Cursor) db.rawQuery(query, null);
+        List<Upgrade> upgrades = new ArrayList<>();
+
+        Log.d(LOG_TAG, "Found " + cursor.getCount() + " upgrades.");
+        Log.d(LOG_TAG, "Column Indices:");
+        mIdxLogger.logIndex(UpgradeTable._ID, cursor);
+        mIdxLogger.logIndex(UpgradeTable.FACTION_ID, cursor);
+        mIdxLogger.logIndex(UpgradeTable.TYPE_ID, cursor);
+        mIdxLogger.logIndex(UpgradeTable.TYPE_NAME, cursor);
+        mIdxLogger.logIndex(UpgradeTable.TITLE, cursor);
+        mIdxLogger.logIndex(UpgradeTable.TEXT, cursor);
+        mIdxLogger.logIndex(UpgradeTable.IS_UNIQUE, cursor);
+        mIdxLogger.logIndex(UpgradeTable.POINT_COST, cursor);
+
+        for (int i=0; i < cursor.getCount(); i++){
+            Upgrade upgrade = new Upgrade();
+            cursor.moveToPosition(i);
+            upgrade.populate(cursor);
+            upgrades.add(upgrade);
+        }
+
+        cursor.close();
+        db.close();
+        return upgrades;
+    }
 
 }

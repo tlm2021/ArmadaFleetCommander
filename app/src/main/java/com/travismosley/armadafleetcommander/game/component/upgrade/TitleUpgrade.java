@@ -3,7 +3,6 @@ package com.travismosley.armadafleetcommander.game.component.upgrade;
 import android.os.Parcel;
 
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract;
 
 import java.util.ArrayList;
 
@@ -32,17 +31,7 @@ public class TitleUpgrade extends Upgrade {
     }
 
     public void populate(Cursor cursor){
-
-        // Base component attributes
-        mId = cursor.getInt(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_ID);
-        mTitle = cursor.getString(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TITLE);
-        mPointCost = cursor.getInt(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_POINT_COST);
-
-        // Upgrade attributes
-        mUnique = cursor.getBoolean(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_IS_UNIQUE);
-        mText = cursor.getString(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TEXT);
-        mUpgradeTypeId = cursor.getInt(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TYPE_ID);
-        mUpgradeTypeName = cursor.getString(ArmadaDatabaseContract.UpgradeTable.COLUMN_NAME_TYPE_NAME);
+        super.populate(cursor);
     }
 
     // Parcel support

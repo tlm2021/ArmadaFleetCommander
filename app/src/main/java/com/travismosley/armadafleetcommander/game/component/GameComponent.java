@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
+import com.travismosley.armadafleetcommander.data.contract.table.ComponentTableContract;
 
 /**
  * Base class for all objects that represent GameComponents
@@ -17,7 +18,6 @@ public abstract class GameComponent implements Parcelable {
     public GameComponent(){}
 
     public abstract String typeName();
-    public abstract void populate(Cursor cursor);
 
     public int id(){
         return mId;
@@ -44,6 +44,12 @@ public abstract class GameComponent implements Parcelable {
         mId = in.readInt();
         mTitle = in.readString();
         mPointCost = in.readInt();
+    }
+
+    public void populate(Cursor cursor){
+        mId = cursor.getInt(ComponentTableContract._ID);
+        mTitle = cursor.getString(ComponentTableContract.TITLE);
+        mPointCost = cursor.getInt(ComponentTableContract.POINT_COST);
     }
 
     @Override

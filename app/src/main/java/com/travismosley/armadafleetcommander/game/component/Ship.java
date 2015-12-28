@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
+import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
 
 import java.util.List;
@@ -25,20 +25,28 @@ public class Ship extends Vehicle {
     }
 
     public void populate(Cursor cursor){
-
-        // Base component attributes
-        mId = cursor.getInt(ShipTable.COLUMN_NAME_ID);
-        mTitle = cursor.getString(ShipTable.COLUMN_NAME_TITLE);
-        mPointCost = cursor.getInt(ShipTable.COLUMN_NAME_POINT_COST);
-
-        // Vehicle attributes
-        mClass = cursor.getString(ShipTable.COLUMN_NAME_CLASS_TITLE);
-        mHull = cursor.getInt(ShipTable.COLUMN_NAME_HULL);
-        mMaxSpeed = cursor.getInt(ShipTable.COLUMN_NAME_SPEED);
+        super.populate(cursor);
     }
 
     public void setUpgradeSlots(List<UpgradeSlot> upgradeSlots){
         mUpgradeSlots = upgradeSlots;
+    }
+
+    public boolean hasUpgrade(Upgrade upgrade){
+
+        for (int i=0; i < mUpgradeSlots.size(); i++){
+
+            // See if this upgrade slot is equipped
+            if (mUpgradeSlots.get(i).isEquipped()){
+
+                // See if the equipped upgrade is unique
+                Upgrade equippedUpgrade = mUpgradeSlots.get(i).getEquipped();
+                if (equippedUpgrade.id() == upgrade.id()){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public List<UpgradeSlot> upgradeSlots(){

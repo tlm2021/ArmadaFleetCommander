@@ -1,10 +1,11 @@
-package com.travismosley.armadafleetcommander.adaptor;
+package com.travismosley.armadafleetcommander.adaptor.selector;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.travismosley.armadafleetcommander.adaptor.SquadronsAdapter;
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
 

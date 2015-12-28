@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,25 @@ public class Fleet implements Parcelable {
 
         // Check if the squadron fits under the point limit
         return ship.pointCost() <= this.remainingFleetPoints();
+    }
+
+    public boolean canAddComponent(Upgrade upgrade){
+
+        // Check if the upgrade fits under the point limit
+        if (upgrade.pointCost() > this.remainingSquadronPoints()){
+            return false;
+        }
+
+        if (upgrade.isUnique()){
+            for (int i=0; i<mShips.size(); i++){
+                if (mShips.get(i).hasUpgrade(upgrade)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
     }
 
     /* Parcel support */

@@ -5,7 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.travismosley.armadafleetcommander.adaptor.ShipsSelectorAdapter;
+import com.travismosley.armadafleetcommander.adaptor.selector.ShipsSelectorAdapter;
+import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 
 
@@ -14,15 +15,20 @@ import com.travismosley.armadafleetcommander.game.component.Ship;
  */
 public class ShipSelectorFragment extends ComponentSelectorFragment<Ship> {
 
-    private final String LOG_TAG = ShipSelectorFragment.class.getSimpleName();
+    private static final String LOG_TAG = ShipSelectorFragment.class.getSimpleName();
 
     // Public constructor
-    public ShipSelectorFragment() {
-    }
+    public ShipSelectorFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+    }
+
+    public static ShipSelectorFragment newInstance(Fleet fleet){
+        ShipSelectorFragment shipSelector = new ShipSelectorFragment();
+        shipSelector.setArguments(getBundleForNewInstance(fleet));
+        return shipSelector;
     }
 
     @Override

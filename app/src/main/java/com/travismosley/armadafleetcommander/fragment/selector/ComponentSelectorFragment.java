@@ -20,7 +20,8 @@ import com.travismosley.armadafleetcommander.game.component.GameComponent;
 
 public abstract class ComponentSelectorFragment<ComponentType extends GameComponent> extends ListFragment {
 
-    private final String LOG_TAG = ComponentSelectorFragment.class.getSimpleName();
+    private static final String LOG_TAG = ComponentSelectorFragment.class.getSimpleName();
+    private static final String KEY_FLEET = "KEY_FLEET";
 
     protected Fleet mFleet;
     protected ArmadaDatabaseFacade mArmadaDb;
@@ -30,11 +31,17 @@ public abstract class ComponentSelectorFragment<ComponentType extends GameCompon
     // Public constructor
     public ComponentSelectorFragment() {}
 
+    protected static Bundle getBundleForNewInstance(Fleet fleet){
+        Bundle args = new Bundle();
+        args.putParcelable(KEY_FLEET, fleet);
+        return args;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         mArmadaDb = new ArmadaDatabaseFacade(getActivity());
-        mFleet = getArguments().getParcelable(getString(R.string.key_fleet));
+        mFleet = getArguments().getParcelable(KEY_FLEET);
     }
 
     @Override
