@@ -15,6 +15,7 @@ import com.travismosley.armadafleetcommander.adaptor.UpgradeSlotsAdapter;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
 
+
 public class ShipDetailFragment extends Fragment {
 
     private Ship mShip;
@@ -44,7 +45,7 @@ public class ShipDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mShip = getArguments().getParcelable(getString(R.string.key_ship));
+            mShip = getArguments().getParcelable(KEY_SHIP);
         }
     }
 

@@ -32,6 +32,17 @@ public class Ship extends Vehicle {
         mUpgradeSlots = upgradeSlots;
     }
 
+    @Override
+    public int pointCost(){
+        int cost = mPointCost;
+        for(int i = 0; i < mUpgradeSlots.size(); i++){
+            if (mUpgradeSlots.get(i).isEquipped()){
+                cost += mUpgradeSlots.get(i).getEquipped().pointCost();
+            }
+        }
+        return cost;
+    }
+
     public boolean hasUpgrade(Upgrade upgrade){
 
         for (int i=0; i < mUpgradeSlots.size(); i++){

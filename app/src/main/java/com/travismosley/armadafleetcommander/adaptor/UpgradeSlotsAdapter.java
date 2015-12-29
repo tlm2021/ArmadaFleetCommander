@@ -62,7 +62,8 @@ public class UpgradeSlotsAdapter extends ArrayAdapter<UpgradeSlot> {
         } else{
             Upgrade upgrade = upgradeSlot.getEquipped();
             upgradeTitle.setText(upgrade.title());
-            upgradeCost.setText(upgrade.pointCost());
+            upgradeCost.setText(String.valueOf(upgrade.pointCost()));
+            btnClear.setVisibility(View.INVISIBLE);
         }
 
         return upgradeSlotView;

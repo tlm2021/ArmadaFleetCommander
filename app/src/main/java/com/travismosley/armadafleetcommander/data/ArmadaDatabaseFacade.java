@@ -91,7 +91,7 @@ public class ArmadaDatabaseFacade{
         Cursor cursor = (Cursor) db.rawQuery(query, null);
         List<Ship> ships = new ArrayList<>();
 
-        Log.d(LOG_TAG, "Found " + cursor.getCount() + " squadrons.");
+        Log.d(LOG_TAG, "Found " + cursor.getCount() + " ships.");
 
         Log.d(LOG_TAG, "Column Indices:");
         mIdxLogger.logIndex(ShipTable._ID, cursor);

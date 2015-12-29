@@ -17,6 +17,7 @@ public class SquadronQueryBuilder extends VehicleQueryBuilder {
         return SquadronTable.TABLE_NAME;
     }
 
+    @Override
     protected List<String> getColumns(){
         List<String> columns = super.getColumns();
         columns.add(SquadronTable.IS_UNIQUE);

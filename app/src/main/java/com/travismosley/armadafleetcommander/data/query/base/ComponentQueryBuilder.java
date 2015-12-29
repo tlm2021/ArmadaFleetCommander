@@ -3,6 +3,7 @@ package com.travismosley.armadafleetcommander.data.query.base;
 import com.travismosley.android.data.database.QueryBuilder;
 import com.travismosley.armadafleetcommander.data.contract.table.ComponentTableContract;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,10 +15,13 @@ public abstract class ComponentQueryBuilder extends QueryBuilder {
 
     private final String LOG_TAG = ComponentQueryBuilder.class.getSimpleName();
 
-    protected List<String> getColumns(){
-        return Arrays.asList(ComponentTableContract._ID,
+    @Override
+    protected List<String> getColumns() {
+        return new ArrayList<>(Arrays.asList(
+                ComponentTableContract._ID,
                 ComponentTableContract.TITLE,
-                ComponentTableContract.FACTION_ID);
+                ComponentTableContract.FACTION_ID,
+                ComponentTableContract.POINT_COST));
     }
 
     @Override

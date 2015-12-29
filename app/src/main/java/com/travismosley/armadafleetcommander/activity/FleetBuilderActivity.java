@@ -9,6 +9,7 @@ import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.fragment.FleetBuilderFragment;
 import com.travismosley.armadafleetcommander.fragment.ShipDetailFragment;
 import com.travismosley.armadafleetcommander.fragment.listener.OnComponentSelectedListener;
+import com.travismosley.armadafleetcommander.fragment.listener.OnUpgradeSelectedListener;
 import com.travismosley.armadafleetcommander.fragment.selector.ComponentSelectorFragment;
 import com.travismosley.armadafleetcommander.fragment.selector.ShipSelectorFragment;
 import com.travismosley.armadafleetcommander.fragment.selector.SquadronSelectorFragment;
@@ -16,6 +17,7 @@ import com.travismosley.armadafleetcommander.fragment.selector.UpgradeSelectorFr
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
 
 public class FleetBuilderActivity extends AppCompatActivity
@@ -31,6 +33,7 @@ public class FleetBuilderActivity extends AppCompatActivity
 
     private ShipSelectedListener mShipSelectedListener = new ShipSelectedListener();
     private SquadronSelectedListener mSquadronSelectedListener = new SquadronSelectedListener();
+    private UpgradeSelectedListener mUpgradeSelectedListener = new UpgradeSelectedListener();
 
 
     private class ShipSelectedListener implements OnComponentSelectedListener<Ship> {
@@ -48,6 +51,17 @@ public class FleetBuilderActivity extends AppCompatActivity
         @Override
         public void onComponentSelected(Squadron squadron) {
             if (mFleetFrag.addComponent(squadron)) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
+        }
+    }
+
+    private class UpgradeSelectedListener implements OnUpgradeSelectedListener {
+
+        @Override
+        public void onComponentSelected(Upgrade upgrade, UpgradeSlot slot){
+            if (mFleet.canAddComponent(upgrade)){
+                slot.equip(upgrade);
                 getSupportFragmentManager().popBackStackImmediate();
             }
         }
@@ -103,6 +117,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         Log.d(LOG_TAG, "onUpgradeSlotClicked");
 
         UpgradeSelectorFragment upgradeSelector = UpgradeSelectorFragment.newInstance(slot, mFleet);
+        upgradeSelector.setSelectionListener(mUpgradeSelectedListener);
         transitionToFragment(upgradeSelector);
     }
 

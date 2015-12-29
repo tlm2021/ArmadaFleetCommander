@@ -1,9 +1,7 @@
 package com.travismosley.armadafleetcommander.data.query.base;
 
-import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipTable;
 import com.travismosley.armadafleetcommander.data.contract.table.VehicleTableContract;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,11 +15,9 @@ public abstract class VehicleQueryBuilder extends ComponentQueryBuilder {
     @Override
     protected List<String> getColumns(){
         List<String> columns = super.getColumns();
-        columns.addAll(Arrays.asList(
-                ShipTable.CLASS_TITLE,
-                ShipTable.HULL,
-                ShipTable.POINT_COST,
-                ShipTable.SPEED));
+        columns.add(VehicleTableContract.CLASS_TITLE);
+        columns.add(VehicleTableContract.HULL);
+        columns.add(VehicleTableContract.SPEED);
         return columns;
     }
 

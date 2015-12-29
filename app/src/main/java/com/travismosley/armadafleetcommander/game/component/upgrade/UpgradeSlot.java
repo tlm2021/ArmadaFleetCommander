@@ -73,4 +73,16 @@ public class UpgradeSlot implements Parcelable {
         return 0;
     }
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UpgradeSlot> CREATOR = new Parcelable.Creator<UpgradeSlot>() {
+        @Override
+        public UpgradeSlot createFromParcel(Parcel in) {
+            return new UpgradeSlot(in);
+        }
+
+        @Override
+        public UpgradeSlot[] newArray(int size) {
+            return new UpgradeSlot[size];
+        }
+    };
 }
