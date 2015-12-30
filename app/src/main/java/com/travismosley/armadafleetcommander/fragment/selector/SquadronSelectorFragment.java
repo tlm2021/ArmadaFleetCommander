@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.travismosley.armadafleetcommander.adaptor.selector.SquadronsSelectorAdapter;
+import com.travismosley.armadafleetcommander.adaptor.list.selector.SquadronsSelectorAdapter;
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
 

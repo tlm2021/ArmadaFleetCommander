@@ -3,13 +3,14 @@ package com.travismosley.armadafleetcommander.game.component.upgrade;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.travismosley.android.data.database.PopulateFromCursorInterface;
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetcommander.data.contract.ArmadaDatabaseContract.ShipUpgradeSlotsTable;
 
 /**
  * Class for defining and upgrade support and storage
  */
-public class UpgradeSlot implements Parcelable {
+public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
 
     private int mUpgradeTypeId;
     private String mUpgradeTypeName;
@@ -74,15 +75,15 @@ public class UpgradeSlot implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UpgradeSlot> CREATOR = new Parcelable.Creator<UpgradeSlot>() {
+    public static final Parcelable.Creator<Upgrade> CREATOR = new Parcelable.Creator<Upgrade>() {
         @Override
-        public UpgradeSlot createFromParcel(Parcel in) {
-            return new UpgradeSlot(in);
+        public Upgrade createFromParcel(Parcel in) {
+            return new Upgrade(in);
         }
 
         @Override
-        public UpgradeSlot[] newArray(int size) {
-            return new UpgradeSlot[size];
+        public Upgrade[] newArray(int size) {
+            return new Upgrade[size];
         }
     };
 }

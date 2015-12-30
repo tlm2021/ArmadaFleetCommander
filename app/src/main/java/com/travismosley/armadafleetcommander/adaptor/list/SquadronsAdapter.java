@@ -1,9 +1,8 @@
-package com.travismosley.armadafleetcommander.adaptor;
+package com.travismosley.armadafleetcommander.adaptor.list;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.travismosley.armadafleetcommander.R;
@@ -24,10 +23,7 @@ public class SquadronsAdapter extends ComponentListAdapter<Squadron> {
         super(context, squadrons);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View squadView = super.getView(position, convertView, parent);
-        Squadron squad = getItem(position);
+    public void populateView(View squadView, Squadron squad) {
 
         // Set the squadron name
         TextView nameView = (TextView) squadView.findViewById(R.id.squadron_title);
@@ -54,8 +50,6 @@ public class SquadronsAdapter extends ComponentListAdapter<Squadron> {
         } else {
             squadView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
-
-        return squadView;
     }
 
     protected int getItemLayoutId(){

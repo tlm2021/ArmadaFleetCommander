@@ -10,18 +10,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lyt_header"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:layout_centerHorizontal="true">
 
-        <TextView
-            android:layout_width="fill_parent"
+        <Spinner
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/ship_title_default"
-            android:id="@+id/txt_ship_title"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentEnd="false"
-            android:gravity="center_horizontal" />
+            android:id="@+id/spinner_ship_title"
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,9 +25,9 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/ship_class_default"
             android:id="@+id/txt_ship_class"
-            android:layout_below="@+id/txt_ship_title"
             android:layout_alignParentStart="false"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/spinner_ship_title" />
 
     </RelativeLayout>
 
@@ -42,7 +38,6 @@
         android:layout_below="@+id/lyt_header"
         android:layout_alignParentStart="false"
         android:scaleType="fitStart"
-        android:src="@mipmap/cr90_placeholder"
         android:adjustViewBounds="true" />
 
     <TextView

@@ -2,7 +2,9 @@ package com.travismosley.armadafleetcommander.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import com.travismosley.armadafleetcommander.game.component.GameComponent;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
@@ -15,6 +17,8 @@ import java.util.List;
  */
 
 public class Fleet implements Parcelable {
+
+    String LOG_TAG = Fleet.class.getSimpleName();
 
     public int mFactionId;
     private int mPointLimit;
@@ -101,12 +105,6 @@ public class Fleet implements Parcelable {
         return true;
     }
 
-    public boolean canAddComponent(Ship ship){
-
-        // Check if the squadron fits under the point limit
-        return ship.pointCost() <= this.remainingFleetPoints();
-    }
-
     public boolean canAddComponent(Upgrade upgrade){
 
         // Check if the upgrade fits under the point limit
@@ -123,6 +121,14 @@ public class Fleet implements Parcelable {
         }
 
         return true;
+    }
+
+    public boolean canAddComponent(GameComponent component){
+        Log.w(LOG_TAG, "Point-only check for component" + component);
+        Log.w(LOG_TAG, "Need canAddComponent method for more specific check.");
+
+        // Check if the squadron fits under the point limit
+        return component.pointCost() <= this.remainingFleetPoints();
 
     }
 

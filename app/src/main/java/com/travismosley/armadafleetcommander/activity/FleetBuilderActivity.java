@@ -124,7 +124,7 @@ public class FleetBuilderActivity extends AppCompatActivity
     public void onShipClicked(Ship ship){
         Log.d(LOG_TAG, "onShipClicked for " + ship);
 
-        ShipDetailFragment shipDetailFragment = ShipDetailFragment.newInstance(ship);
+        ShipDetailFragment shipDetailFragment = ShipDetailFragment.newInstance(ship, mFleet);
 
         // Replace the current fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

@@ -16,6 +16,7 @@ public abstract class VehicleQueryBuilder extends ComponentQueryBuilder {
     protected List<String> getColumns(){
         List<String> columns = super.getColumns();
         columns.add(VehicleTableContract.CLASS_TITLE);
+        columns.add(VehicleTableContract.CLASS_ID);
         columns.add(VehicleTableContract.HULL);
         columns.add(VehicleTableContract.SPEED);
         return columns;

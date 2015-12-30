@@ -1,11 +1,10 @@
-package com.travismosley.armadafleetcommander.adaptor.selector;
+package com.travismosley.armadafleetcommander.adaptor.list.selector;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.travismosley.armadafleetcommander.adaptor.UpgradesAdapter;
+import com.travismosley.armadafleetcommander.adaptor.list.UpgradesAdapter;
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 
@@ -24,17 +23,12 @@ public class UpgradesSelectorAdapter extends UpgradesAdapter {
         mFleet = fleet;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View shipView = super.getView(position, convertView, parent);
-        Upgrade upgrade = getItem(position);
+    public void populateView(View upgradeView, Upgrade upgrade) {
+        super.populateView(upgradeView, upgrade);
 
         // Check if the user is allowed to add the squadron
         if (!mFleet.canAddComponent(upgrade)){
-            shipView.setBackgroundColor(Color.parseColor("#717171"));
+            upgradeView.setBackgroundColor(Color.parseColor("#717171"));
         }
-
-        return shipView;
-
     }
 }

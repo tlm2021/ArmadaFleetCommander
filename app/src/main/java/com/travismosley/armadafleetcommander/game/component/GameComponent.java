@@ -3,13 +3,14 @@ package com.travismosley.armadafleetcommander.game.component;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.travismosley.android.data.database.PopulateFromCursorInterface;
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetcommander.data.contract.table.ComponentTableContract;
 
 /**
  * Base class for all objects that represent GameComponents
  */
-public abstract class GameComponent implements Parcelable {
+public abstract class GameComponent implements Parcelable, PopulateFromCursorInterface {
 
     protected int mId; // An app-internal, unique ID
     protected String mTitle;

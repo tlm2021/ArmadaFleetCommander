@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetcommander.adaptor;
+package com.travismosley.armadafleetcommander.adaptor.list;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.travismosley.armadafleetcommander.R;
@@ -47,13 +48,29 @@ public class UpgradeSlotsAdapter extends ArrayAdapter<UpgradeSlot> {
         }
 
         UpgradeSlot upgradeSlot = mUpgradeSlots.get(position);
+        upgradeSlotView.setTag(upgradeSlot);
 
-        TextView upgradeClassView = (TextView) upgradeSlotView.findViewById(R.id.txt_upgrade_type);
+        final TextView upgradeClassView = (TextView) upgradeSlotView.findViewById(R.id.txt_upgrade_type);
         upgradeClassView.setText(upgradeSlot.typeName());
 
         TextView upgradeTitle = (TextView) upgradeSlotView.findViewById(R.id.txt_upgrade_title);
         TextView upgradeCost = (TextView) upgradeSlotView.findViewById(R.id.txt_point_cost);
+
         Button btnClear = (Button) upgradeSlotView.findViewById(R.id.btn_clear);
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d(LOG_TAG, "Running onClick");
+
+                // Get the upgrade and clear it
+                View upgradeSlotView = (RelativeLayout) v.getParent();
+                UpgradeSlot upgradeSlot = (UpgradeSlot) upgradeSlotView.getTag();
+                upgradeSlot.clear();
+
+                notifyDataSetChanged();
+            }
+        });
 
         if (!upgradeSlot.isEquipped()){
             upgradeTitle.setText(getContext().getString(R.string.upgrade_empty));
@@ -63,7 +80,7 @@ public class UpgradeSlotsAdapter extends ArrayAdapter<UpgradeSlot> {
             Upgrade upgrade = upgradeSlot.getEquipped();
             upgradeTitle.setText(upgrade.title());
             upgradeCost.setText(String.valueOf(upgrade.pointCost()));
-            btnClear.setVisibility(View.INVISIBLE);
+            btnClear.setVisibility(View.VISIBLE);
         }
 
         return upgradeSlotView;

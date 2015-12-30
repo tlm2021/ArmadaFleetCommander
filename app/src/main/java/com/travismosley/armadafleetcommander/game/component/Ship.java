@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
+import com.travismosley.armadafleetcommander.game.component.upgrade.TitleUpgrade;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class Ship extends Vehicle {
 
     private final static String LOG_TAG = Ship.class.getSimpleName();
+    private TitleUpgrade mTitleUpgrade;
     private List<UpgradeSlot> mUpgradeSlots;
 
     public Ship(){}
@@ -40,6 +42,10 @@ public class Ship extends Vehicle {
                 cost += mUpgradeSlots.get(i).getEquipped().pointCost();
             }
         }
+
+        if (mTitleUpgrade != null){
+            cost += mTitleUpgrade.pointCost();
+        }
         return cost;
     }
 
@@ -58,6 +64,22 @@ public class Ship extends Vehicle {
             }
         }
         return false;
+    }
+
+    public void setTitle(TitleUpgrade title){
+        mTitleUpgrade = title;
+    }
+
+    public void clearTitle(){
+        mTitleUpgrade = null;
+    }
+
+    public boolean hasTitleUpgrade(){
+        return mTitleUpgrade != null;
+    }
+
+    public TitleUpgrade titleUpgrade(){
+        return mTitleUpgrade;
     }
 
     public List<UpgradeSlot> upgradeSlots(){

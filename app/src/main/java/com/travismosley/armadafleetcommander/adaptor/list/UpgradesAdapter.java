@@ -1,10 +1,10 @@
-package com.travismosley.armadafleetcommander.adaptor;
+package com.travismosley.armadafleetcommander.adaptor.list;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.travismosley.android.ui.utils.TextViewUtils;
 import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 
@@ -22,21 +22,16 @@ public class UpgradesAdapter extends ComponentListAdapter<Upgrade> {
         super(context, upgrades);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View upgradeView = super.getView(position, convertView, parent);
-        Upgrade upgrade = getItem(position);
+    public void populateView(View upgradeView, Upgrade upgrade) {
 
         // Set the squadron name
         TextView nameView = (TextView) upgradeView.findViewById(R.id.txt_upgrade_title);
         nameView.setText(upgrade.title());
-        correctWidth(nameView);
+        TextViewUtils.fitText(nameView);
 
         // Set the point value
         TextView pointsView = (TextView) upgradeView.findViewById(R.id.txt_point_cost);
         pointsView.setText(Integer.toString(upgrade.pointCost()));
-
-        return upgradeView;
     }
 
     protected int getItemLayoutId(){

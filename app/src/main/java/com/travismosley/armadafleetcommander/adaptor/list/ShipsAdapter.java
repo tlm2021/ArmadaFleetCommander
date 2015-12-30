@@ -1,10 +1,10 @@
-package com.travismosley.armadafleetcommander.adaptor;
+package com.travismosley.armadafleetcommander.adaptor.list;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.travismosley.android.ui.utils.TextViewUtils;
 import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * ArrayAdaptor for Ship lists
  */
-public class ShipsAdapter extends ComponentListAdapter<Ship> {
+public class ShipsAdapter extends ComponentListAdapter<Ship>{
     /* Adapts a Squadron objects for a ListView */
 
     private final static String LOG_TAG = ShipsAdapter.class.getSimpleName();
@@ -22,19 +22,22 @@ public class ShipsAdapter extends ComponentListAdapter<Ship> {
         super(context, ships);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    protected void populateView(View shipView, Ship ship){
 
-        View shipView = super.getView(position, convertView, parent);
-        Ship ship = getItem(position);
-
-        // Set the squadron name
+        // Set the ship title and class name
         TextView nameView = (TextView) shipView.findViewById(R.id.txt_ship_title);
-        nameView.setText(ship.title());
-        correctWidth(nameView);
-
-        // Set the squadron class name
         TextView classView = (TextView) shipView.findViewById(R.id.txt_ship_class);
-        classView.setText(ship.vehicleClass());
+
+        if (ship.hasTitleUpgrade()) {
+            nameView.setText(ship.titleUpgrade().title());
+            classView.setText(ship.title());
+            classView.setVisibility(View.VISIBLE);
+        } else {
+            nameView.setText(ship.title());
+            classView.setVisibility(View.INVISIBLE);
+        }
+
+        TextViewUtils.fitText(nameView);
 
         // Set the hull value
         TextView hullView = (TextView) shipView.findViewById(R.id.txt_ship_hull);
@@ -47,8 +50,6 @@ public class ShipsAdapter extends ComponentListAdapter<Ship> {
         // Set the point value
         TextView pointsView = (TextView) shipView.findViewById(R.id.txt_ship_points);
         pointsView.setText(Integer.toString(ship.pointCost()));
-
-        return shipView;
     }
 
     protected int getItemLayoutId(){

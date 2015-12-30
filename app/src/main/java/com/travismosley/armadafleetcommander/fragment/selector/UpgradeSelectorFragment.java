@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.travismosley.armadafleetcommander.adaptor.selector.UpgradesSelectorAdapter;
+import com.travismosley.armadafleetcommander.adaptor.list.selector.UpgradesSelectorAdapter;
 import com.travismosley.armadafleetcommander.fragment.listener.OnUpgradeSelectedListener;
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
