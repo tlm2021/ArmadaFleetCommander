@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_fleet"
-    tools:context=".fragment.FleetBuilderFragment">
+    tools:context=".fragment.FleetBuilderFragment"
+    android:background="@android:color/darker_gray">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lyt_fleet_overview"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:elevation="2dp"
+        android:background="#ffac64">
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,12 +56,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinner_commander"
-            android:layout_below="@+id/txt_fleet_name" />
+            tools:listitem="@layout/list_item_upgrade"
+            android:layout_below="@+id/txt_fleet_name"
+            android:elevation="3dp"
+            android:padding="4dp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:layout_below="@+id/lyt_fleet_overview"
         android:id="@+id/lyt_fleet_ships">
 
@@ -90,13 +96,19 @@
 
         <ListView
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="fill_parent"
             android:id="@+id/list_ships"
+            tools:listitem="@layout/list_item_ship"
             android:layout_below="@+id/lyt_ships_overview"
             android:layout_alignParentStart="false"
             android:layout_alignParentEnd="true"
             android:stackFromBottom="false"
-            android:textFilterEnabled="false" />
+            android:textFilterEnabled="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="4dp"
+            android:elevation="2dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -164,12 +176,21 @@
 
         <ListView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/list_squadrons"
+            tools:listitem="@layout/list_item_squadron"
             android:layout_below="@+id/lyt_squadrons_overview"
             android:layout_alignParentStart="false"
             android:layout_alignParentEnd="false"
-            android:footerDividersEnabled="false" />
+            android:footerDividersEnabled="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="4dp"
+            android:elevation="2dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textFilterEnabled="false"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -20,7 +20,7 @@
         android:layout_toEndOf="@id/img_upgrade_icon"
         android:layout_centerVertical="true">
 
-        <TextView
+        <com.travismosley.android.ui.view.FitTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.travismosley.android.ui.utils.TextViewUtils;
 import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 
@@ -27,7 +26,6 @@ public class UpgradesAdapter extends ComponentListAdapter<Upgrade> {
         // Set the squadron name
         TextView nameView = (TextView) upgradeView.findViewById(R.id.txt_upgrade_title);
         nameView.setText(upgrade.title());
-        TextViewUtils.fitText(nameView);
 
         // Set the point value
         TextView pointsView = (TextView) upgradeView.findViewById(R.id.txt_point_cost);

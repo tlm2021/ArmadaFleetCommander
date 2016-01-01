@@ -23,6 +23,7 @@ public class ShipFactory extends ComponentFactory<Ship>{
     }
 
     public List<Ship> getForQuery(String query){
+
         List<Ship> shipList = super.getForQuery(query, Ship.class);
         Log.d(LOG_TAG, "getForQuery");
         ArmadaDatabaseFacade armadaDb = new ArmadaDatabaseFacade(mContext);

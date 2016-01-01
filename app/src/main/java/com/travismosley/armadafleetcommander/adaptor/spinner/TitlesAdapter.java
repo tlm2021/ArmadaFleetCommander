@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.travismosley.android.ui.utils.TextViewUtils;
 import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.adaptor.list.ComponentListAdapter;
 import com.travismosley.armadafleetcommander.adaptor.list.UpgradesAdapter;
@@ -63,9 +62,6 @@ public class TitlesAdapter extends ComponentListAdapter<TitleUpgrade> {
             pointsView.setText(Integer.toString(title.pointCost()));
             pointsView.setVisibility(View.VISIBLE);
         }
-
-        TextViewUtils.fitText(nameView);
-
     }
 
     protected int getItemLayoutId(){

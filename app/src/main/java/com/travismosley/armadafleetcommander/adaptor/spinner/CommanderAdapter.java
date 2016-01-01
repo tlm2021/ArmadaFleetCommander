@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.travismosley.android.ui.utils.TextViewUtils;
 import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.adaptor.list.ComponentListAdapter;
 import com.travismosley.armadafleetcommander.adaptor.list.UpgradesAdapter;
@@ -61,8 +60,6 @@ public class CommanderAdapter extends ComponentListAdapter<Commander> {
             pointsView.setText(Integer.toString(commander.pointCost()));
             pointsView.setVisibility(View.VISIBLE);
         }
-
-        TextViewUtils.fitText(nameView);
     }
 
     protected int getItemLayoutId(){

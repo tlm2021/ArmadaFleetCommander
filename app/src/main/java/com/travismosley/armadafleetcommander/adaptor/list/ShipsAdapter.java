@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.travismosley.android.ui.utils.TextViewUtils;
 import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 
@@ -36,8 +35,6 @@ public class ShipsAdapter extends ComponentListAdapter<Ship>{
             nameView.setText(ship.title());
             classView.setVisibility(View.INVISIBLE);
         }
-
-        TextViewUtils.fitText(nameView);
 
         // Set the hull value
         TextView hullView = (TextView) shipView.findViewById(R.id.txt_ship_hull);
