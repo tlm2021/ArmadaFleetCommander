@@ -17,8 +17,8 @@ public abstract class QueryBuilder {
 
     private final String LOG_TAG = QueryBuilder.class.getSimpleName();
 
-    protected SQLiteQueryBuilder mQueryBuilder;
-    protected final String[] mColumns;
+    private SQLiteQueryBuilder mQueryBuilder;
+    private final String[] mColumns;
 
     public QueryBuilder(){
         mQueryBuilder = new SQLiteQueryBuilder();
@@ -41,7 +41,7 @@ public abstract class QueryBuilder {
 
     protected String queryWhere(String whereClause){
         String query = mQueryBuilder.buildQuery(
-                mColumns,           // SELECT <List>
+                mColumns,                          // SELECT <List>
                 whereClause,                       // WHERE <String>
                 getGroupBy(),                      // GROUP BY <String>
                 null,                              // HAVING <String>

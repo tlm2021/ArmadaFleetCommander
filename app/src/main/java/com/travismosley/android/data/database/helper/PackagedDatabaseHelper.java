@@ -49,7 +49,7 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
             // Do nothing - database exists
             Log.i(LOG_TAG, "Found and loaded " + mDbPath + " successfully.");
         } else {
-            // By calling this method and empty database will be created into the default system path
+            // By calling this method an empty database will be created into the default system path
             // of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
 
