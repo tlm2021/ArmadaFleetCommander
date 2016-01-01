@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.travismosley.android.ui.event.SwipeEvent;
@@ -20,9 +21,11 @@ import com.travismosley.armadafleetcommander.R;
 import com.travismosley.armadafleetcommander.adaptor.list.ComponentListAdapter;
 import com.travismosley.armadafleetcommander.adaptor.list.ShipsAdapter;
 import com.travismosley.armadafleetcommander.adaptor.list.SquadronsAdapter;
+import com.travismosley.armadafleetcommander.adaptor.spinner.CommanderAdapter;
 import com.travismosley.armadafleetcommander.game.Fleet;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.Commander;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -167,6 +170,27 @@ public class FleetBuilderFragment extends Fragment {
         // Inflate our view
         mFleetFragment = inflater.inflate(R.layout.fragment_fleet, container, false);
         updateFleetPoints();
+
+        // Get a CommanderAdapter and set it on the commander spinner
+        Spinner spnCommander = (Spinner) mFleetFragment.findViewById(R.id.spinner_commander);
+        spnCommander.setAdapter(new CommanderAdapter(getActivity(), mFleet));
+        spnCommander.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    mFleet.clearCommander();
+                } else {
+                    Log.d(LOG_TAG, "Setting commander: " + parent.getItemAtPosition(position));
+                    mFleet.setCommander((Commander) parent.getItemAtPosition(position));
+                }
+                updateFleetPoints();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // Add the click listener for the add_squadron button
         Button btnAddSquadron = (Button) mFleetFragment.findViewById(R.id.btn_add_squadron);

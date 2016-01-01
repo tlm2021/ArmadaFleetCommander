@@ -7,6 +7,7 @@ import android.util.Log;
 import com.travismosley.armadafleetcommander.game.component.GameComponent;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.Commander;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ public class Fleet implements Parcelable {
     private int mPointLimit;
     public List<Squadron> mSquadrons;
     public List<Ship> mShips;
+    private Commander mCommander;
+
 
     public Fleet(int factionId) {
         mFactionId = factionId;
@@ -61,10 +64,17 @@ public class Fleet implements Parcelable {
         return total;
     }
 
+    public int commanderPoints(){
+        if (mCommander == null){
+            return 0;
+        }
+        return mCommander.pointCost();
+    }
+
     public int fleetPoints(){
 
         // Get the total fleet points spent
-        return squadronPoints() + shipPoints();
+        return squadronPoints() + shipPoints() + commanderPoints();
     }
 
     public int remainingFleetPoints(){
@@ -130,6 +140,14 @@ public class Fleet implements Parcelable {
         // Check if the squadron fits under the point limit
         return component.pointCost() <= this.remainingFleetPoints();
 
+    }
+
+    public void clearCommander(){
+        mCommander = null;
+    }
+
+    public void setCommander(Commander commander){
+        mCommander = commander;
     }
 
     /* Parcel support */

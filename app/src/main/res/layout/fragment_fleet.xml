@@ -48,6 +48,12 @@
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@id/txt_fleet_point_divider"
             android:phoneNumber="true" />
+
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_commander"
+            android:layout_below="@+id/txt_fleet_name" />
     </RelativeLayout>
 
     <RelativeLayout

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.travismosley.android.data.database.logging.ColumnIndexLogger;
 import com.travismosley.armadafleetcommander.data.factory.ComponentFactory;
 import com.travismosley.armadafleetcommander.data.factory.ShipFactory;
+import com.travismosley.armadafleetcommander.data.query.CommanderQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.ShipQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.ShipTitleQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.ShipUpgradeSlotQueryBuilder;
@@ -12,6 +13,7 @@ import com.travismosley.armadafleetcommander.data.query.SquadronQueryBuilder;
 import com.travismosley.armadafleetcommander.data.query.UpgradeQueryBuilder;
 import com.travismosley.armadafleetcommander.game.component.Ship;
 import com.travismosley.armadafleetcommander.game.component.Squadron;
+import com.travismosley.armadafleetcommander.game.component.upgrade.Commander;
 import com.travismosley.armadafleetcommander.game.component.upgrade.TitleUpgrade;
 import com.travismosley.armadafleetcommander.game.component.upgrade.Upgrade;
 import com.travismosley.armadafleetcommander.game.component.upgrade.UpgradeSlot;
@@ -69,6 +71,13 @@ public class ArmadaDatabaseFacade{
         return factory.getForQuery(query, TitleUpgrade.class);
     }
 
+    private List<Commander> getCommandersForQuery(String query){
+
+        // Get a Commander factory and feed it the query
+        ComponentFactory<Commander> factory = new ComponentFactory<>(mContext);
+        return factory.getForQuery(query, Commander.class);
+    }
+
     /* Squadron Queries */
 
     public List<Squadron> getSquadrons() {
@@ -102,11 +111,6 @@ public class ArmadaDatabaseFacade{
         return getUpgradeSlotsForQuery(queryBuilder.queryWhereShipId(shipId));
     }
 
-    public List<TitleUpgrade> getTitlesForShipClass(int shipClassId){
-        ShipTitleQueryBuilder queryBuilder = new ShipTitleQueryBuilder();
-        return getTitleUpgradesForQuery(queryBuilder.queryWhereShipClassId(shipClassId));
-    }
-
     /* Upgrade Queries */
 
     public List<Upgrade> getUpgradesForTypeAndFaction(int typeId, int factionId){
@@ -114,5 +118,13 @@ public class ArmadaDatabaseFacade{
         return getUpgradesForQuery(queryBuilder.queryWhereTypeIdAndFactionId(typeId, factionId));
     }
 
+    public List<TitleUpgrade> getTitlesForShipClass(int shipClassId){
+        ShipTitleQueryBuilder queryBuilder = new ShipTitleQueryBuilder();
+        return getTitleUpgradesForQuery(queryBuilder.queryWhereShipClassId(shipClassId));
+    }
 
+    public List<Commander> getCommandersForFaction(int factionId){
+        CommanderQueryBuilder queryBuilder = new CommanderQueryBuilder();
+        return getCommandersForQuery(queryBuilder.queryWhereFactionId(factionId));
+    }
 }
