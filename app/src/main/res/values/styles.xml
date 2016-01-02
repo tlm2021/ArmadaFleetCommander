@@ -46,6 +46,11 @@
         <item name="android:paddingBottom">5dp</item>
     </style>
 
+    <style name="ComponentListItem.Highlighted" parent="ComponentListItem">
+        <item name="android:background">?android:colorAccent</item>
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

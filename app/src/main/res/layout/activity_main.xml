@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true" />
 
     <fragment
-        android:name="com.travismosley.armadafleetcommander.fragment.MainActivityFragment"
+        android:name="com.travismosley.armadafleetadmiral.fragment.MainActivityFragment"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:id="@+id/main_activity_fragment"

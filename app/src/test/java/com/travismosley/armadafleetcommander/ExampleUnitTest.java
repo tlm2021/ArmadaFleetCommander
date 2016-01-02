@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetcommander;
+package com.travismosley.armadafleetadmiral;
 
 import org.junit.Test;
 
