@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorPrimaryRebel">#FFF3E0</color>
+    <color name="colorPrimaryRebelDark">#BF360C</color>
+    <color name="colorAccentRebel">#FF5722</color>
+
+    <color name="colorPrimaryEmpire">#455a64</color>
+    <color name="colorPrimaryEmpireDark">#263238</color>
+    <color name="colorAccentEmpire">#FAFAFA</color>
 </resources>

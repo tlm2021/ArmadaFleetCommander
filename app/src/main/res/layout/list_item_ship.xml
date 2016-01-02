@@ -2,9 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:background="#ffffff"
-    android:elevation="3dp">
+    style="@style/ComponentListItem">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -18,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/textMedium"
             android:text="@string/ship_speed_default"
             android:id="@+id/txt_ship_speed"
             android:layout_gravity="center_vertical"
@@ -28,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/textMedium"
             android:text="@string/ship_hull_default"
             android:id="@+id/txt_ship_hull"
             android:layout_gravity="center_vertical"
@@ -38,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            style="@style/textLarge"
             android:id="@+id/txt_ship_points"
             android:layout_gravity="center_vertical|right"
             android:layout_marginLeft="5dp"
@@ -58,14 +56,14 @@
         <com.travismosley.android.ui.view.FitTextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            style="@style/textLarge"
             android:text="@string/ship_title_default"
             android:id="@+id/txt_ship_title" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            style="@style/textSmall"
             android:text="@string/ship_class_default"
             android:id="@+id/txt_ship_class" />
     </LinearLayout>

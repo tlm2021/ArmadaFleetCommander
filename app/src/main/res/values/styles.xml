@@ -1,20 +1,54 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppThemeRebel" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryRebel</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryRebelDark</item>
+        <item name="colorAccent">@color/colorAccentRebel</item>
+    </style>
+
+    <style name="AppThemeEmpire" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryEmpire</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryEmpireDark</item>
+        <item name="colorAccent">@color/colorAccentEmpire</item>
+    </style>
+
+    <style name="Header" parent="AppTheme">
+        <item name="android:background">?android:colorPrimary</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="textLarge">
+        <item name="android:textSize">@dimen/abc_text_size_large_material</item>
+    </style>
+
+    <style name="textMedium">
+        <item name="android:textSize">@dimen/abc_text_size_medium_material</item>
+    </style>
+
+    <style name="textSmall">
+        <item name="android:textSize">@dimen/abc_text_size_small_material</item>
+    </style>
+
+    <style name="ComponentListItem" parent="AppTheme">
+        <item name="android:background">?android:colorPrimaryDark</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

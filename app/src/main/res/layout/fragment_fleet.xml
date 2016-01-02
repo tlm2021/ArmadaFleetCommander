@@ -3,16 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_fleet"
-    tools:context=".fragment.FleetBuilderFragment"
-    android:background="@android:color/darker_gray">
+    tools:context=".activity.FleetBuilderActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lyt_fleet_overview"
-        android:padding="10dp"
-        android:elevation="2dp"
-        android:background="#ffac64">
+        style="@style/Header">
 
         <TextView
             android:layout_width="wrap_content"
@@ -180,17 +177,13 @@
             android:id="@+id/list_squadrons"
             tools:listitem="@layout/list_item_squadron"
             android:layout_below="@+id/lyt_squadrons_overview"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentEnd="false"
             android:footerDividersEnabled="false"
             android:divider="@android:color/transparent"
             android:dividerHeight="4dp"
             android:elevation="2dp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:textFilterEnabled="false"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp" />
+            android:textFilterEnabled="false" />
     </RelativeLayout>
 
 </RelativeLayout>

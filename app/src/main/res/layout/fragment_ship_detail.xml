@@ -4,14 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.travismosley.armadafleetcommander.fragment.ShipDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lyt_header"
         android:padding="10dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        style="@style/Header">
 
         <Spinner
             android:layout_width="wrap_content"
@@ -22,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/textMedium"
             android:text="@string/ship_class_default"
             android:id="@+id/txt_ship_class"
             android:layout_alignParentStart="false"
@@ -43,7 +42,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="@style/textMedium"
         android:text="@string/upgrade_header"
         android:id="@+id/txt_upgrade_header"
         android:layout_below="@+id/img_ship"
@@ -53,6 +52,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:listitem="@layout/list_item_upgrade"
         android:id="@+id/list_upgrades"
         android:layout_below="@+id/txt_upgrade_header"
         android:layout_alignParentStart="true" />
