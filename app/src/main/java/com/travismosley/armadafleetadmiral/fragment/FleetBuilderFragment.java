@@ -2,23 +2,19 @@ package com.travismosley.armadafleetadmiral.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.travismosley.android.ui.event.SwipeEvent;
-import com.travismosley.android.ui.listener.OnSwipeListener;
+import com.nhaarman.listviewanimations.appearance.simple.ScaleInAnimationAdapter;
 import com.travismosley.armadafleetadmiral.R;
-import com.travismosley.armadafleetadmiral.adaptor.list.ComponentListAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.list.ShipsAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.list.SquadronsAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.spinner.CommanderAdapter;
@@ -46,72 +42,6 @@ public class FleetBuilderFragment extends Fragment {
     OnAddSquadronListener mAddSquadronCallback;
     OnAddShipListener mAddShipCallback;
     OnShipClickedListener mOnShipClickedCallback;
-
-    private class SquadSwipeListener extends OnSwipeListener{
-
-        // Listen for swipe events and trigger the appropriate actions
-        // These should return false if we don't do any event handling, true otherwise
-        public boolean onSwipeUp(View v, SwipeEvent event){
-            Log.d(LOG_TAG, "Running onSwipeUp");
-            return true;}
-
-        public boolean onSwipeDown(View v, SwipeEvent event){
-            Log.d(LOG_TAG, "Running onSwipeDown");
-            return true;
-        }
-
-        public boolean onSwipeLeft(View v, SwipeEvent event){
-            Log.d(LOG_TAG, "Running onSwipeLeft");
-            return true;
-        }
-
-        public boolean onSwipeRight(View v, SwipeEvent event){
-
-            Log.d(LOG_TAG, "Running onSwipeRight");
-            // The view will be our squadron list
-            ListView view = (ListView) v;
-
-            // Get the position of the item swiped and remove it
-            int swipePos = view.pointToPosition((int) event.sourceX(), (int) event.sourceY());
-            if (swipePos >= 0){
-                removeSquadron(swipePos);
-            }
-            return true;
-        }
-    }
-
-    private class ShipSwipeListener extends OnSwipeListener{
-
-        // Listen for swipe events and trigger the appropriate actions
-        // These should return false if we don't do any event handling, true otherwise
-        public boolean onSwipeUp(View v, SwipeEvent event){
-            Log.d(LOG_TAG, "Running onSwipeUp");
-            return false;}
-
-        public boolean onSwipeDown(View v, SwipeEvent event){
-            Log.d(LOG_TAG, "Running onSwipeDown");
-            return false;
-        }
-
-        public boolean onSwipeLeft(View v, SwipeEvent event){
-            Log.d(LOG_TAG, "Running onSwipeLeft");
-            return false;
-        }
-
-        public boolean onSwipeRight(View v, SwipeEvent event){
-
-            Log.d(LOG_TAG, "Running onSwipeRight");
-            // The view will be our squadron list
-            ListView view = (ListView) v;
-
-            // Get the position of the item swiped and remove it
-            int swipePos = view.pointToPosition((int) event.sourceX(), (int) event.sourceY());
-            if (swipePos >= 0){
-                removeShip(swipePos);
-            }
-            return true;
-        }
-    }
 
     // onAddSquadron callback
     public interface OnAddSquadronListener{
@@ -203,9 +133,9 @@ public class FleetBuilderFragment extends Fragment {
         // Get a SquadronAdapter, and set it on the list
         mSquadListView = (ListView) mFleetFragment.findViewById(R.id.list_squadrons);
         mSquadronsAdaptor = new SquadronsAdapter(getActivity(), mFleet.mSquadrons);
-
-        mSquadListView.setAdapter(mSquadronsAdaptor);
-        mSquadListView.setOnTouchListener(new SquadSwipeListener());
+        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(mSquadronsAdaptor);
+        animationAdapter.setAbsListView(mSquadListView);
+        mSquadListView.setAdapter(animationAdapter);
 
         // Add the click listener for the add_squadron button
         Button btnAddShip = (Button) mFleetFragment.findViewById(R.id.btn_add_ship);
@@ -221,7 +151,6 @@ public class FleetBuilderFragment extends Fragment {
         mShipsAdaptor = new ShipsAdapter(getActivity(), mFleet.mShips);
 
         mShipListView.setAdapter(mShipsAdaptor);
-        mShipListView.setOnTouchListener(new ShipSwipeListener());
         mShipListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -255,40 +184,10 @@ public class FleetBuilderFragment extends Fragment {
 
     public void removeSquadron(final int position){
         Log.d(LOG_TAG, "removeSquadron for position " + position);
-        transitionOutComponent(position, mSquadListView);
     }
 
     public void removeShip(final int position){
         Log.d(LOG_TAG, "removeShip for position " + position);
-        transitionOutComponent(position, mShipListView);
-    }
-
-    private void transitionOutComponent(final int position, final ListView listView){
-
-        // create the animation
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_out_right);
-        anim.setDuration(250);
-
-        final ComponentListAdapter adapter = (ComponentListAdapter) listView.getAdapter();
-
-        // Add a listener to update the squadron list when done
-        anim.setAnimationListener(new Animation.AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {}
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                adapter.removeComponent(position);
-                updateFleetPoints();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
-        });
-
-        // Start the animation
-        listView.getChildAt(position).startAnimation(anim);
     }
 
     public void updateFleetPoints(){

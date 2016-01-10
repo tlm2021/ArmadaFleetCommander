@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.travismosley.android.data.database.cursor.CursorFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
         super(context, dbName, null, 1);
         mContext = context;
         mDbPath = getDatabasePath();
+        mCursorFactory = new CursorFactory();
     }
 
     private String getDatabasePath(){
@@ -42,8 +45,9 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
     public void createDataBase() throws IOException {
 
         File file = new File(mDbPath);
-        if(file.exists())
+        if(file.exists()) {
             file.delete();
+        }
 
         if (checkDataBase()) {
             // Do nothing - database exists
@@ -63,10 +67,10 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
 
     private boolean checkDataBase(){
         SQLiteDatabase checkDB = null;
-        try{
+        try {
             String myPath = mDbPath;
             checkDB = SQLiteDatabase.openDatabase(myPath, mCursorFactory, SQLiteDatabase.OPEN_READONLY);
-        }catch(SQLiteException e){
+        } catch(SQLiteException e){
             // database doesn't exist yet
             Log.i(LOG_TAG, "Couldn't find " + mDbPath + ". Will copy from APK.");
         }
@@ -106,6 +110,10 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public SQLiteDatabase getDatabase(){
+        if (mDb != null) {
+            return mDb;
+        }
+
         try {
             createDataBase();
         } catch (IOException e) {
@@ -123,7 +131,6 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
     public synchronized void close(){
         if(mDb != null)
             mDb.close();
-
         super.close();
     }
 

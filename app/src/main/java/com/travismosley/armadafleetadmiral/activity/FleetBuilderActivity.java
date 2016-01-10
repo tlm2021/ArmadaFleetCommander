@@ -1,9 +1,13 @@
 package com.travismosley.armadafleetadmiral.activity;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Slide;
+import android.transition.Transition;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.fragment.FleetBuilderFragment;
@@ -40,9 +44,8 @@ public class FleetBuilderActivity extends AppCompatActivity
 
         @Override
         public void onComponentSelected(Ship ship) {
-            if (mFleetFrag.addComponent(ship)) {
-                getSupportFragmentManager().popBackStackImmediate();
-            }
+            getFragmentManager().popBackStack();
+            mFleetFrag.addComponent(ship);
         }
     }
 
@@ -50,9 +53,8 @@ public class FleetBuilderActivity extends AppCompatActivity
 
         @Override
         public void onComponentSelected(Squadron squadron) {
-            if (mFleetFrag.addComponent(squadron)) {
-                getSupportFragmentManager().popBackStackImmediate();
-            }
+            getFragmentManager().popBackStack();
+            mFleetFrag.addComponent(squadron);
         }
     }
 
@@ -62,7 +64,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         public void onComponentSelected(Upgrade upgrade, UpgradeSlot slot){
             if (mFleet.canAddComponent(upgrade)){
                 slot.equip(upgrade);
-                getSupportFragmentManager().popBackStackImmediate();
+                getFragmentManager().popBackStack();
             }
         }
     }
@@ -82,9 +84,9 @@ public class FleetBuilderActivity extends AppCompatActivity
         }
 
         mFleetFrag = createFleetFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fleet_builder_fragment_container, mFleetFrag).commit();
-
+        getFragmentManager().beginTransaction()
+                .add(R.id.fleet_builder_root, mFleetFrag)
+                .commit();
     }
 
     private FleetBuilderFragment createFleetFragment(){
@@ -95,6 +97,13 @@ public class FleetBuilderActivity extends AppCompatActivity
         }
         args.putParcelable(getString(R.string.key_fleet), mFleet);
         fleetFragment.setArguments(args);
+        Transition slide = new Slide(Gravity.RIGHT);
+        fleetFragment.setEnterTransition(slide);
+        fleetFragment.setExitTransition(slide);
+        fleetFragment.setReenterTransition(slide);
+        fleetFragment.setReenterTransition(slide);
+        fleetFragment.setAllowEnterTransitionOverlap(false);
+        fleetFragment.setAllowReturnTransitionOverlap(false);
         return fleetFragment;
     }
 
@@ -131,24 +140,27 @@ public class FleetBuilderActivity extends AppCompatActivity
         Log.d(LOG_TAG, "onShipClicked for " + ship);
 
         ShipDetailFragment shipDetailFragment = ShipDetailFragment.newInstance(ship, mFleet);
-
-        // Replace the current fragment
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fleet_builder_fragment_container, shipDetailFragment);
-
-        // Let the user use the back button, and return
-        transaction.addToBackStack(null);
-        transaction.commit();
+        transitionToFragment(shipDetailFragment, new Slide(Gravity.RIGHT));
     }
 
-    public void transitionToFragment(ComponentSelectorFragment fragment){
+    public void transitionToFragment(Fragment fragment){
+        transitionToFragment(fragment, new Slide(Gravity.LEFT));
+    }
+
+    public void transitionToFragment(Fragment fragment, Transition transition){
+
+        fragment.setEnterTransition(transition);
+        fragment.setReturnTransition(transition);
+        fragment.setExitTransition(transition);
+        fragment.setReenterTransition(transition);
+        fragment.setAllowEnterTransitionOverlap(false);
+        fragment.setAllowReturnTransitionOverlap(false);
 
         // Replace the current fragment
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fleet_builder_fragment_container, fragment);
-
-        // Let the user use the back button, and return
-        transaction.addToBackStack(null);
-        transaction.commit();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.fleet_builder_root, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

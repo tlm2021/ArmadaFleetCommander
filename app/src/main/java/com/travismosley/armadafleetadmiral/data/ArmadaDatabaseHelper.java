@@ -10,8 +10,10 @@ import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract;
  */
 public class ArmadaDatabaseHelper extends PackagedDatabaseHelper{
 
-    public ArmadaDatabaseHelper(Context context){
+    protected ArmadaDatabaseHelper(Context context){
         super(context, ArmadaDatabaseContract.DATABASE_NAME);
     }
+
+
 }
 

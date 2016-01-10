@@ -13,7 +13,6 @@ import com.travismosley.armadafleetadmiral.data.query.base.BaseUpgradeQueryBuild
 public class CommanderQueryBuilder extends BaseUpgradeQueryBuilder{
 
     private final String LOG_TAG = CommanderQueryBuilder.class.getSimpleName();
-
     private SQLiteQueryBuilder mQueryBuilder;
 
     protected String getTableName(){

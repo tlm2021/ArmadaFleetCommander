@@ -22,7 +22,7 @@ public class CommanderAdapter extends ComponentListAdapter<Commander> {
     private final Fleet mFleet;
 
     public CommanderAdapter(Context context, Fleet fleet) {
-        super(context, new ArmadaDatabaseFacade(context).getCommandersForFaction(fleet.mFactionId));
+        super(context, ArmadaDatabaseFacade.getInstance(context).getCommandersForFaction(fleet.mFactionId));
         mFleet = fleet;
     }
 

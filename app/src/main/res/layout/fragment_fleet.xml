@@ -91,7 +91,7 @@
                 android:text="+" />
         </RelativeLayout>
 
-        <ListView
+        <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:id="@+id/list_ships"
@@ -171,7 +171,7 @@
                 android:layout_alignParentEnd="false" />
         </RelativeLayout>
 
-        <ListView
+        <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:id="@+id/list_squadrons"

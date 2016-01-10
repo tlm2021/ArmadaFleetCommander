@@ -24,7 +24,7 @@ public class TitlesAdapter extends ComponentListAdapter<TitleUpgrade> {
     private final Ship mShip;
 
     public TitlesAdapter(Context context, Ship ship, Fleet fleet) {
-        super(context, new ArmadaDatabaseFacade(context).getTitlesForShipClass(ship.vehicleClassId()));
+        super(context, ArmadaDatabaseFacade.getInstance(context).getTitlesForShipClass(ship.vehicleClassId()));
         mShip = ship;
         mFleet = fleet;
     }

@@ -1,7 +1,7 @@
 package com.travismosley.armadafleetadmiral.fragment.selector;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +40,7 @@ public abstract class ComponentSelectorFragment<ComponentType extends GameCompon
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mArmadaDb = new ArmadaDatabaseFacade(getActivity());
+        mArmadaDb = ArmadaDatabaseFacade.getInstance(getActivity());
         mFleet = getArguments().getParcelable(KEY_FLEET);
     }
 
