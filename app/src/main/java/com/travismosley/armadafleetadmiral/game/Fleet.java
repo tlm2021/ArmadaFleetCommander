@@ -77,6 +77,10 @@ public class Fleet implements Parcelable {
         return squadronPoints() + shipPoints() + commanderPoints();
     }
 
+    public void setPointLimit(int points){
+        mPointLimit = points;
+    }
+
     public int remainingFleetPoints(){
         return fleetPointLimit() - fleetPoints();
     }
