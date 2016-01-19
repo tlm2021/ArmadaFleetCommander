@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.travismosley.armadafleetadmiral.data.factory.ComponentFactory;
 import com.travismosley.armadafleetadmiral.data.query.CommanderQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.ObjectiveQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.ShipQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.ShipTitleQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.ShipUpgradeSlotQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.SquadronQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.UpgradeQueryBuilder;
+import com.travismosley.armadafleetadmiral.game.component.Objective;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
@@ -89,6 +91,11 @@ public class ArmadaDatabaseFacade{
         return factory.getForQuery(query, mDbHelper.getDatabase(), Commander.class);
     }
 
+    private List<Objective> getObjectivesForQuery(String query){
+        ComponentFactory<Objective> factory = new ComponentFactory<>();
+        return factory.getForQuery(query, mDbHelper.getDatabase(), Objective.class);
+    }
+
     /* Squadron Queries */
 
     public List<Squadron> getSquadrons() {
@@ -137,5 +144,12 @@ public class ArmadaDatabaseFacade{
     public List<Commander> getCommandersForFaction(int factionId){
         CommanderQueryBuilder queryBuilder = new CommanderQueryBuilder();
         return getCommandersForQuery(queryBuilder.queryWhereFactionId(factionId));
+    }
+
+    /* Objective Queries */
+
+    public List<Objective> getObjectivesForType(int typeId){
+        ObjectiveQueryBuilder queryBuilder = new ObjectiveQueryBuilder();
+        return getObjectivesForQuery(queryBuilder.queryWhereTypeId(typeId));
     }
 }

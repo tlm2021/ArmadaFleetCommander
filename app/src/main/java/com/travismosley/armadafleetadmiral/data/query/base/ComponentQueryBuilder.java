@@ -38,6 +38,4 @@ public abstract class ComponentQueryBuilder extends QueryBuilder {
         return queryWhere(getFactionWhereClause(factionId));
     }
 
-
-
 }

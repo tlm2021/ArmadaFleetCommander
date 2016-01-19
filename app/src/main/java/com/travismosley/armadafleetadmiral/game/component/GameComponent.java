@@ -12,7 +12,7 @@ import com.travismosley.armadafleetadmiral.data.contract.table.ComponentTableCon
  */
 public abstract class GameComponent implements Parcelable, PopulateFromCursorInterface {
 
-    protected int mId; // An app-internal, unique ID
+    protected int mId;
     protected String mTitle;
     protected int mPointCost;
 

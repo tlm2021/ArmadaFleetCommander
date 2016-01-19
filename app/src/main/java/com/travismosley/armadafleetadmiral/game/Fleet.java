@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import com.travismosley.armadafleetadmiral.game.component.GameComponent;
+import com.travismosley.armadafleetadmiral.game.component.Objective;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
@@ -21,11 +22,15 @@ public class Fleet implements Parcelable {
 
     String LOG_TAG = Fleet.class.getSimpleName();
 
+    private String mFleetName;
     public int mFactionId;
     private int mPointLimit;
     public List<Squadron> mSquadrons;
     public List<Ship> mShips;
     private Commander mCommander;
+    private Objective mAssaultObjective;
+    private Objective mDefenseObjective;
+    private Objective mNavigationObjective;
 
 
     public Fleet(int factionId) {

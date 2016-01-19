@@ -2,6 +2,7 @@ package com.travismosley.armadafleetadmiral.data.contract;
 
 import android.provider.BaseColumns;
 
+import com.travismosley.armadafleetadmiral.data.contract.table.ObjectiveTableContract;
 import com.travismosley.armadafleetadmiral.data.contract.table.UpgradeTableContract;
 import com.travismosley.armadafleetadmiral.data.contract.table.VehicleTableContract;
 
@@ -43,6 +44,10 @@ public class ArmadaDatabaseContract {
 
     public static abstract class CommanderTable implements UpgradeTableContract{
         public static final String TABLE_NAME = "commander_view";
+    }
+
+    public static abstract class ObjectiveTable implements ObjectiveTableContract{
+        public static final String TABLE_NAME = "objective_view";
     }
 
 }
