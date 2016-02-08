@@ -13,7 +13,5 @@ public class ArmadaDatabaseHelper extends PackagedDatabaseHelper{
     protected ArmadaDatabaseHelper(Context context){
         super(context, ArmadaDatabaseContract.DATABASE_NAME);
     }
-
-
 }
 

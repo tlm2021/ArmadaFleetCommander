@@ -16,7 +16,7 @@ public class ComponentFactory<Component extends PopulateFromCursorInterface> {
 
     private static final String LOG_TAG = ComponentFactory.class.getSimpleName();
 
-    public ComponentFactory(){};
+    public ComponentFactory(){}
 
     public List<Component> getForQuery(String query, SQLiteDatabase db, Class<Component> componentClass){
 

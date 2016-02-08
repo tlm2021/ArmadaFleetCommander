@@ -42,14 +42,14 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
         return mContext.getDatabasePath(getDatabaseName()).getPath();
     }
 
-    public void createDataBase() throws IOException {
+    public void createDatabase() throws IOException {
 
         File file = new File(mDbPath);
         if(file.exists()) {
             file.delete();
         }
 
-        if (checkDataBase()) {
+        if (checkDatabase()) {
             // Do nothing - database exists
             Log.i(LOG_TAG, "Found and loaded " + mDbPath + " successfully.");
         } else {
@@ -58,14 +58,15 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
             this.getReadableDatabase();
 
             try {
-                copyDataBase();
+                copyDatabase();
             } catch (IOException e) {
-                throw new Error("Error copying database");
+                Log.e(LOG_TAG, "Error copying database.", e);
+                throw new Error("Unable to create the database.");
             }
         }
     }
 
-    private boolean checkDataBase(){
+    private boolean checkDatabase(){
         SQLiteDatabase checkDB = null;
         try {
             String myPath = mDbPath;
@@ -81,7 +82,7 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
         return checkDB != null;
     }
 
-    private void copyDataBase() throws IOException{
+    private void copyDatabase() throws IOException{
         // Open your local db as the input stream
         InputStream myInput = mContext.getAssets().open(getDatabaseName());
 
@@ -103,7 +104,7 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
         myInput.close();
     }
 
-    public void openDataBase() throws SQLException {
+    public void openDatabase() throws SQLException {
         // Open the database
         mDb = SQLiteDatabase.openDatabase(mDbPath, mCursorFactory, SQLiteDatabase.OPEN_READONLY);
         Log.i(LOG_TAG, "Successfully opened " + mDbPath);
@@ -115,12 +116,12 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
         }
 
         try {
-            createDataBase();
+            createDatabase();
         } catch (IOException e) {
             throw new Error("Error creating the database;");
         }
         try {
-            openDataBase();
+            openDatabase();
         } catch (SQLException e) {
             throw new Error("Error loading the database!");
         }
@@ -139,9 +140,5 @@ public abstract class PackagedDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){}
-
-    public void setCursorFactory(SQLiteDatabase.CursorFactory cursorFactory){
-        mCursorFactory = cursorFactory;
-    }
 
 }
