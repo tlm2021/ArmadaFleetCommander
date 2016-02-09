@@ -2,7 +2,7 @@ package com.travismosley.armadafleetadmiral.data.query;
 
 import android.database.sqlite.SQLiteQueryBuilder;
 
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract.CommanderTable;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.CommanderTable;
 import com.travismosley.armadafleetadmiral.data.query.base.BaseUpgradeQueryBuilder;
 
 /**

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.travismosley.armadafleetadmiral.R;
-import com.travismosley.armadafleetadmiral.data.ArmadaDatabaseFacade;
+import com.travismosley.armadafleetadmiral.data.ComponentDatabaseFacade;
 import com.travismosley.armadafleetadmiral.fragment.listener.OnComponentSelectedListener;
 import com.travismosley.armadafleetadmiral.game.Fleet;
 import com.travismosley.armadafleetadmiral.game.component.GameComponent;
@@ -24,7 +24,7 @@ public abstract class ComponentSelectorFragment<ComponentType extends GameCompon
     private static final String KEY_FLEET = "KEY_FLEET";
 
     protected Fleet mFleet;
-    protected ArmadaDatabaseFacade mArmadaDb;
+    protected ComponentDatabaseFacade mArmadaDb;
 
     OnComponentSelectedListener<ComponentType> mListener;
 
@@ -40,7 +40,7 @@ public abstract class ComponentSelectorFragment<ComponentType extends GameCompon
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mArmadaDb = ArmadaDatabaseFacade.getInstance(getActivity());
+        mArmadaDb = ComponentDatabaseFacade.getInstance(getActivity());
         mFleet = getArguments().getParcelable(KEY_FLEET);
     }
 

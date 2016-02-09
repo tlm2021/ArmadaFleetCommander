@@ -1,6 +1,6 @@
 package com.travismosley.armadafleetadmiral.data.query;
 
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract.ShipTable;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ShipTable;
 import com.travismosley.armadafleetadmiral.data.query.base.VehicleQueryBuilder;
 
 /**

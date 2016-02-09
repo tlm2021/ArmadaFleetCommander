@@ -1,6 +1,6 @@
 package com.travismosley.armadafleetadmiral.data.query.base;
 
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract.UpgradeTable;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.UpgradeTable;
 
 import java.util.Arrays;
 import java.util.List;

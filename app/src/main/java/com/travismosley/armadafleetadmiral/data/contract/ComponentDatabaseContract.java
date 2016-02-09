@@ -9,12 +9,12 @@ import com.travismosley.armadafleetadmiral.data.contract.table.VehicleTableContr
 /**
  * Contract for the Armada component database
  */
-public class ArmadaDatabaseContract {
+public class ComponentDatabaseContract {
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "armada_fleet_commander.db";
+    public static final String DATABASE_NAME = "components.db";
 
-    public ArmadaDatabaseContract() {}
+    public ComponentDatabaseContract() {}
 
     public static abstract class SquadronTable implements VehicleTableContract{
 

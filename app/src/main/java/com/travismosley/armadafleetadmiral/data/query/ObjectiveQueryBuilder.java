@@ -1,7 +1,7 @@
 package com.travismosley.armadafleetadmiral.data.query;
 
 import com.travismosley.android.data.database.QueryBuilder;
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract.ObjectiveTable;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ObjectiveTable;
 import com.travismosley.armadafleetadmiral.data.contract.table.ObjectiveTableContract;
 
 import java.util.ArrayList;

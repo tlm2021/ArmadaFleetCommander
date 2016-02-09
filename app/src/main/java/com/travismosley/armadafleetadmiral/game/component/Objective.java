@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract;
 
 /**
  * Class for Objective cards
@@ -34,12 +34,12 @@ public class Objective extends GameComponent{
     public void populate(Cursor cursor){
 
         // Upgrade attributes
-        mId = cursor.getInt(ArmadaDatabaseContract.ObjectiveTable._ID);
-        mTitle = cursor.getString(ArmadaDatabaseContract.ObjectiveTable.TITLE);
-        mVictoryPoints = cursor.getInt(ArmadaDatabaseContract.ObjectiveTable.VICTORY_POINTS);
-        mDescription = cursor.getString(ArmadaDatabaseContract.ObjectiveTable.DESCRIPTION);
-        mObjectiveTypeId = cursor.getInt(ArmadaDatabaseContract.ObjectiveTable.TYPE_ID);
-        mObjectiveTypeName = cursor.getString(ArmadaDatabaseContract.ObjectiveTable.TYPE_NAME);
+        mId = cursor.getInt(ComponentDatabaseContract.ObjectiveTable._ID);
+        mTitle = cursor.getString(ComponentDatabaseContract.ObjectiveTable.TITLE);
+        mVictoryPoints = cursor.getInt(ComponentDatabaseContract.ObjectiveTable.VICTORY_POINTS);
+        mDescription = cursor.getString(ComponentDatabaseContract.ObjectiveTable.DESCRIPTION);
+        mObjectiveTypeId = cursor.getInt(ComponentDatabaseContract.ObjectiveTable.TYPE_ID);
+        mObjectiveTypeName = cursor.getString(ComponentDatabaseContract.ObjectiveTable.TYPE_NAME);
     }
 
     // Parcel support

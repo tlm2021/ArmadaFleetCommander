@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.travismosley.android.data.database.PopulateFromCursorInterface;
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract.ShipUpgradeSlotsTable;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ShipUpgradeSlotsTable;
 
 /**
  * Class for defining and upgrade support and storage

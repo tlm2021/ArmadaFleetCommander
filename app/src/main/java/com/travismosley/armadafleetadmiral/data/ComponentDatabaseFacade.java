@@ -25,19 +25,19 @@ import java.util.List;
  * internal classes. Helps out with encapsulation and type conversion;
  */
 
-public class ArmadaDatabaseFacade{
+public class ComponentDatabaseFacade {
 
-    private static final String LOG_TAG = ArmadaDatabaseFacade.class.getSimpleName();
-    private static ArmadaDatabaseFacade mInstance;
-    private final ArmadaDatabaseHelper mDbHelper;
+    private static final String LOG_TAG = ComponentDatabaseFacade.class.getSimpleName();
+    private static ComponentDatabaseFacade mInstance;
+    private final ComponentDatabaseHelper mDbHelper;
 
-    protected ArmadaDatabaseFacade(Context context) {
-        mDbHelper = new ArmadaDatabaseHelper(context);
+    protected ComponentDatabaseFacade(Context context) {
+        mDbHelper = new ComponentDatabaseHelper(context);
     }
 
-    public static ArmadaDatabaseFacade getInstance(Context context){
+    public static ComponentDatabaseFacade getInstance(Context context){
         if (mInstance == null) {
-            mInstance = new ArmadaDatabaseFacade(context);
+            mInstance = new ComponentDatabaseFacade(context);
         }
         return mInstance;
     }

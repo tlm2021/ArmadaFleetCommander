@@ -1,6 +1,6 @@
 package com.travismosley.armadafleetadmiral.data.query;
 
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract.ShipTitleTable;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ShipTitleTable;
 import com.travismosley.armadafleetadmiral.data.query.base.BaseUpgradeQueryBuilder;
 
 /**

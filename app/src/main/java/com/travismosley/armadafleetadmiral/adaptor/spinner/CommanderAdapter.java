@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.adaptor.list.ComponentListAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.list.UpgradesAdapter;
-import com.travismosley.armadafleetadmiral.data.ArmadaDatabaseFacade;
+import com.travismosley.armadafleetadmiral.data.ComponentDatabaseFacade;
 import com.travismosley.armadafleetadmiral.game.Fleet;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
 
@@ -22,7 +22,7 @@ public class CommanderAdapter extends ComponentListAdapter<Commander> {
     private final Fleet mFleet;
 
     public CommanderAdapter(Context context, Fleet fleet) {
-        super(context, ArmadaDatabaseFacade.getInstance(context).getCommandersForFaction(fleet.mFactionId));
+        super(context, ComponentDatabaseFacade.getInstance(context).getCommandersForFaction(fleet.mFactionId));
         mFleet = fleet;
     }
 

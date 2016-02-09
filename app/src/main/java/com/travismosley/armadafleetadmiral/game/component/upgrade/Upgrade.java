@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetadmiral.data.contract.ArmadaDatabaseContract.UpgradeTable;
+import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.UpgradeTable;
 import com.travismosley.armadafleetadmiral.game.component.GameComponent;
 
 import java.util.ArrayList;
