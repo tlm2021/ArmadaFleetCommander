@@ -9,7 +9,7 @@ import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract;
 import java.util.ArrayList;
 
 /**
- * Created by Travis on 2/9/2016.
+ * Class for creating the Fleet Database
  */
 public class FleetDatabaseHelper extends SQLiteOpenHelper{
 

@@ -18,6 +18,7 @@ public class Ship extends Vehicle {
     private final static String LOG_TAG = Ship.class.getSimpleName();
     private TitleUpgrade mTitleUpgrade;
     private List<UpgradeSlot> mUpgradeSlots;
+    private boolean mIsFlagship = false;
 
     public Ship(){}
 
