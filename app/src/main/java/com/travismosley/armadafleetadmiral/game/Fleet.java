@@ -12,7 +12,9 @@ import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Upgrade;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class encapsulating a fleet, it's contents, and other properties
@@ -40,8 +42,30 @@ public class Fleet implements Parcelable {
         mShips = new ArrayList<>();
     }
 
+    public String name(){
+        return mFleetName;
+    }
+
+    public void setName(String name){
+        mFleetName = name;
+    }
+
     public int fleetPointLimit(){
         return mPointLimit;
+    }
+
+    public int fleetPoints(){
+
+        // Get the total fleet points spent
+        return squadronPoints() + shipPoints() + commanderPoints();
+    }
+
+    public void setPointLimit(int points){
+        mPointLimit = points;
+    }
+
+    public int remainingFleetPoints(){
+        return fleetPointLimit() - fleetPoints();
     }
 
     public int squadronPointLimit(){
@@ -57,6 +81,10 @@ public class Fleet implements Parcelable {
             total += mSquadrons.get(i).pointCost();
         }
         return total;
+    }
+
+    public int remainingSquadronPoints(){
+        return Math.min(remainingFleetPoints(), squadronPointLimit() - squadronPoints());
     }
 
     public int shipPoints(){
@@ -76,27 +104,22 @@ public class Fleet implements Parcelable {
         return mCommander.pointCost();
     }
 
-    public int fleetPoints(){
-
-        // Get the total fleet points spent
-        return squadronPoints() + shipPoints() + commanderPoints();
-    }
-
-    public void setPointLimit(int points){
-        mPointLimit = points;
-    }
-
-    public int remainingFleetPoints(){
-        return fleetPointLimit() - fleetPoints();
-    }
-
-    public int remainingSquadronPoints(){
-        return Math.min(remainingFleetPoints(), squadronPointLimit() - squadronPoints());
-    }
-
     public void addSquadron(Squadron squadron){
         mSquadrons.add(squadron);
     }
+
+    public Map<Integer, Integer> squadronCounts(){
+
+        Map<Integer, Integer> counts = new HashMap<>();
+
+        for (int i=0; i<mSquadrons.size(); i++){
+            Squadron squad = mSquadrons.get(i);
+            int count = counts.containsKey(squad.id()) ? counts.get(squad.id()) : 0;
+            counts.put(squad.id(), count + 1);
+        }
+        return counts;
+    }
+
 
     public boolean hasComponent(Squadron squadron){
 
@@ -159,6 +182,9 @@ public class Fleet implements Parcelable {
         mCommander = commander;
     }
 
+    public Commander commander(){
+        return mCommander;
+    }
     /* Parcel support */
 
     protected Fleet(Parcel in) {

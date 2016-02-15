@@ -8,6 +8,7 @@ import com.travismosley.armadafleetadmiral.game.component.upgrade.TitleUpgrade;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Upgrade;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.UpgradeSlot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class Ship extends Vehicle {
 
     private final static String LOG_TAG = Ship.class.getSimpleName();
     private TitleUpgrade mTitleUpgrade;
+    private String mCustomTitle;
     private List<UpgradeSlot> mUpgradeSlots;
     private boolean mIsFlagship = false;
 
@@ -67,6 +69,19 @@ public class Ship extends Vehicle {
         return false;
     }
 
+    public List<Upgrade> getEquippedUpgrades(){
+        ArrayList<Upgrade> upgradeList = new ArrayList<>();
+
+        for (int i=0; i < mUpgradeSlots.size(); i++){
+            UpgradeSlot slot = mUpgradeSlots.get(i);
+            if (slot.isEquipped()){
+                upgradeList.add(slot.getEquipped());
+            }
+        }
+
+        return upgradeList;
+    }
+
     public void setTitle(TitleUpgrade title){
         mTitleUpgrade = title;
     }
@@ -81,6 +96,34 @@ public class Ship extends Vehicle {
 
     public TitleUpgrade titleUpgrade(){
         return mTitleUpgrade;
+    }
+
+    public boolean hasCustomTitle(){
+        return mCustomTitle != null;
+    }
+
+    public String customTitle(){
+        return mCustomTitle;
+    }
+
+    public void clearCustomTitle(){
+        mCustomTitle = null;
+    }
+
+    public void setCustomTitle(String title){
+        mCustomTitle = title;
+    }
+
+    public boolean isFlagship(){
+        return mIsFlagship;
+    }
+
+    public void toggleIsFlagship(){
+        mIsFlagship = !mIsFlagship;
+    }
+
+    public void setIsFlagship(boolean isFlagship){
+        mIsFlagship = isFlagship;
     }
 
     public List<UpgradeSlot> upgradeSlots(){

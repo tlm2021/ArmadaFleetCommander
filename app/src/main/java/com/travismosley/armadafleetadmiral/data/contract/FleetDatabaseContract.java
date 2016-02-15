@@ -21,13 +21,17 @@ public class FleetDatabaseContract {
         public static final String NAME = "name";
         public static final String FACTION_ID = "faction_id";
         public static final String COMMANDER_ID = "commander_id";
+        public static final String FLEET_POINT_LIMIT = "point_limit";
+        public static final String FLEET_POINT_TOTAL = "point_total";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID          + " INTEGER PRIMARY KEY," +
-                        NAME         + " TEXT, " +
-                        FACTION_ID   + " INTEGER, " +
-                        COMMANDER_ID + " INTEGER" +
+                        NAME         + " TEXT NOT NULL, " +
+                        FACTION_ID   + " INTEGER NOT NULL, " +
+                        COMMANDER_ID + " INTEGER NOT NULL, " +
+                        FLEET_POINT_LIMIT + " INTEGER NOT NULL, " +
+                        FLEET_POINT_TOTAL + " INTEGER NOT NULL" +
                 " )";
     }
 
@@ -35,10 +39,14 @@ public class FleetDatabaseContract {
 
         // Table to store ship builds
         public static final String TABLE_NAME = "ship_build";
+        public static final String CUSTOM_TITLE = "custom_title";
+        public static final String TITLE_UPGRADE_ID = "title_upgrade_id";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
-                        _ID     + " INTEGER PRIMARY KEY," +
+                        _ID     + " INTEGER PRIMARY KEY, " +
+                        CUSTOM_TITLE + " STRING, " +
+                        TITLE_UPGRADE_ID + " INTEGER" +
                 " )";
     }
 

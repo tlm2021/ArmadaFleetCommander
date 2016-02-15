@@ -32,7 +32,7 @@ public class FleetBuilderFragment extends Fragment {
     private final static String LOG_TAG = FleetBuilderFragment.class.getSimpleName();
 
     public Fleet mFleet;
-    private SquadronsAdapter mSquadronsAdaptor;
+    private SquadronsAdapter mSquadronsAdapter;
     private ShipsAdapter mShipsAdaptor;
     private View mFleetFragment;
 
@@ -132,8 +132,8 @@ public class FleetBuilderFragment extends Fragment {
 
         // Get a SquadronAdapter, and set it on the list
         mSquadListView = (ListView) mFleetFragment.findViewById(R.id.list_squadrons);
-        mSquadronsAdaptor = new SquadronsAdapter(getActivity(), mFleet.mSquadrons);
-        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(mSquadronsAdaptor);
+        mSquadronsAdapter = new SquadronsAdapter(getActivity(), mFleet.mSquadrons);
+        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(mSquadronsAdapter);
         animationAdapter.setAbsListView(mSquadListView);
         mSquadListView.setAdapter(animationAdapter);
 
@@ -166,7 +166,7 @@ public class FleetBuilderFragment extends Fragment {
 
         Log.d(LOG_TAG, "addComponent for " + squadron);
         if (mFleet.canAddComponent(squadron)) {
-            mSquadronsAdaptor.addComponent(squadron);
+            mSquadronsAdapter.addComponent(squadron);
             return true;
         }
         return false;
