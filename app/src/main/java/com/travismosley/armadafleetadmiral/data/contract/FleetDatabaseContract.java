@@ -39,12 +39,14 @@ public class FleetDatabaseContract {
 
         // Table to store ship builds
         public static final String TABLE_NAME = "ship_build";
+        public static final String SHIP_ID = "ship_id";
         public static final String CUSTOM_TITLE = "custom_title";
         public static final String TITLE_UPGRADE_ID = "title_upgrade_id";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID     + " INTEGER PRIMARY KEY, " +
+                        SHIP_ID + " INTERGER NOT NULL, " +
                         CUSTOM_TITLE + " STRING, " +
                         TITLE_UPGRADE_ID + " INTEGER" +
                 " )";
@@ -96,6 +98,28 @@ public class FleetDatabaseContract {
                 " )";
     }
 
+    public static abstract class FleetShipView{
+        public static final String VIEW_NAME = "fleet_ship_view";
+        public static final String FLEET_ID = "fleet_id";
+        public static final String SHIP_BUILD_ID = "ship_build_id";
+        public static final String SHIP_ID = "ship_id";
+        public static final String CUSTOM_TITLE = "custom_title";
+        public static final String TITLE_UPGRADE_ID = "title_upgrade_id";
+
+        public static final String SQL_CREATE_VIEW =
+                "CREATE VIEW " + VIEW_NAME + " AS " +
+                        "SELECT " + FleetTable._ID + " AS " + FLEET_ID + "," +
+                        ShipBuildTable._ID + " AS " + SHIP_BUILD_ID + "," +
+                        ShipBuildTable.SHIP_ID + " AS " + SHIP_ID + "," +
+                        ShipBuildTable.CUSTOM_TITLE + " AS " + CUSTOM_TITLE + "," +
+                        ShipBuildTable.TITLE_UPGRADE_ID + " AS " + TITLE_UPGRADE_ID +
+                        " FROM " + FleetTable.TABLE_NAME +
+                        " JOIN " + FleetShipBuildTable.FLEET_ID +
+                            " ON " + FleetShipBuildTable.FLEET_ID + " = " + FleetTable._ID +
+                        " JOIN " + ShipBuildTable.TABLE_NAME +
+                            " ON " + FleetShipBuildTable.SHIP_BUILD_ID + " = " + ShipBuildTable._ID;
+    }
+
     public static final ArrayList<String> getOnCreateSqlCommands(){
         ArrayList<String> commands = new ArrayList<>();
         commands.add(FleetTable.SQL_CREATE_TABLE);
@@ -103,6 +127,7 @@ public class FleetDatabaseContract {
         commands.add(ShipBuildUpgradesTable.SQL_CREATE_TABLE);
         commands.add(FleetShipBuildTable.SQL_CREATE_TABLE);
         commands.add(FleetSquadronsTable.SQL_CREATE_TABLE);
+        commands.add(FleetShipView.SQL_CREATE_VIEW);
 
         return commands;
     }

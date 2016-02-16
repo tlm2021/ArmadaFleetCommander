@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetadmiral.data.query.base;
+package com.travismosley.armadafleetadmiral.data.query.component.base;
 
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.UpgradeTable;
 

@@ -1,9 +1,9 @@
-package com.travismosley.armadafleetadmiral.data.query;
+package com.travismosley.armadafleetadmiral.data.query.component;
 
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.CommanderTable;
-import com.travismosley.armadafleetadmiral.data.query.base.BaseUpgradeQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.base.BaseUpgradeQueryBuilder;
 
 /**
  * A helper class around SQLiteQueryBuilder to simplify building queries for

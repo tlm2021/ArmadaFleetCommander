@@ -1,7 +1,7 @@
-package com.travismosley.armadafleetadmiral.data.query;
+package com.travismosley.armadafleetadmiral.data.query.component;
 
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ShipTable;
-import com.travismosley.armadafleetadmiral.data.query.base.VehicleQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.base.VehicleQueryBuilder;
 
 /**
  * A helper class around SQLiteQUeryBuilder to simplify building queries for
@@ -14,5 +14,13 @@ public class ShipQueryBuilder extends VehicleQueryBuilder {
     @Override
     protected String getTableName(){
         return ShipTable.TABLE_NAME;
+    }
+
+    protected String getShipIdWhereClause(int shipId){
+        return ShipTable._ID + "=" + String.valueOf(shipId);
+    }
+
+    public String queryWhereShipId(int shipId) {
+        return queryWhere(getShipIdWhereClause(shipId));
     }
 }

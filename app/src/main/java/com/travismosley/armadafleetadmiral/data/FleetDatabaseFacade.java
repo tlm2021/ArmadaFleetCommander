@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract;
-import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetShipBuildTable;
+import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.ShipBuildTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.ShipBuildUpgradesTable;
+import com.travismosley.armadafleetadmiral.data.query.FleetQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.FleetShipQueryBuilder;
 import com.travismosley.armadafleetadmiral.game.Fleet;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Upgrade;
@@ -29,12 +31,14 @@ public class FleetDatabaseFacade {
 
     private static final String LOG_TAG = FleetDatabaseFacade.class.getSimpleName();
     private static FleetDatabaseFacade mInstance;
-    private static FleetDatabaseHelper mDbHelper;
+    private static FleetDatabaseHelper mFleetDbHelper;
+    private static ComponentDatabaseFacade mComponentDbFacade;
 
     private SQLiteDatabase mDb;
 
     protected FleetDatabaseFacade(Context context){
-        mDbHelper = new FleetDatabaseHelper(context);
+        mFleetDbHelper = new FleetDatabaseHelper(context);
+        mComponentDbFacade = new ComponentDatabaseFacade(context);
     }
 
     public static FleetDatabaseFacade getInstance(Context context) {
@@ -47,7 +51,7 @@ public class FleetDatabaseFacade {
     public List<Integer> getUpgradeIdsForShipBuild(int shipBuildId){
 
         List<Integer> upgradeIds = new ArrayList<>();
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        SQLiteDatabase db = mFleetDbHelper.getReadableDatabase();
         Cursor cursor = (Cursor) db.rawQuery(
                 "SELECT " + ShipBuildUpgradesTable.UPGRADE_ID +
                         " FROM " + ShipBuildUpgradesTable.TABLE_NAME +
@@ -97,7 +101,7 @@ public class FleetDatabaseFacade {
                         " GROUP BY " + ShipBuildUpgradesTable.SHIP_BUILD_ID +
                         " HAVING COUNT(*) = " + String.valueOf(buildUpgrades.size());
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        SQLiteDatabase db = mFleetDbHelper.getReadableDatabase();
         Cursor cursor = (Cursor) db.rawQuery(query, null);
         cursor.moveToPosition(0);
 
@@ -121,6 +125,7 @@ public class FleetDatabaseFacade {
         ContentValues values = new ContentValues();
 
         // Add the custom title (may be null) and upgrade id if available
+        values.put(ShipBuildTable.SHIP_ID, ship.id());
         values.put(ShipBuildTable.CUSTOM_TITLE, ship.customTitle());
         if (ship.hasTitleUpgrade()){
             values.put(ShipBuildTable.TITLE_UPGRADE_ID, ship.titleUpgrade().id());
@@ -130,6 +135,7 @@ public class FleetDatabaseFacade {
 
         values.clear();
         values.put(ShipBuildUpgradesTable.SHIP_BUILD_ID, shipBuildId);
+        closeDatabase();
 
         List<Upgrade> shipUpgrades = ship.getEquippedUpgrades();
         for (int i=0; i < shipUpgrades.size(); i++){
@@ -159,7 +165,9 @@ public class FleetDatabaseFacade {
         values.put(FleetShipBuildTable.FLEET_ID, fleetId);
 
         for (int i=0; i < fleet.mShips.size(); i++){
+            Ship ship = fleet.mShips.get(i);
             values.put(FleetShipBuildTable.SHIP_BUILD_ID, getOrAddShipBuild(fleet.mShips.get(i)));
+            values.put(FleetShipBuildTable.FLAGSHIP, ship.isFlagship() ? 1 : 0);
             getDatabase().insert(FleetShipBuildTable.TABLE_NAME, null, values);
         }
 
@@ -180,9 +188,39 @@ public class FleetDatabaseFacade {
         return fleetId;
     }
 
+    public Fleet getFleet(int fleetId){
+        SQLiteDatabase db = getDatabase();
+        FleetQueryBuilder fleetQueryBuilder = new FleetQueryBuilder();
+        Cursor cursor = (Cursor) db.rawQuery(fleetQueryBuilder.queryWhereFleetId(fleetId), null);
+
+        Fleet fleet = new Fleet();
+        fleet.populate(cursor);
+
+        fleet.mShips = getShipsForFleet(fleetId);
+
+        return fleet;
+    }
+
+    public List<Ship> getShipsForFleet(int fleetId){
+
+        ArrayList<Ship> shipList = new ArrayList<>();
+        SQLiteDatabase db = getDatabase();
+
+        FleetShipQueryBuilder shipQueryBuilder = new FleetShipQueryBuilder();
+        Cursor cursor = (Cursor) db.rawQuery(shipQueryBuilder.queryWhereFleetId(fleetId), null);
+
+        for (int i=0; i<cursor.getCount(); i++){
+            cursor.moveToPosition(i);
+            Ship ship = mComponentDbFacade.getShipForShipId(cursor.getInt(FleetDatabaseContract.FleetShipView.SHIP_ID));
+            shipList.add(ship);
+        }
+
+        return shipList;
+    }
+
     private SQLiteDatabase getDatabase(){
         if (mDb == null) {
-            mDb = mDbHelper.getWritableDatabase();
+            mDb = mFleetDbHelper.getWritableDatabase();
         }
         return mDb;
     }

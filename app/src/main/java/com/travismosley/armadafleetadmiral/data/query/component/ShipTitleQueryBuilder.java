@@ -1,7 +1,7 @@
-package com.travismosley.armadafleetadmiral.data.query;
+package com.travismosley.armadafleetadmiral.data.query.component;
 
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ShipTitleTable;
-import com.travismosley.armadafleetadmiral.data.query.base.BaseUpgradeQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.base.BaseUpgradeQueryBuilder;
 
 /**
  * A helper class around SQLiteQueryBuilder to simplify building queries for

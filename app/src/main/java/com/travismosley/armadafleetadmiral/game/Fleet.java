@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.travismosley.android.data.database.PopulateFromCursorInterface;
+import com.travismosley.android.data.database.cursor.Cursor;
+import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract;
 import com.travismosley.armadafleetadmiral.game.component.GameComponent;
 import com.travismosley.armadafleetadmiral.game.component.Objective;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
@@ -20,7 +23,7 @@ import java.util.Map;
  * Class encapsulating a fleet, it's contents, and other properties
  */
 
-public class Fleet implements Parcelable {
+public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
     String LOG_TAG = Fleet.class.getSimpleName();
 
@@ -34,12 +37,21 @@ public class Fleet implements Parcelable {
     private Objective mDefenseObjective;
     private Objective mNavigationObjective;
 
-
-    public Fleet(int factionId) {
-        mFactionId = factionId;
+    public Fleet(){
         mPointLimit = 400;
         mSquadrons = new ArrayList<>();
         mShips = new ArrayList<>();
+    }
+
+    public Fleet(int factionId) {
+        super();
+        mFactionId = factionId;
+    }
+
+    public void populate(Cursor cursor){
+        mFactionId = cursor.getInt(FleetDatabaseContract.FleetTable.FACTION_ID);
+        mPointLimit = cursor.getInt(FleetDatabaseContract.FleetTable.FLEET_POINT_LIMIT);
+        mFleetName = cursor.getString(FleetDatabaseContract.FleetTable.NAME);
     }
 
     public String name(){

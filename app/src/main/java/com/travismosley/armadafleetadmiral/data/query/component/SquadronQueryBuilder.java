@@ -1,7 +1,7 @@
-package com.travismosley.armadafleetadmiral.data.query;
+package com.travismosley.armadafleetadmiral.data.query.component;
 
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.SquadronTable;
-import com.travismosley.armadafleetadmiral.data.query.base.VehicleQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.base.VehicleQueryBuilder;
 
 import java.util.List;
 

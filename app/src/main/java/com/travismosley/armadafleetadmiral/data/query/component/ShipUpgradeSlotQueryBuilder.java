@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetadmiral.data.query;
+package com.travismosley.armadafleetadmiral.data.query.component;
 
 import com.travismosley.android.data.database.QueryBuilder;
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ShipUpgradeSlotsTable;

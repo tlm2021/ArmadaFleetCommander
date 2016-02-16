@@ -18,7 +18,7 @@ public class ComponentFactory<Component extends PopulateFromCursorInterface> {
 
     public ComponentFactory(){}
 
-    public List<Component> getForQuery(String query, SQLiteDatabase db, Class<Component> componentClass){
+    public List<Component> getAllForQuery(String query, SQLiteDatabase db, Class<Component> componentClass){
 
         Cursor cursor = (Cursor) db.rawQuery(query, null);
         List<Component> componentList = new ArrayList<>();
@@ -45,5 +45,21 @@ public class ComponentFactory<Component extends PopulateFromCursorInterface> {
 
         return componentList;
     }
+
+    public Component getSingleForQuery(String query, SQLiteDatabase db, Class<Component> componentClass){
+
+        Cursor cursor = (Cursor) db.rawQuery(query, null);
+        Component component;
+
+        try {
+            component = componentClass.newInstance();
+        } catch (Exception exc) {
+            Log.e(LOG_TAG, "Unable to create new instance of " + componentClass, exc);
+            return null;
+        }
+        component.populate(cursor);
+        return component;
+    }
+
 
 }

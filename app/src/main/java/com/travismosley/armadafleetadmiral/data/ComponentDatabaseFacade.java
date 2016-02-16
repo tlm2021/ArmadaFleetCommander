@@ -3,13 +3,13 @@ package com.travismosley.armadafleetadmiral.data;
 import android.content.Context;
 
 import com.travismosley.armadafleetadmiral.data.factory.ComponentFactory;
-import com.travismosley.armadafleetadmiral.data.query.CommanderQueryBuilder;
-import com.travismosley.armadafleetadmiral.data.query.ObjectiveQueryBuilder;
-import com.travismosley.armadafleetadmiral.data.query.ShipQueryBuilder;
-import com.travismosley.armadafleetadmiral.data.query.ShipTitleQueryBuilder;
-import com.travismosley.armadafleetadmiral.data.query.ShipUpgradeSlotQueryBuilder;
-import com.travismosley.armadafleetadmiral.data.query.SquadronQueryBuilder;
-import com.travismosley.armadafleetadmiral.data.query.UpgradeQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.CommanderQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.ObjectiveQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.ShipQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.ShipTitleQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.ShipUpgradeSlotQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.SquadronQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.UpgradeQueryBuilder;
 import com.travismosley.armadafleetadmiral.game.component.Objective;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
@@ -46,14 +46,23 @@ public class ComponentDatabaseFacade {
 
         // Get a Squadron factory, and feed it the query
         ComponentFactory<Squadron> factory = new ComponentFactory<>();
-        return factory.getForQuery(query, mDbHelper.getDatabase(), Squadron.class);
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), Squadron.class);
+    }
+
+    private Ship getShipForQuery(String query){
+
+        // Get a Ship factory, and feed it the query
+        ComponentFactory<Ship> factory = new ComponentFactory<>();
+        Ship ship = factory.getSingleForQuery(query, mDbHelper.getDatabase(), Ship.class);
+        ship.setUpgradeSlots(getUpgradeSlotsForShip(ship.id()));
+        return ship;
     }
 
     private List<Ship> getShipsForQuery(String query) {
 
         // Get a Ship factory, and feed it the query
         ComponentFactory<Ship> factory = new ComponentFactory<>();
-        List<Ship> shipList = factory.getForQuery(query, mDbHelper.getDatabase(), Ship.class);
+        List<Ship> shipList = factory.getAllForQuery(query, mDbHelper.getDatabase(), Ship.class);
 
         for (int i = 0; i < shipList.size(); i++) {
             Ship ship = shipList.get(i);
@@ -67,33 +76,33 @@ public class ComponentDatabaseFacade {
 
         // Get an UpgradeSlot factory and feed it the query
         ComponentFactory<UpgradeSlot> factory = new ComponentFactory<>();
-        return factory.getForQuery(query, mDbHelper.getDatabase(), UpgradeSlot.class);
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), UpgradeSlot.class);
     }
 
     private List<Upgrade> getUpgradesForQuery(String query){
 
         // Get an Upgrade factory, and feed it the query
         ComponentFactory<Upgrade> factory = new ComponentFactory<>();
-        return factory.getForQuery(query, mDbHelper.getDatabase(), Upgrade.class);
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), Upgrade.class);
     }
 
     private List<TitleUpgrade> getTitleUpgradesForQuery(String query){
 
         // Get a TitleUpgrade factory and feed it the query
         ComponentFactory<TitleUpgrade> factory = new ComponentFactory<>();
-        return factory.getForQuery(query, mDbHelper.getDatabase(), TitleUpgrade.class);
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), TitleUpgrade.class);
     }
 
     private List<Commander> getCommandersForQuery(String query){
 
         // Get a Commander factory and feed it the query
         ComponentFactory<Commander> factory = new ComponentFactory<>();
-        return factory.getForQuery(query, mDbHelper.getDatabase(), Commander.class);
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), Commander.class);
     }
 
     private List<Objective> getObjectivesForQuery(String query){
         ComponentFactory<Objective> factory = new ComponentFactory<>();
-        return factory.getForQuery(query, mDbHelper.getDatabase(), Objective.class);
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), Objective.class);
     }
 
     /* Squadron Queries */
@@ -119,6 +128,11 @@ public class ComponentDatabaseFacade {
     public List<Ship> getShipsForFaction(int factionId){
         ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
         return getShipsForQuery(queryBuilder.queryWhereFactionId(factionId));
+    }
+
+    public Ship getShipForShipId(int shipId){
+        ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
+        return getShipForQuery(queryBuilder.queryWhereShipId(shipId));
     }
 
     /* Upgrade Slot Queries */
