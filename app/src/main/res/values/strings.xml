@@ -40,5 +40,9 @@
     <string name="upgrade_header">Upgrades</string>
     <string name="upgrade_empty">Empty</string>
     <string name="upgrade_points_default">8</string>
+    <string name="upgrade_title_default">Enhanced Armaments</string>
+    <string name="upgrade_mod_default">Modification</string>
+    <string name="upgrade_desc_default">The battery armaments for your left and right hull zones are increased by 1 red die. Now I'm gonna type more to fill up this space with stuff. But now I need a fourth line.</string>
+    <string name="upgrade_unique">*</string>
 
 </resources>
