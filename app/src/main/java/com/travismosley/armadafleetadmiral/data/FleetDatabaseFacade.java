@@ -231,5 +231,4 @@ public class FleetDatabaseFacade {
             mDb = null;
         }
     }
-
 }

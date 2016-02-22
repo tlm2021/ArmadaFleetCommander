@@ -44,7 +44,7 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
     }
 
     public Fleet(int factionId) {
-        super();
+        this();
         mFactionId = factionId;
     }
 

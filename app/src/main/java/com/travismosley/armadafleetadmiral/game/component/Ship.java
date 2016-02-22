@@ -133,11 +133,20 @@ public class Ship extends Vehicle {
     // Parcel support
     protected Ship(Parcel in) {
         super(in);
+        mTitleUpgrade = in.readParcelable(TitleUpgrade.class.getClassLoader());
+        mCustomTitle = in.readString();
+        mUpgradeSlots = new ArrayList<>();
+        in.readTypedList(mUpgradeSlots, UpgradeSlot.CREATOR);
+        mIsFlagship = in.readByte() != 0x00;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeParcelable(mTitleUpgrade, flags);
+        dest.writeString(mCustomTitle);
+        dest.writeTypedList(mUpgradeSlots);
+        dest.writeByte((byte) (mIsFlagship ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")
