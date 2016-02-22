@@ -8,12 +8,13 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:id="@+id/lyt_upgrade_info">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
+            android:id="@+id/img_upgrade_icon"
             android:src="@mipmap/upgrade_icon"
             android:layout_marginRight="10dp" />
 
@@ -21,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/upgrade_unique"
-            android:id="@+id/textView"
+            android:id="@+id/txt_upgrade_unique"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="4dp"
             android:layout_marginRight="2dp"
@@ -32,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/upgrade_title_default"
-            android:id="@+id/textView2"
+            android:id="@+id/txt_upgrade_title"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="4dp"
             android:textAppearance="@android:style/TextAppearance.Holo.Widget.TextView.PopupMenu"
@@ -43,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/upgrade_points_default"
-            android:id="@+id/textView3"
+            android:id="@+id/txt_upgrade_points"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="4dp"
             android:textColor="#470202" />

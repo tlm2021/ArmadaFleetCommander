@@ -23,6 +23,8 @@
     <string name="squadron_speed_default">3</string>
     <string name="squadron_hull_default">5</string>
     <string name="squadron_points_default">20</string>
+    <string name="squadron_desc_default">While attacking a ship, if the defending hull zone has no shields, you may reroll any number of dice in your attack pool.</string>
+    <string name="squadron_type_default">Bomber</string>
 
     <string name="ship_list_title">Ships</string>
     <string name="ship_title_default">CR90 Corvette A</string>
@@ -44,5 +46,7 @@
     <string name="upgrade_mod_default">Modification</string>
     <string name="upgrade_desc_default">The battery armaments for your left and right hull zones are increased by 1 red die. Now I'm gonna type more to fill up this space with stuff. But now I need a fourth line.</string>
     <string name="upgrade_unique">*</string>
+
+
 
 </resources>
