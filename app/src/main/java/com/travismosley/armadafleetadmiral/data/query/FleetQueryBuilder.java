@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * A helper class around SQLiteQueryBuilder to simplify building queries for
- * getting information about Squadrons.
+ * getting information about Fleets.
  */
 public class FleetQueryBuilder extends QueryBuilder {
 

@@ -78,7 +78,6 @@ public class Ship extends Vehicle {
                 upgradeList.add(slot.getEquipped());
             }
         }
-
         return upgradeList;
     }
 

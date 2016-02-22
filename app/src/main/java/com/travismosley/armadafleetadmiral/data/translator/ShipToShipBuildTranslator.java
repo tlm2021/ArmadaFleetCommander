@@ -3,7 +3,6 @@ package com.travismosley.armadafleetadmiral.data.translator;
 import android.content.Context;
 
 import com.travismosley.armadafleetadmiral.data.FleetDatabaseFacade;
-import com.travismosley.armadafleetadmiral.data.FleetDatabaseHelper;
 
 /**
  * Created by Travis on 2/11/2016.
