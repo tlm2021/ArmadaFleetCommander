@@ -1,6 +1,6 @@
 package com.travismosley.armadafleetadmiral.data.contract;
 
-import com.travismosley.armadafleetadmiral.data.contract.table.BaseTableContract;
+import com.travismosley.android.data.database.contract.BaseTableContract;
 
 import java.util.ArrayList;
 
@@ -8,13 +8,12 @@ import java.util.ArrayList;
  * Contract for the Armada component database
  */
 
-public class FleetDatabaseContract {
+public abstract class FleetDatabaseContract {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "fleets.db";
-    public FleetDatabaseContract() {}
 
-    public static abstract class FleetTable extends BaseTableContract{
+    public static class FleetTable extends BaseTableContract{
 
         // Table to store saved fleets
         public static final String TABLE_NAME = "fleet";
@@ -35,7 +34,7 @@ public class FleetDatabaseContract {
                 " )";
     }
 
-    public static abstract class ShipBuildTable extends BaseTableContract{
+    public static class ShipBuildTable extends BaseTableContract{
 
         // Table to store ship builds
         public static final String TABLE_NAME = "ship_build";
@@ -52,7 +51,7 @@ public class FleetDatabaseContract {
                 " )";
     }
 
-    public static abstract class FleetShipBuildTable extends BaseTableContract{
+    public static class FleetShipBuildTable extends BaseTableContract{
 
         // Table to link ship builds to fleets
         public static final String TABLE_NAME = "fleet_ship_build";
@@ -63,13 +62,13 @@ public class FleetDatabaseContract {
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
-                        FleetTable.getForeignKeyColumnSql(FLEET_ID) + "," +
-                        ShipBuildTable.getForeignKeyColumnSql(SHIP_BUILD_ID) + "," +
+                        getForeignKeyColumnSql(FLEET_ID, FleetTable.TABLE_NAME) + ", " +
+                        getForeignKeyColumnSql(SHIP_BUILD_ID, ShipBuildTable.TABLE_NAME) + ", " +
                         FLAGSHIP + " INTEGER " +
-                " )";
+                        " )";
     }
 
-    public static abstract class FleetSquadronsTable extends BaseTableContract{
+    public static class FleetSquadronsTable extends BaseTableContract{
 
         public static final String TABLE_NAME = "fleet_squadrons";
         public static final String FLEET_ID = "fleet_id";
@@ -79,23 +78,24 @@ public class FleetDatabaseContract {
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID         + " INTEGER PRIMARY KEY," +
-                        FleetTable.getForeignKeyColumnSql(FLEET_ID) +
-                        SQUADRON_ID + " INTEGER " +
+                        getForeignKeyColumnSql(FLEET_ID, FleetTable.TABLE_NAME) + ", " +
+                        SQUADRON_ID + " INTEGER " + ", " +
                         COUNT       + " INTEGER" +
-                " )";
+                        " )";
     }
 
     public static abstract class ShipBuildUpgradesTable extends BaseTableContract{
+
         public static final String TABLE_NAME = "ship_build_upgrades";
         public static final String SHIP_BUILD_ID = "ship_build_id";
         public static final String UPGRADE_ID = "upgrade_id";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
-                        _ID           + " INTEGER PRIMARY KEY," +
-                        ShipBuildTable.getForeignKeyColumnSql(SHIP_BUILD_ID) +
-                        UPGRADE_ID    + " INTEGER " +
-                " )";
+                        _ID        + " INTEGER PRIMARY KEY, " +
+                        getForeignKeyColumnSql(SHIP_BUILD_ID, ShipBuildTable.TABLE_NAME) + ", " +
+                        UPGRADE_ID + " INTEGER " +
+                        " )";
     }
 
     public static abstract class FleetShipView{
@@ -108,19 +108,26 @@ public class FleetDatabaseContract {
 
         public static final String SQL_CREATE_VIEW =
                 "CREATE VIEW " + VIEW_NAME + " AS " +
-                        "SELECT " + FleetTable._ID + " AS " + FLEET_ID + "," +
-                        ShipBuildTable._ID + " AS " + SHIP_BUILD_ID + "," +
-                        ShipBuildTable.SHIP_ID + " AS " + SHIP_ID + "," +
-                        ShipBuildTable.CUSTOM_TITLE + " AS " + CUSTOM_TITLE + "," +
-                        ShipBuildTable.TITLE_UPGRADE_ID + " AS " + TITLE_UPGRADE_ID +
+                        "SELECT " + FleetTable.TABLE_NAME + "." + FleetTable._ID +
+                            " AS " + FLEET_ID + ", " +
+                        ShipBuildTable.TABLE_NAME + "." + ShipBuildTable._ID +
+                            " AS " + SHIP_BUILD_ID + ", " +
+                        ShipBuildTable.TABLE_NAME + "." + ShipBuildTable.SHIP_ID +
+                            " AS " + SHIP_ID + ", " +
+                        ShipBuildTable.TABLE_NAME + "." + ShipBuildTable.CUSTOM_TITLE +
+                            " AS " + CUSTOM_TITLE + ", " +
+                        ShipBuildTable.TABLE_NAME + "." + ShipBuildTable.TITLE_UPGRADE_ID +
+                            " AS " + TITLE_UPGRADE_ID +
                         " FROM " + FleetTable.TABLE_NAME +
-                        " JOIN " + FleetShipBuildTable.FLEET_ID +
-                            " ON " + FleetShipBuildTable.FLEET_ID + " = " + FleetTable._ID +
+                        " JOIN " + FleetShipBuildTable.TABLE_NAME +
+                            " ON " + FleetShipBuildTable.TABLE_NAME + "." + FleetShipBuildTable.FLEET_ID +
+                                " = " + FleetTable.TABLE_NAME + "." + FleetTable._ID +
                         " JOIN " + ShipBuildTable.TABLE_NAME +
-                            " ON " + FleetShipBuildTable.SHIP_BUILD_ID + " = " + ShipBuildTable._ID;
+                            " ON " + FleetShipBuildTable.TABLE_NAME + "." + FleetShipBuildTable.SHIP_BUILD_ID +
+                                " = " + ShipBuildTable.TABLE_NAME + "." + ShipBuildTable._ID;
     }
 
-    public static final ArrayList<String> getOnCreateSqlCommands(){
+    public static ArrayList<String> getOnCreateSqlCommands(){
         ArrayList<String> commands = new ArrayList<>();
         commands.add(FleetTable.SQL_CREATE_TABLE);
         commands.add(ShipBuildTable.SQL_CREATE_TABLE);
