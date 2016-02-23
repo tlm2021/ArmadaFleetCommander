@@ -1,67 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    style="@style/ComponentListItem">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/textLarge"
-            android:text="@string/squadron_title_default"
-            android:id="@+id/squadron_title" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/textSmall"
-            android:text="@string/squadron_class_default"
-            android:id="@+id/squadron_class" />
-
-    </LinearLayout>
+    style="@style/ComponentListItem"
+    android:background="#fac6e2">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|bottom|right"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true">
+        android:weightSum="1">
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/squadron_speed_default"
-            android:id="@+id/squadron_speed"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:id="@+id/type_cost_container"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center_vertical">
 
-        <TextView
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/img_squadron_class"
+                android:src="@mipmap/squadron"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/squadron_points_default"
+                android:id="@+id/txt_squadron_points"
+                android:textIsSelectable="false"
+                android:layout_gravity="center_horizontal|bottom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/textSmall"
-            android:text="@string/squadron_hull_default"
-            android:id="@+id/squadron_hull"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:id="@+id/lyt_squadron_text">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/textLarge"
-            android:id="@+id/squadron_points"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/squadron_points_default" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lyt_squadron_id">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:id="@+id/txt_squadron_unique"
+                    android:visibility="visible"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/textLarge"
+                    android:text="@string/squadron_title_default"
+                    android:id="@+id/txt_squadron_title"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="5dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_more_text"
+                    android:onClick="@string/squadron_desc_default"
+                    android:clickable="true"
+                    android:elevation="@dimen/abc_button_padding_horizontal_material" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/lyt_squadron_stats"
+                android:weightSum="1"
+                android:layout_marginBottom="5dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_speed"
+                    android:src="@mipmap/squadron_speed"
+                    android:layout_weight="0.60"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/squadron_speed_default"
+                    android:id="@+id/txt_squadron_speed"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="5dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_hull"
+                    android:src="@mipmap/squadron_hull"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/textSmall"
+                    android:text="@string/squadron_hull_default"
+                    android:id="@+id/txt_squadron_hull"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="5dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_anti_dice"
+                    android:src="@mipmap/squadron_anti"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_custom_dice"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/squadron_dice"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_ship_dice"
+                    android:src="@mipmap/squadron_ship"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_custom_dice"
+                    android:layout_marginRight="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/squadron_dice" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_defense"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/brace" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_defense_2"
+                    android:src="@mipmap/brace"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:columnCount="8"
+                android:id="@+id/grid_squadron_type"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_type"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/bomber" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/squadron_type_default"
+                    android:id="@+id/txt_squadron_type"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="5dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_type_2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/escort" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/squadron_type_default"
+                    android:id="@+id/txt_squadron_type_2"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_type_3"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/bomber" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/squadron_type_default"
+                    android:id="@+id/txt_squadron_type_3"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="5dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_squadron_type_4"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/escort" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/squadron_type_default"
+                    android:id="@+id/txt_squadron_type_4"
+                    android:layout_gravity="center_vertical" />
+            </GridLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
