@@ -75,15 +75,15 @@ public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
     }
 
     @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Upgrade> CREATOR = new Parcelable.Creator<Upgrade>() {
+    public static final Parcelable.Creator<UpgradeSlot> CREATOR = new Parcelable.Creator<UpgradeSlot>() {
         @Override
-        public Upgrade createFromParcel(Parcel in) {
-            return new Upgrade(in);
+        public UpgradeSlot createFromParcel(Parcel in) {
+            return new UpgradeSlot(in);
         }
 
         @Override
-        public Upgrade[] newArray(int size) {
-            return new Upgrade[size];
+        public UpgradeSlot[] newArray(int size) {
+            return new UpgradeSlot[size];
         }
     };
 }

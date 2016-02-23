@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Armada Fleet Commander</string>
     <string name="action_settings">Settings</string>
+    <string name="action_save">Save</string>
+    <string name="action_rename">Rename</string>
 
     <string name="title_activity_squadron_list">SquadronListActivity</string>
     <string name="title_activity_fleet_builder">FleetBuilderActivity</string>

@@ -18,7 +18,9 @@
             android:id="@+id/txt_fleet_name"
             android:text="@string/fleet_name_default"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:clickable="false"
+            android:editable="true" />
 
         <TextView
             android:layout_width="wrap_content"

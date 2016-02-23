@@ -53,12 +53,26 @@
         android:layout_toStartOf="@id/lyt_values"
         android:layout_alignParentLeft="true">
 
-        <com.travismosley.android.ui.view.FitTextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/textLarge"
-            android:text="@string/ship_title_default"
-            android:id="@+id/txt_ship_title" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:id="@+id/txt_unique_indicator"
+                android:enabled="false"
+                android:visibility="visible" />
+
+            <com.travismosley.android.ui.view.FitTextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/textLarge"
+                android:text="@string/ship_title_default"
+                android:id="@+id/txt_ship_title" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

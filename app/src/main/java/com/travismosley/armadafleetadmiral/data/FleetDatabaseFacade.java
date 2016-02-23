@@ -3,10 +3,12 @@ package com.travismosley.armadafleetadmiral.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract;
+import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetShipView;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetShipBuildTable;
+import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetSquadronsTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.ShipBuildTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.ShipBuildUpgradesTable;
@@ -52,11 +54,14 @@ public class FleetDatabaseFacade {
 
         List<Integer> upgradeIds = new ArrayList<>();
         SQLiteDatabase db = mFleetDbHelper.getReadableDatabase();
-        Cursor cursor = (Cursor) db.rawQuery(
-                "SELECT " + ShipBuildUpgradesTable.UPGRADE_ID +
-                        " FROM " + ShipBuildUpgradesTable.TABLE_NAME +
-                        " WHERE " + ShipBuildUpgradesTable.SHIP_BUILD_ID +
-                        " = " + String.valueOf(shipBuildId), null);
+
+        String query = "SELECT " + ShipBuildUpgradesTable.UPGRADE_ID +
+                " FROM " + ShipBuildUpgradesTable.TABLE_NAME +
+                " WHERE " + ShipBuildUpgradesTable.SHIP_BUILD_ID +
+                " = " + String.valueOf(shipBuildId);
+
+        Log.d(LOG_TAG, "getUpgradeIdsForShipBuild query: " + query);
+        Cursor cursor = (Cursor) db.rawQuery(query, null);
 
         for (int i = 0; i < cursor.getCount(); i++){
             cursor.moveToPosition(i);
@@ -100,6 +105,8 @@ public class FleetDatabaseFacade {
                         " FROM " + ShipBuildUpgradesTable.TABLE_NAME +
                         " GROUP BY " + ShipBuildUpgradesTable.SHIP_BUILD_ID +
                         " HAVING COUNT(*) = " + String.valueOf(buildUpgrades.size());
+
+        Log.d(LOG_TAG, "getBuildForUpgrades query: " + query);
 
         SQLiteDatabase db = mFleetDbHelper.getReadableDatabase();
         Cursor cursor = (Cursor) db.rawQuery(query, null);
@@ -172,16 +179,16 @@ public class FleetDatabaseFacade {
         }
 
         values.clear();
-        values.put(FleetDatabaseContract.FleetSquadronsTable.FLEET_ID, fleetId);
+        values.put(FleetSquadronsTable.FLEET_ID, fleetId);
 
         // Add the squadron counts
         Iterator<Map.Entry<Integer, Integer>> squadCountIterator = fleet.squadronCounts().entrySet().iterator();
 
         while (squadCountIterator.hasNext()){
             Map.Entry<Integer, Integer> squadCount = squadCountIterator.next();
-            values.put(FleetDatabaseContract.FleetSquadronsTable.SQUADRON_ID, squadCount.getKey());
-            values.put(FleetDatabaseContract.FleetSquadronsTable.COUNT, squadCount.getValue());
-            getDatabase().insert(FleetDatabaseContract.FleetSquadronsTable.TABLE_NAME, null, values);
+            values.put(FleetSquadronsTable.SQUADRON_ID, squadCount.getKey());
+            values.put(FleetSquadronsTable.COUNT, squadCount.getValue());
+            getDatabase().insert(FleetSquadronsTable.TABLE_NAME, null, values);
         }
 
         closeDatabase();
@@ -211,7 +218,7 @@ public class FleetDatabaseFacade {
 
         for (int i=0; i<cursor.getCount(); i++){
             cursor.moveToPosition(i);
-            Ship ship = mComponentDbFacade.getShipForShipId(cursor.getInt(FleetDatabaseContract.FleetShipView.SHIP_ID));
+            Ship ship = mComponentDbFacade.getShipForShipId(cursor.getInt(FleetShipView.SHIP_ID));
             shipList.add(ship);
         }
 
@@ -231,5 +238,4 @@ public class FleetDatabaseFacade {
             mDb = null;
         }
     }
-
 }
