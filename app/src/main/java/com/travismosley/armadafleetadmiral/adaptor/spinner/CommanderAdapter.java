@@ -50,14 +50,14 @@ public class CommanderAdapter extends ComponentListAdapter<Commander> {
 
         Log.d(LOG_TAG, "populateView");
         TextView nameView = (TextView) commanderView.findViewById(R.id.txt_upgrade_title);
-        TextView pointsView = (TextView) commanderView.findViewById(R.id.txt_point_cost);
+        TextView pointsView = (TextView) commanderView.findViewById(R.id.txt_upgrade_points);
 
         if (commander == null){
             nameView.setText("No commander selected...");
             pointsView.setVisibility(View.INVISIBLE);
         } else {
             nameView.setText(commander.title());
-            pointsView.setText(Integer.toString(commander.pointCost()));
+            pointsView.setText(String.format("%d", commander.pointCost()));
             pointsView.setVisibility(View.VISIBLE);
         }
     }

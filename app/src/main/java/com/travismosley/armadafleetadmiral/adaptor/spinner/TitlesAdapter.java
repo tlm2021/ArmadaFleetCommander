@@ -52,14 +52,14 @@ public class TitlesAdapter extends ComponentListAdapter<TitleUpgrade> {
     public void populateView(View titleView, TitleUpgrade title) {
         Log.d(LOG_TAG, "populateView");
         TextView nameView = (TextView) titleView.findViewById(R.id.txt_upgrade_title);
-        TextView pointsView = (TextView) titleView.findViewById(R.id.txt_point_cost);
+        TextView pointsView = (TextView) titleView.findViewById(R.id.txt_upgrade_points);
 
         if (title == null){
             nameView.setText(mShip.title());
             pointsView.setVisibility(View.INVISIBLE);
         } else {
             nameView.setText(title.title());
-            pointsView.setText(Integer.toString(title.pointCost()));
+            pointsView.setText(String.format("%d", title.pointCost()));
             pointsView.setVisibility(View.VISIBLE);
         }
     }
