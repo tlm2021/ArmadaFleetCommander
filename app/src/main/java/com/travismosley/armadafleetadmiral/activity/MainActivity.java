@@ -26,14 +26,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Fragment mainFrag = new MainActivityFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_root, mainFrag)
-                .commit();
+        if (savedInstanceState == null) {
+            Fragment mainFrag = new MainActivityFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.main_root, mainFrag)
+                    .commit();
+        }
     }
 
     private void launchFleetBuilder(Fleet fleet){
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void transitionToFragment(Fragment fragment){
-        transitionToFragment(fragment, new Slide(Gravity.LEFT));
+        transitionToFragment(fragment, new Slide(Gravity.START));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

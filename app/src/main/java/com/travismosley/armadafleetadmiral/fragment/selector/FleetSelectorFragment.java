@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.travismosley.armadafleetadmiral.R;
@@ -22,17 +23,10 @@ public class FleetSelectorFragment extends Fragment {
     private static final String LOG_TAG = FleetSelectorFragment.class.getSimpleName();
 
     private static final String KEY_FACTION_ID = "KEY_FACTION_ID";
-
-    private int mFactionId;
     protected FleetDatabaseFacade mFleetDb;
-
+    private int mFactionId;
     // Fleet Build Selector interface
     private OnFleetBuilderRequestedListener mFleetSelectedListener;
-
-    public interface OnFleetBuilderRequestedListener{
-        void onFleetBuilderRequested(Fleet fleet);
-    }
-
 
     public FleetSelectorFragment() {}
 
@@ -62,6 +56,16 @@ public class FleetSelectorFragment extends Fragment {
         Log.d(LOG_TAG, "onCreateView");
         // Inflate the layout for this fragment
         View fleetSelectorFragment = inflater.inflate(R.layout.fragment_fleet_selector, container, false);
+
+        Button btnNewFleet = (Button) fleetSelectorFragment.findViewById(R.id.btn_new_fleet);
+        btnNewFleet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fleet fleet = new Fleet(mFactionId);
+                mFleetSelectedListener.onFleetBuilderRequested(fleet);
+            }
+        });
+
         ListView fleetListView = (ListView) fleetSelectorFragment.findViewById(R.id.list_fleets);
         List<Fleet> fleets = mFleetDb.getFleetsForFaction(mFactionId);
 
@@ -94,5 +98,9 @@ public class FleetSelectorFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mFleetSelectedListener = null;
+    }
+
+    public interface OnFleetBuilderRequestedListener {
+        void onFleetBuilderRequested(Fleet fleet);
     }
 }

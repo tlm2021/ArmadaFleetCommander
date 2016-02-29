@@ -47,35 +47,6 @@ public class FleetBuilderActivity extends AppCompatActivity
     private SquadronSelectedListener mSquadronSelectedListener = new SquadronSelectedListener();
     private UpgradeSelectedListener mUpgradeSelectedListener = new UpgradeSelectedListener();
 
-    private class ShipSelectedListener implements OnComponentSelectedListener<Ship> {
-
-        @Override
-        public void onComponentSelected(Ship ship) {
-            getFragmentManager().popBackStack();
-            mFleetFrag.addComponent(ship);
-        }
-    }
-
-    private class SquadronSelectedListener implements OnComponentSelectedListener<Squadron> {
-
-        @Override
-        public void onComponentSelected(Squadron squadron) {
-            getFragmentManager().popBackStack();
-            mFleetFrag.addComponent(squadron);
-        }
-    }
-
-    private class UpgradeSelectedListener implements OnUpgradeSelectedListener {
-
-        @Override
-        public void onComponentSelected(Upgrade upgrade, UpgradeSlot slot){
-            if (mFleet.canAddComponent(upgrade)){
-                slot.equip(upgrade);
-                getFragmentManager().popBackStack();
-            }
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,14 +58,13 @@ public class FleetBuilderActivity extends AppCompatActivity
         Bundle args = getIntent().getExtras();
         mFleet = new Fleet(args.getInt(getString(R.string.key_faction_id)));
 
-        if (mFleet.mFactionId == 0){
+        if (mFleet.mFactionId == 0) {
             this.setTheme(R.style.AppThemeRebel);
-        } else{
+        } else {
             this.setTheme(R.style.AppThemeEmpire);
         }
 
-        mFleet.setName("Death Legion Zeta");
-        getSupportActionBar().setTitle(mFleet.name());
+        updateFleetName("Death Legion Zeta");
 
         mFleetFrag = createFleetFragment();
         getSupportFragmentManager().beginTransaction()
@@ -103,22 +73,22 @@ public class FleetBuilderActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(LOG_TAG, "Creating options Menu");
         getMenuInflater().inflate(R.menu.menu_fleet_builder, menu);
 
         MenuItemCompat.OnActionExpandListener renameExpandListener = new MenuItemCompat.OnActionExpandListener() {
 
-            protected EditText getView(MenuItem item){
+            protected EditText getView(MenuItem item) {
 
                 return (EditText) MenuItemCompat.getActionView(item);
             }
 
-            protected String getText(MenuItem item){
+            protected String getText(MenuItem item) {
                 return getView(item).getText().toString();
             }
 
-            protected void updateText(MenuItem item){
+            protected void updateText(MenuItem item) {
                 getView(item).setText(mFleet.name());
             }
 
@@ -143,8 +113,8 @@ public class FleetBuilderActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_save:
                 Toast.makeText(this, "Saving fleet " + mFleet.name(), Toast.LENGTH_SHORT).show();
                 onSaveFleet();
@@ -155,10 +125,10 @@ public class FleetBuilderActivity extends AppCompatActivity
         }
     }
 
-    private FleetBuilderFragment createFleetFragment(){
+    private FleetBuilderFragment createFleetFragment() {
         FleetBuilderFragment fleetFragment = new FleetBuilderFragment();
         Bundle args = getIntent().getExtras();
-        if (args == null){
+        if (args == null) {
             args = new Bundle();
         }
         args.putParcelable(getString(R.string.key_fleet), mFleet);
@@ -166,18 +136,18 @@ public class FleetBuilderActivity extends AppCompatActivity
         return fleetFragment;
     }
 
-    public void onSaveFleet(){
+    public void onSaveFleet() {
         FleetDatabaseFacade fleetDatabase = FleetDatabaseFacade.getInstance(this);
         fleetDatabase.addFleet(mFleet);
     }
 
-    public void updateFleetName(String newName){
+    public void updateFleetName(String newName) {
         mFleet.setName(newName);
-        getSupportActionBar().setTitle(newName);
+        setTitle(newName);
     }
 
     // Open up the squadron list when needed
-    public void onAddSquadron(){
+    public void onAddSquadron() {
         Log.d(LOG_TAG, "onAddSquadron");
 
         // Initialize the squadron fragment
@@ -187,7 +157,7 @@ public class FleetBuilderActivity extends AppCompatActivity
     }
 
     // Open up the squadron list when needed
-    public void onAddShip(){
+    public void onAddShip() {
         Log.d(LOG_TAG, "onAddShip");
 
         // Initialize the squadron fragment
@@ -197,7 +167,7 @@ public class FleetBuilderActivity extends AppCompatActivity
     }
 
     // Open up the upgrade list when needed
-    public void onUpgradeSlotClicked(UpgradeSlot slot){
+    public void onUpgradeSlotClicked(UpgradeSlot slot) {
         Log.d(LOG_TAG, "onUpgradeSlotClicked");
 
         UpgradeSelectorFragment upgradeSelector = UpgradeSelectorFragment.newInstance(slot, mFleet);
@@ -206,20 +176,20 @@ public class FleetBuilderActivity extends AppCompatActivity
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void onShipClicked(Ship ship){
+    public void onShipClicked(Ship ship) {
         Log.d(LOG_TAG, "onShipClicked for " + ship);
 
         ShipDetailFragment shipDetailFragment = ShipDetailFragment.newInstance(ship, mFleet);
-        transitionToFragment(shipDetailFragment, new Slide(Gravity.RIGHT));
+        transitionToFragment(shipDetailFragment, new Slide(Gravity.END));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void transitionToFragment(Fragment fragment){
-        transitionToFragment(fragment, new Slide(Gravity.LEFT));
+    public void transitionToFragment(Fragment fragment) {
+        transitionToFragment(fragment, new Slide(Gravity.START));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void transitionToFragment(Fragment fragment, Transition transition){
+    public void transitionToFragment(Fragment fragment, Transition transition) {
 
         // Replace the current fragment
         FragmentManager fm = getSupportFragmentManager();
@@ -234,5 +204,34 @@ public class FleetBuilderActivity extends AppCompatActivity
         fragment.setReenterTransition(transition);
         fragment.setAllowEnterTransitionOverlap(false);
         fragment.setAllowReturnTransitionOverlap(false);
+    }
+
+    private class ShipSelectedListener implements OnComponentSelectedListener<Ship> {
+
+        @Override
+        public void onComponentSelected(Ship ship) {
+            getSupportFragmentManager().popBackStack();
+            mFleetFrag.addComponent(ship);
+        }
+    }
+
+    private class SquadronSelectedListener implements OnComponentSelectedListener<Squadron> {
+
+        @Override
+        public void onComponentSelected(Squadron squadron) {
+            getSupportFragmentManager().popBackStack();
+            mFleetFrag.addComponent(squadron);
+        }
+    }
+
+    private class UpgradeSelectedListener implements OnUpgradeSelectedListener {
+
+        @Override
+        public void onComponentSelected(Upgrade upgrade, UpgradeSlot slot) {
+            if (mFleet.canAddComponent(upgrade)) {
+                slot.equip(upgrade);
+                getSupportFragmentManager().popBackStack();
+            }
+        }
     }
 }
