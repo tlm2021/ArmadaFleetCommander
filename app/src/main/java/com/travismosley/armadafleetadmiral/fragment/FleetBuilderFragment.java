@@ -1,8 +1,8 @@
 package com.travismosley.armadafleetadmiral.fragment;
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,28 +66,28 @@ public class FleetBuilderFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
+    public void onAttach(Context context){
+        super.onAttach(context);
 
         // Make sure the attaching activity has implemented the interface
         try{
-            mAddSquadronCallback = (OnAddSquadronListener) activity;
+            mAddSquadronCallback = (OnAddSquadronListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnAddSquadronListener");
         }
 
         try{
-            mAddShipCallback = (OnAddShipListener) activity;
+            mAddShipCallback = (OnAddShipListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnAddShipListener");
         }
 
         try{
-            mOnShipClickedCallback = (OnShipClickedListener) activity;
+            mOnShipClickedCallback = (OnShipClickedListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement OnShipClickedListener");
         }
     }

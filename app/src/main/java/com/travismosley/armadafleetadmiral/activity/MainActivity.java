@@ -1,11 +1,11 @@
 package com.travismosley.armadafleetadmiral.activity;
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Fragment mainFrag = new MainActivityFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.main_root, mainFrag)
+                .commit();
     }
 
     private void launchFleetBuilder(Fleet fleet){
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity
     public void transitionToFragment(Fragment fragment, Transition transition){
 
         // Replace the current fragment
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.main_root, fragment)
                 .addToBackStack(null)

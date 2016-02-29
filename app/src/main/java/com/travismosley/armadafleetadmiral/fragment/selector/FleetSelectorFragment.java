@@ -1,9 +1,9 @@
 package com.travismosley.armadafleetadmiral.fragment.selector;
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,12 +80,12 @@ public class FleetSelectorFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof OnFleetBuilderRequestedListener) {
-            mFleetSelectedListener = (OnFleetBuilderRequestedListener) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFleetBuilderRequestedListener) {
+            mFleetSelectedListener = (OnFleetBuilderRequestedListener) context;
         } else {
-            throw new RuntimeException(activity.toString()
+            throw new RuntimeException(context.toString()
                     + " must implement OnFleetBuilderRequestedListener");
         }
     }
