@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId 'com.travismosley.armadafleetadmiral'
@@ -29,16 +29,17 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile 'org.hamcrest:hamcrest-library:1.1'
-    androidTestCompile 'com.android.support:support-annotations:22.2.1'
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.android.support:support-annotations:23.2.0'
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.android.support.test:rules:0.4'
     // Espresso tests
     //androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     // UI Automator tests
     //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
-    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:support-v4:23.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
     compile 'com.nhaarman.listviewanimations:lib-manipulation:3.1.0@aar'
@@ -46,6 +47,7 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'org.apache.commons:commons-lang3:3.4'
 }
+
 
 configurations.all {
     resolutionStrategy.force 'com.android.support:support-annotations:22.2.1'

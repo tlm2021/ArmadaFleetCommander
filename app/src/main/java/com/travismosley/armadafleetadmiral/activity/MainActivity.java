@@ -1,17 +1,27 @@
 package com.travismosley.armadafleetadmiral.activity;
 
+import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.fragment.MainActivityFragment;
+import com.travismosley.armadafleetadmiral.fragment.selector.FleetSelectorFragment;
+import com.travismosley.armadafleetadmiral.game.Fleet;
 
 public class MainActivity extends AppCompatActivity
-    implements MainActivityFragment.OnFleetBuilderRequestedCallback {
+    implements MainActivityFragment.OnFleetSelectorRequestedListener,
+        FleetSelectorFragment.OnFleetBuilderRequestedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +31,18 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
     }
 
-    private void launchFleetBuilder(int factionId){
+    private void launchFleetBuilder(Fleet fleet){
         Intent intent = new Intent(this, FleetBuilderActivity.class);
-        intent.putExtra("KEY_FACTION_ID", factionId);
-        this.startActivity(intent);
+        intent.putExtra(getString(R.string.key_fleet), fleet);
+        startActivity(intent);
     }
 
-    public void onFleetBuilderRequested(int factionId){
-        launchFleetBuilder(factionId);
+    public void onFleetBuilderRequested(Fleet fleet){
+        launchFleetBuilder(fleet);
+    }
+
+    public void onFleetListRequested(int factionId){
+        transitionToFragment(FleetSelectorFragment.newInstance(factionId));
     }
 
     @Override
@@ -51,5 +65,28 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void transitionToFragment(Fragment fragment){
+        transitionToFragment(fragment, new Slide(Gravity.LEFT));
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void transitionToFragment(Fragment fragment, Transition transition){
+
+        // Replace the current fragment
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.main_root, fragment)
+                .addToBackStack(null)
+                .commit();
+
+        fragment.setEnterTransition(transition);
+        fragment.setReturnTransition(transition);
+        fragment.setExitTransition(transition);
+        fragment.setReenterTransition(transition);
+        fragment.setAllowEnterTransitionOverlap(false);
+        fragment.setAllowReturnTransitionOverlap(false);
     }
 }

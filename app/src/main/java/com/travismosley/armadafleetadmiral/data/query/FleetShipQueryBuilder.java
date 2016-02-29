@@ -20,6 +20,7 @@ public class FleetShipQueryBuilder extends QueryBuilder {
         return new ArrayList<>(Arrays.asList(
                 FleetDatabaseContract.FleetShipView.FLEET_ID,
                 FleetDatabaseContract.FleetShipView.SHIP_BUILD_ID,
+                FleetDatabaseContract.FleetShipView.SHIP_ID,
                 FleetDatabaseContract.FleetShipView.CUSTOM_TITLE,
                 FleetDatabaseContract.FleetShipView.TITLE_UPGRADE_ID));
     }

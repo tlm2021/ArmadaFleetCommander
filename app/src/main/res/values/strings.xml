@@ -49,6 +49,9 @@
     <string name="upgrade_desc_default">The battery armaments for your left and right hull zones are increased by 1 red die. Now I\'m gonna type more to fill up this space with stuff. But now I need a fourth line.</string>
     <string name="upgrade_unique">*</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_fleet">New Fleet</string>
 
 
 </resources>

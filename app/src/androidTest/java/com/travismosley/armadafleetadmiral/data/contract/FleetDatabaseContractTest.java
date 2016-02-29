@@ -14,12 +14,13 @@ import junit.framework.Assert;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class FleetDatabaseContractTest extends AndroidTestCase{
 
-    private String DROP_ALL = "PRAGMA writable_schema = 1; delete from sqlite_master where type = 'table'; PRAGMA writable_schema = 0";
     private static final String DATABASE_NAME = FleetDatabaseContractTest.class.getSimpleName() + "_DB";
     private class TestingDatabaseOpenHelper extends SQLiteOpenHelper{
 
@@ -49,7 +50,7 @@ public class FleetDatabaseContractTest extends AndroidTestCase{
 
     @Override
     protected void tearDown() throws Exception{
-        Log.i(LOG_TAG, "Running tearDown");
+        Log.d(LOG_TAG, "Running tearDown");
         super.tearDown();
         mDb.close();
         getContext().deleteDatabase(DATABASE_NAME);
@@ -175,6 +176,26 @@ public class FleetDatabaseContractTest extends AndroidTestCase{
 
         checkExpectedColumns(expectedColumns, cursor);
         cursor.close();
+    }
+
+    public void test_contract_onCreateCommands(){
+
+        String[] expectedCommands = new String[] {
+                FleetDatabaseContract.FleetTable.SQL_CREATE_TABLE,
+                FleetDatabaseContract.ShipBuildTable.SQL_CREATE_TABLE,
+                FleetDatabaseContract.ShipBuildUpgradesTable.SQL_CREATE_TABLE,
+                FleetDatabaseContract.FleetShipBuildTable.SQL_CREATE_TABLE,
+                FleetDatabaseContract.FleetSquadronsTable.SQL_CREATE_TABLE,
+                FleetDatabaseContract.FleetShipView.SQL_CREATE_VIEW
+        };
+
+        ArrayList<String> onCreateCommands = FleetDatabaseContract.getOnCreateSqlCommands();
+
+        Assert.assertEquals(expectedCommands.length, onCreateCommands.size());
+
+        for (int i=0; i < expectedCommands.length; i++){
+            Assert.assertEquals(expectedCommands[i], onCreateCommands.get(i));
+        }
     }
 
 }

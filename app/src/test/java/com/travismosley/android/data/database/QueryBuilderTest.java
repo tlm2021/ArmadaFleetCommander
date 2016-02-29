@@ -53,7 +53,6 @@ public class QueryBuilderTest {
         return String.format(TEST_QUERY_FORMAT, colString, where, groupBy, orderBy);
     }
 
-
     private class QueryBuilderForTesting extends QueryBuilder{
 
         @Override

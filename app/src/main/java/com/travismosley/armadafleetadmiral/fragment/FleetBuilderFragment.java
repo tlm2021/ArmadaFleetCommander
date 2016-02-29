@@ -1,8 +1,8 @@
 package com.travismosley.armadafleetadmiral.fragment;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +24,7 @@ import com.travismosley.armadafleetadmiral.game.component.Squadron;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A Fragment for adding ships, objectives, squadrons, and commanders to a view
  */
 
 public class FleetBuilderFragment extends Fragment {

@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.travismosley.android.data.database.cursor.Cursor;
-import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetShipView;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetShipBuildTable;
+import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetShipView;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetSquadronsTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.FleetTable;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.ShipBuildTable;
@@ -22,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -110,8 +109,12 @@ public class FleetDatabaseFacade {
 
         SQLiteDatabase db = mFleetDbHelper.getReadableDatabase();
         Cursor cursor = (Cursor) db.rawQuery(query, null);
-        cursor.moveToPosition(0);
 
+        if (cursor.getCount() == 0){
+            return -1;
+        }
+
+        cursor.moveToPosition(0);
         int matchedShipBuildId = cursor.getInt(ShipBuildUpgradesTable.SHIP_BUILD_ID);
 
         cursor.close();
@@ -154,6 +157,23 @@ public class FleetDatabaseFacade {
         return shipBuildId;
     }
 
+    public List<Ship> getShipsForFleet(int fleetId){
+
+        ArrayList<Ship> shipList = new ArrayList<>();
+        SQLiteDatabase db = getDatabase();
+
+        FleetShipQueryBuilder shipQueryBuilder = new FleetShipQueryBuilder();
+        Cursor cursor = (Cursor) db.rawQuery(shipQueryBuilder.queryWhereFleetId(fleetId), null);
+
+        for (int i=0; i<cursor.getCount(); i++){
+            cursor.moveToPosition(i);
+            Ship ship = mComponentDbFacade.getShipForShipId(cursor.getInt(FleetShipView.SHIP_ID));
+            shipList.add(ship);
+        }
+
+        return shipList;
+    }
+
     public long addFleet(Fleet fleet){
 
         // Create a new fleet
@@ -182,10 +202,8 @@ public class FleetDatabaseFacade {
         values.put(FleetSquadronsTable.FLEET_ID, fleetId);
 
         // Add the squadron counts
-        Iterator<Map.Entry<Integer, Integer>> squadCountIterator = fleet.squadronCounts().entrySet().iterator();
 
-        while (squadCountIterator.hasNext()){
-            Map.Entry<Integer, Integer> squadCount = squadCountIterator.next();
+        for (Map.Entry<Integer, Integer> squadCount : fleet.squadronCounts().entrySet()) {
             values.put(FleetSquadronsTable.SQUADRON_ID, squadCount.getKey());
             values.put(FleetSquadronsTable.COUNT, squadCount.getValue());
             getDatabase().insert(FleetSquadronsTable.TABLE_NAME, null, values);
@@ -204,25 +222,29 @@ public class FleetDatabaseFacade {
         fleet.populate(cursor);
 
         fleet.mShips = getShipsForFleet(fleetId);
+        cursor.close();
 
         return fleet;
     }
 
-    public List<Ship> getShipsForFleet(int fleetId){
-
-        ArrayList<Ship> shipList = new ArrayList<>();
+    public List<Fleet> getFleetsForFaction(int factionId){
         SQLiteDatabase db = getDatabase();
+        FleetQueryBuilder fleetQueryBuilder = new FleetQueryBuilder();
+        Cursor cursor = (Cursor) db.rawQuery(fleetQueryBuilder.queryWhereFactionId(factionId), null);
 
-        FleetShipQueryBuilder shipQueryBuilder = new FleetShipQueryBuilder();
-        Cursor cursor = (Cursor) db.rawQuery(shipQueryBuilder.queryWhereFleetId(fleetId), null);
+        List<Fleet> fleets = new ArrayList<>();
 
-        for (int i=0; i<cursor.getCount(); i++){
+        for (int i=0; i < cursor.getCount(); i++){
             cursor.moveToPosition(i);
-            Ship ship = mComponentDbFacade.getShipForShipId(cursor.getInt(FleetShipView.SHIP_ID));
-            shipList.add(ship);
+
+            Fleet fleet = new Fleet();
+            fleet.populate(cursor);
+            fleet.mShips = getShipsForFleet(cursor.getInt(FleetTable._ID));
+            fleets.add(fleet);
         }
 
-        return shipList;
+        cursor.close();
+        return fleets;
     }
 
     private SQLiteDatabase getDatabase(){

@@ -1,12 +1,13 @@
 package com.travismosley.armadafleetadmiral.activity;
 
-import android.app.FragmentManager;
-import android.os.Bundle;
+import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.util.Log;
@@ -14,10 +15,10 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.travismosley.armadafleetadmiral.R;
+import com.travismosley.armadafleetadmiral.data.FleetDatabaseFacade;
 import com.travismosley.armadafleetadmiral.fragment.FleetBuilderFragment;
 import com.travismosley.armadafleetadmiral.fragment.ShipDetailFragment;
 import com.travismosley.armadafleetadmiral.fragment.listener.OnComponentSelectedListener;
@@ -139,7 +140,6 @@ public class FleetBuilderActivity extends AppCompatActivity
         MenuItem renameMenuItem = menu.findItem(R.id.action_rename);
         MenuItemCompat.setOnActionExpandListener(renameMenuItem, renameExpandListener);
         return true;
-
     }
 
     @Override
@@ -147,6 +147,8 @@ public class FleetBuilderActivity extends AppCompatActivity
         switch (item.getItemId()){
             case R.id.action_save:
                 Toast.makeText(this, "Saving fleet " + mFleet.name(), Toast.LENGTH_SHORT).show();
+                onSaveFleet();
+                Toast.makeText(this, "Saved " + mFleet.name(), Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -162,6 +164,11 @@ public class FleetBuilderActivity extends AppCompatActivity
         args.putParcelable(getString(R.string.key_fleet), mFleet);
         fleetFragment.setArguments(args);
         return fleetFragment;
+    }
+
+    public void onSaveFleet(){
+        FleetDatabaseFacade fleetDatabase = FleetDatabaseFacade.getInstance(this);
+        fleetDatabase.addFleet(mFleet);
     }
 
     public void updateFleetName(String newName){
@@ -198,6 +205,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         transitionToFragment(upgradeSelector);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void onShipClicked(Ship ship){
         Log.d(LOG_TAG, "onShipClicked for " + ship);
 
@@ -205,10 +213,12 @@ public class FleetBuilderActivity extends AppCompatActivity
         transitionToFragment(shipDetailFragment, new Slide(Gravity.RIGHT));
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void transitionToFragment(Fragment fragment){
         transitionToFragment(fragment, new Slide(Gravity.LEFT));
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void transitionToFragment(Fragment fragment, Transition transition){
 
         // Replace the current fragment
@@ -217,5 +227,12 @@ public class FleetBuilderActivity extends AppCompatActivity
                 .replace(R.id.fleet_builder_root, fragment)
                 .addToBackStack(null)
                 .commit();
+
+        fragment.setEnterTransition(transition);
+        fragment.setReturnTransition(transition);
+        fragment.setExitTransition(transition);
+        fragment.setReenterTransition(transition);
+        fragment.setAllowEnterTransitionOverlap(false);
+        fragment.setAllowReturnTransitionOverlap(false);
     }
 }

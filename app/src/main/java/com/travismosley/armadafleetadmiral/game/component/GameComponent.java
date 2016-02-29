@@ -12,6 +12,8 @@ import com.travismosley.armadafleetadmiral.data.contract.table.ComponentTableCon
  */
 public abstract class GameComponent implements Parcelable, PopulateFromCursorInterface {
 
+    private static final String LOG_TAG = GameComponent.class.getSimpleName();
+
     protected int mId;
     protected String mTitle;
     protected int mPointCost;

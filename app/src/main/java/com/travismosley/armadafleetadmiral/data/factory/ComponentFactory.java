@@ -49,6 +49,7 @@ public class ComponentFactory<Component extends PopulateFromCursorInterface> {
     public Component getSingleForQuery(String query, SQLiteDatabase db, Class<Component> componentClass){
 
         Cursor cursor = (Cursor) db.rawQuery(query, null);
+        cursor.moveToPosition(0);
         Component component;
 
         try {

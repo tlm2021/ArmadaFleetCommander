@@ -5,7 +5,7 @@ import com.travismosley.armadafleetadmiral.data.contract.table.VehicleTableContr
 import java.util.List;
 
 /**
- * A helper class around SQLiteQUeryBuilder to simplify building queries for
+ * A helper class around SQLiteQueryBuilder to simplify building queries for
  * getting information about Squadrons.
  */
 public abstract class VehicleQueryBuilder extends ComponentQueryBuilder {

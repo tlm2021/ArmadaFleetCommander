@@ -2,11 +2,10 @@ package com.travismosley.armadafleetadmiral.adaptor.list;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
+import com.travismosley.android.ui.adapter.ArrayAdapter;
 import com.travismosley.armadafleetadmiral.game.component.GameComponent;
 
 import java.util.List;
@@ -24,24 +23,10 @@ public abstract class ComponentListAdapter<Component extends GameComponent> exte
 
     public ComponentListAdapter(Context context,
                                 List<Component> componentList) {
-        super(context, -1, componentList);
+        super(context, componentList);
 
         Log.d(LOG_TAG, "Initialize for " + componentList);
         mComponents = componentList;
-    }
-
-    protected View inflateView(View convertView, ViewGroup parent){
-        View view;
-
-        // Recycle the view if possible
-        if (convertView != null) {
-            view = convertView;
-        } else {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(getItemLayoutId(), parent, false);
-        }
-
-        return view;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -53,7 +38,6 @@ public abstract class ComponentListAdapter<Component extends GameComponent> exte
         return view;
     }
 
-    protected abstract int getItemLayoutId();
     protected abstract void populateView(View view, Component component);
 
     @Override
