@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.nhaarman.listviewanimations.appearance.simple.ScaleInAnimationAdapter;
 import com.travismosley.armadafleetadmiral.R;
+import com.travismosley.armadafleetadmiral.activity.FleetBuilderActivity;
 import com.travismosley.armadafleetadmiral.adaptor.list.ShipsAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.list.SquadronsAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.spinner.CommanderAdapter;
@@ -27,11 +28,10 @@ import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
  * A Fragment for adding ships, objectives, squadrons, and commanders to a view
  */
 
-public class FleetBuilderFragment extends Fragment {
+public class FleetOverviewFragment extends Fragment {
 
-    private final static String LOG_TAG = FleetBuilderFragment.class.getSimpleName();
+    private final static String LOG_TAG = FleetOverviewFragment.class.getSimpleName();
 
-    public Fleet mFleet;
     private SquadronsAdapter mSquadronsAdapter;
     private ShipsAdapter mShipsAdaptor;
     private View mFleetFragment;
@@ -61,7 +61,6 @@ public class FleetBuilderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFleet = getArguments().getParcelable(getString(R.string.key_fleet));
         setRetainInstance(true);
     }
 
@@ -92,7 +91,7 @@ public class FleetBuilderFragment extends Fragment {
         }
     }
 
-    public FleetBuilderFragment(){}
+    public FleetOverviewFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,15 +102,15 @@ public class FleetBuilderFragment extends Fragment {
 
         // Get a CommanderAdapter and set it on the commander spinner
         Spinner spnCommander = (Spinner) mFleetFragment.findViewById(R.id.spinner_commander);
-        spnCommander.setAdapter(new CommanderAdapter(getActivity(), mFleet));
+        spnCommander.setAdapter(new CommanderAdapter(getActivity(), getFleet()));
         spnCommander.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    mFleet.clearCommander();
+                    getFleet().clearCommander();
                 } else {
                     Log.d(LOG_TAG, "Setting commander: " + parent.getItemAtPosition(position));
-                    mFleet.setCommander((Commander) parent.getItemAtPosition(position));
+                    getFleet().setCommander((Commander) parent.getItemAtPosition(position));
                 }
                 updateFleetPoints();
             }
@@ -132,7 +131,7 @@ public class FleetBuilderFragment extends Fragment {
 
         // Get a SquadronAdapter, and set it on the list
         mSquadListView = (ListView) mFleetFragment.findViewById(R.id.list_squadrons);
-        mSquadronsAdapter = new SquadronsAdapter(getActivity(), mFleet.mSquadrons);
+        mSquadronsAdapter = new SquadronsAdapter(getActivity(), getFleet().mSquadrons);
         ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(mSquadronsAdapter);
         animationAdapter.setAbsListView(mSquadListView);
         mSquadListView.setAdapter(animationAdapter);
@@ -148,7 +147,7 @@ public class FleetBuilderFragment extends Fragment {
 
         // Get a ShipsAdapter and set it on the list
         mShipListView = (ListView) mFleetFragment.findViewById(R.id.list_ships);
-        mShipsAdaptor = new ShipsAdapter(getActivity(), mFleet.mShips);
+        mShipsAdaptor = new ShipsAdapter(getActivity(), getFleet().mShips);
 
         mShipListView.setAdapter(mShipsAdaptor);
         mShipListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -162,10 +161,15 @@ public class FleetBuilderFragment extends Fragment {
         return mFleetFragment;
     }
 
+    private Fleet getFleet(){
+        FleetBuilderActivity activity = (FleetBuilderActivity) getActivity();
+        return activity.mFleet;
+    }
+
     public boolean addComponent(Squadron squadron){
 
         Log.d(LOG_TAG, "addComponent for " + squadron);
-        if (mFleet.canAddComponent(squadron)) {
+        if (getFleet().canAddComponent(squadron)) {
             mSquadronsAdapter.addComponent(squadron);
             return true;
         }
@@ -175,7 +179,7 @@ public class FleetBuilderFragment extends Fragment {
     public boolean addComponent(Ship ship) {
 
         Log.d(LOG_TAG, "addComponent for " + ship);
-        if (mFleet.canAddComponent(ship)) {
+        if (getFleet().canAddComponent(ship)) {
             mShipsAdaptor.addComponent(ship);
             return true;
         }
@@ -194,16 +198,16 @@ public class FleetBuilderFragment extends Fragment {
 
         // Set the fleet point values
         TextView maxFleetPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_fleet_point_allowed);
-        maxFleetPointsView.setText(String.valueOf(mFleet.fleetPointLimit()));
+        maxFleetPointsView.setText(String.valueOf(getFleet().fleetPointLimit()));
 
         TextView usedFleetPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_fleet_points_used);
-        usedFleetPointsView.setText(String.valueOf(mFleet.fleetPoints()));
+        usedFleetPointsView.setText(String.valueOf(getFleet().fleetPoints()));
 
         // Set the squadron point values
         TextView maxSquadPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_squad_points_allowed);
-        maxSquadPointsView.setText(String.valueOf(mFleet.squadronPointLimit()));
+        maxSquadPointsView.setText(String.valueOf(getFleet().squadronPointLimit()));
 
         TextView usedSquadPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_squad_points_used);
-        usedSquadPointsView.setText(String.valueOf(mFleet.squadronPoints()));
+        usedSquadPointsView.setText(String.valueOf(getFleet().squadronPoints()));
     }
 }

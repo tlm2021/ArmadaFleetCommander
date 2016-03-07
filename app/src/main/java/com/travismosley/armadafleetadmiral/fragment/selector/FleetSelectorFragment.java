@@ -1,7 +1,6 @@
 package com.travismosley.armadafleetadmiral.fragment.selector;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,6 +15,7 @@ import com.travismosley.armadafleetadmiral.adaptor.list.FleetAdapter;
 import com.travismosley.armadafleetadmiral.data.FleetDatabaseFacade;
 import com.travismosley.armadafleetadmiral.game.Fleet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FleetSelectorFragment extends Fragment {
@@ -25,6 +25,9 @@ public class FleetSelectorFragment extends Fragment {
     private static final String KEY_FACTION_ID = "KEY_FACTION_ID";
     protected FleetDatabaseFacade mFleetDb;
     private int mFactionId;
+
+    private FleetAdapter mFleetsAdapter;
+
     // Fleet Build Selector interface
     private OnFleetBuilderRequestedListener mFleetSelectedListener;
 
@@ -72,15 +75,10 @@ public class FleetSelectorFragment extends Fragment {
         for (int i=0; i < fleets.size(); i++){
             Log.d(LOG_TAG, fleets.get(i).name());
         }
-
-        fleetListView.setAdapter(new FleetAdapter(getActivity(), mFleetDb.getFleetsForFaction(mFactionId)));
+        mFleetsAdapter = new FleetAdapter(getActivity(), new ArrayList<Fleet>());
+        fleetListView.setAdapter(mFleetsAdapter);
 
         return fleetSelectorFragment;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onFleetClicked(Uri uri){
-        // Fill this in later
     }
 
     @Override
@@ -92,6 +90,13 @@ public class FleetSelectorFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFleetBuilderRequestedListener");
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mFleetsAdapter.clear();
+        mFleetsAdapter.addAll(mFleetDb.getFleetsForFaction(mFactionId));
     }
 
     @Override

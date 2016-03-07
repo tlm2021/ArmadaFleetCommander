@@ -27,10 +27,11 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
     String LOG_TAG = Fleet.class.getSimpleName();
 
+    private int mFleetId;
     private String mFleetName;
     public int mFactionId;
     private int mPointLimit;
-    public List<Squadron> mSquadrons;
+    public Map<Squadron,Integer> mSquadronCounts;
     public List<Ship> mShips;
     private Commander mCommander;
     private Objective mAssaultObjective;
@@ -39,34 +40,41 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
     public Fleet(){
         mPointLimit = 400;
-        mSquadrons = new ArrayList<>();
+        mSquadronCounts = new HashMap<Squadron,Integer>();
         mShips = new ArrayList<>();
     }
 
     public Fleet(int factionId) {
         this();
+        Log.d(LOG_TAG, "Fleet: factionId: " + factionId);
         mFactionId = factionId;
     }
 
     public void populate(Cursor cursor){
+        mFleetId = cursor.getInt(FleetDatabaseContract.FleetTable._ID);
         mFactionId = cursor.getInt(FleetDatabaseContract.FleetTable.FACTION_ID);
         mPointLimit = cursor.getInt(FleetDatabaseContract.FleetTable.FLEET_POINT_LIMIT);
         mFleetName = cursor.getString(FleetDatabaseContract.FleetTable.NAME);
+        mFleetId = cursor.getInt(FleetDatabaseContract.FleetTable._ID);
     }
 
     public String name(){
         return mFleetName;
     }
 
+    public Integer id(){
+        return mFleetId;
+    }
+
     public void setName(String name){
         mFleetName = name;
     }
 
-    public int fleetPointLimit(){
+    public Integer fleetPointLimit(){
         return mPointLimit;
     }
 
-    public int fleetPoints(){
+    public Integer fleetPoints(){
 
         // Get the total fleet points spent
         return squadronPoints() + shipPoints() + commanderPoints();
@@ -89,8 +97,8 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
         // Get the total points spent on squadrons
         int total = 0;
-        for (int i=0; i < mSquadrons.size(); i++){
-            total += mSquadrons.get(i).pointCost();
+        for (Map.Entry<Squadron, Integer> squadCount : mSquadronCounts.entrySet()) {
+            total += squadCount.getKey().pointCost() * squadCount.getValue();
         }
         return total;
     }
@@ -117,31 +125,19 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
     }
 
     public void addSquadron(Squadron squadron){
-        mSquadrons.add(squadron);
+        int count = mSquadronCounts.containsKey(squadron) ? mSquadronCounts.get(squadron) : 0;
+        mSquadronCounts.put(squadron, count + 1);
     }
 
-    public Map<Integer, Integer> squadronCounts(){
-
-        Map<Integer, Integer> counts = new HashMap<>();
-
-        for (int i=0; i<mSquadrons.size(); i++){
-            Squadron squad = mSquadrons.get(i);
-            int count = counts.containsKey(squad.id()) ? counts.get(squad.id()) : 0;
-            counts.put(squad.id(), count + 1);
-        }
-        return counts;
+    public Map<Squadron, Integer> squadronCounts(){
+        return mSquadronCounts;
     }
 
 
     public boolean hasComponent(Squadron squadron){
 
         // Check if this fleet already has a squadron with the same id
-        for (int i = 0; i < mSquadrons.size(); i++){
-            if (mSquadrons.get(i).id() == squadron.id()){
-                return true;
-            }
-        }
-        return false;
+        return mSquadronCounts.containsKey(squadron);
     }
 
     public boolean canAddComponent(Squadron squadron){
@@ -173,7 +169,6 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
                 }
             }
         }
-
         return true;
     }
 
@@ -183,7 +178,6 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
         // Check if the squadron fits under the point limit
         return component.pointCost() <= this.remainingFleetPoints();
-
     }
 
     public void clearCommander(){
@@ -200,12 +194,15 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
     /* Parcel support */
 
     protected Fleet(Parcel in) {
+
+        mFleetId = in.readInt();
+        mFleetName = in.readString();
+        mFactionId = in.readInt();
         mPointLimit = in.readInt();
+
+        mSquadronCounts = new HashMap<>();
         if (in.readByte() == 0x01) {
-            mSquadrons = new ArrayList<>();
-            in.readList(mSquadrons, Squadron.class.getClassLoader());
-        } else {
-            mSquadrons = null;
+            in.readMap(mSquadronCounts, HashMap.class.getClassLoader());
         }
         if (in.readByte() == 0x01) {
             mShips = new ArrayList<>();
@@ -222,12 +219,16 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mFleetId);
+        dest.writeString(mFleetName);
+        dest.writeInt(mFactionId);
         dest.writeInt(mPointLimit);
-        if (mSquadrons == null) {
+
+        if (mSquadronCounts.isEmpty()) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(mSquadrons);
+            dest.writeMap(mSquadronCounts);
         }
         if (mShips == null) {
             dest.writeByte((byte) (0x00));

@@ -42,6 +42,14 @@ public class ComponentDatabaseFacade {
         return mInstance;
     }
 
+    private Squadron getSquadronForQuery(String query){
+
+        // Get a Squadron factory, and feed it the query
+        ComponentFactory<Squadron> factory = new ComponentFactory<>();
+        return factory.getSingleForQuery(query, mDbHelper.getDatabase(), Squadron.class);
+
+    }
+
     private List<Squadron> getSquadronsForQuery(String query){
 
         // Get a Squadron factory, and feed it the query
@@ -117,6 +125,10 @@ public class ComponentDatabaseFacade {
         return getSquadronsForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
+    public Squadron getSquadronForSquadronId(int squadId){
+        SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
+        return getSquadronForQuery(queryBuilder.queryWhereSquadronId(squadId));
+    }
 
     /* Ship Queries */
 

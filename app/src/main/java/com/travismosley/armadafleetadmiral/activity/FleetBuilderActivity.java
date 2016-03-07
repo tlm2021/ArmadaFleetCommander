@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.data.FleetDatabaseFacade;
-import com.travismosley.armadafleetadmiral.fragment.FleetBuilderFragment;
+import com.travismosley.armadafleetadmiral.fragment.FleetOverviewFragment;
 import com.travismosley.armadafleetadmiral.fragment.ShipDetailFragment;
 import com.travismosley.armadafleetadmiral.fragment.listener.OnComponentSelectedListener;
 import com.travismosley.armadafleetadmiral.fragment.listener.OnUpgradeSelectedListener;
@@ -33,15 +33,15 @@ import com.travismosley.armadafleetadmiral.game.component.upgrade.Upgrade;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.UpgradeSlot;
 
 public class FleetBuilderActivity extends AppCompatActivity
-        implements FleetBuilderFragment.OnAddSquadronListener,
-                   FleetBuilderFragment.OnAddShipListener,
-                   FleetBuilderFragment.OnShipClickedListener,
+        implements FleetOverviewFragment.OnAddSquadronListener,
+                   FleetOverviewFragment.OnAddShipListener,
+                   FleetOverviewFragment.OnShipClickedListener,
                    ShipDetailFragment.OnUpgradeSlotClickedListener {
 
     private final static String LOG_TAG = FleetBuilderActivity.class.getSimpleName();
 
     public Fleet mFleet;
-    private FleetBuilderFragment mFleetFrag;
+    private FleetOverviewFragment mFleetFrag;
 
     private ShipSelectedListener mShipSelectedListener = new ShipSelectedListener();
     private SquadronSelectedListener mSquadronSelectedListener = new SquadronSelectedListener();
@@ -56,7 +56,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         Bundle args = getIntent().getExtras();
-        mFleet = new Fleet(args.getInt(getString(R.string.key_faction_id)));
+        mFleet = args.getParcelable(getString(R.string.key_fleet));
 
         if (mFleet.mFactionId == 0) {
             this.setTheme(R.style.AppThemeRebel);
@@ -116,17 +116,17 @@ public class FleetBuilderActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                Toast.makeText(this, "Saving fleet " + mFleet.name(), Toast.LENGTH_SHORT).show();
+
                 onSaveFleet();
-                Toast.makeText(this, "Saved " + mFleet.name(), Toast.LENGTH_SHORT).show();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private FleetBuilderFragment createFleetFragment() {
-        FleetBuilderFragment fleetFragment = new FleetBuilderFragment();
+    private FleetOverviewFragment createFleetFragment() {
+        FleetOverviewFragment fleetFragment = new FleetOverviewFragment();
         Bundle args = getIntent().getExtras();
         if (args == null) {
             args = new Bundle();
@@ -137,8 +137,23 @@ public class FleetBuilderActivity extends AppCompatActivity
     }
 
     public void onSaveFleet() {
+        if (mFleet.commander() == null){
+            Toast.makeText(this, "Unable to save fleet without a commander.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(this, "Saving fleet " + mFleet.name(), Toast.LENGTH_SHORT).show();
         FleetDatabaseFacade fleetDatabase = FleetDatabaseFacade.getInstance(this);
-        fleetDatabase.addFleet(mFleet);
+
+        if (mFleet.id() != null){
+            if (fleetDatabase.hasFleet(mFleet.id())){
+                fleetDatabase.updateFleet(mFleet);
+            } else{
+                fleetDatabase.addFleet(mFleet);
+            }
+        }
+
+        Toast.makeText(this, "Saved " + mFleet.name(), Toast.LENGTH_SHORT).show();
     }
 
     public void updateFleetName(String newName) {

@@ -14,14 +14,17 @@ import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.S
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract.ShipBuildUpgradesTable;
 import com.travismosley.armadafleetadmiral.data.query.FleetQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.FleetShipQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.FleetSquadronsQueryBuilder;
 import com.travismosley.armadafleetadmiral.game.Fleet;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
+import com.travismosley.armadafleetadmiral.game.component.Squadron;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Upgrade;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,13 +92,17 @@ public class FleetDatabaseFacade {
         HAVING COUNT(*) = 2;
          */
 
-        String idList = "(" + StringUtils.join(buildUpgrades, ",") + ")";
+
+        ArrayList<Integer> upgradeIds = new ArrayList<>();
+        for (int i=0; i < buildUpgrades.size(); i++){
+            upgradeIds.add(buildUpgrades.get(i).id());
+        }
 
         String query =
                 // Match ships that have all the upgrades in the list
                 "SELECT " + ShipBuildUpgradesTable.SHIP_BUILD_ID +
                         " FROM " + ShipBuildUpgradesTable.TABLE_NAME +
-                        " WHERE " + ShipBuildUpgradesTable.UPGRADE_ID + " IN " + idList +
+                        " WHERE " + ShipBuildUpgradesTable.UPGRADE_ID + " IN " + "(" + StringUtils.join(upgradeIds, ",") + ")" +
                         " GROUP BY " + ShipBuildUpgradesTable.SHIP_BUILD_ID +
                         " HAVING COUNT(*) = " + String.valueOf(buildUpgrades.size()) +
                         // And only the upgrades in the list
@@ -174,7 +181,23 @@ public class FleetDatabaseFacade {
         return shipList;
     }
 
-    public long addFleet(Fleet fleet){
+    public HashMap<Squadron, Integer> getSquadronsForFleet(int fleetId){
+
+        HashMap<Squadron, Integer> squadCounts = new HashMap<>();
+        FleetSquadronsQueryBuilder squadQueryBuilder = new FleetSquadronsQueryBuilder();
+
+        Cursor cursor = (Cursor) getDatabase().rawQuery(squadQueryBuilder.queryWhereFleetId(fleetId), null);
+
+        for (int i=0; i < cursor.getCount(); i++){
+            cursor.moveToPosition(i);
+            Squadron squad = mComponentDbFacade.getSquadronForSquadronId(cursor.getInt(FleetSquadronsTable.SQUADRON_ID));
+            int count = cursor.getInt(FleetSquadronsTable.COUNT);
+            squadCounts.put(squad, count);
+        }
+        return squadCounts;
+    }
+
+    public long addFleet(Fleet fleet) {
 
         // Create a new fleet
         ContentValues values = new ContentValues();
@@ -185,10 +208,15 @@ public class FleetDatabaseFacade {
         values.put(FleetTable.FLEET_POINT_TOTAL, fleet.fleetPoints());
 
         long fleetId = getDatabase().insert(FleetTable.TABLE_NAME, null, values);
+        addShipBuildsForFleet(fleet, (int) fleetId);
+        addOrUpdateSquadronsForFleet(fleet, (int) fleetId);
+        return fleetId;
+    }
 
+    public void addShipBuildsForFleet(Fleet fleet, int fleetId){
 
         // Add the ship builds
-        values.clear();
+        ContentValues values = new ContentValues();
         values.put(FleetShipBuildTable.FLEET_ID, fleetId);
 
         for (int i=0; i < fleet.mShips.size(); i++){
@@ -197,20 +225,52 @@ public class FleetDatabaseFacade {
             values.put(FleetShipBuildTable.FLAGSHIP, ship.isFlagship() ? 1 : 0);
             getDatabase().insert(FleetShipBuildTable.TABLE_NAME, null, values);
         }
+        closeDatabase();
+    }
 
-        values.clear();
-        values.put(FleetSquadronsTable.FLEET_ID, fleetId);
+    public void addShipBuildsForFleet(Fleet fleet) {
+
+        // If no fleet id provided, use the one assigned to the fleet
+        addShipBuildsForFleet(fleet, fleet.id());
+    }
+
+    public void addOrUpdateSquadronsForFleet(Fleet fleet, int fleetId ){
 
         // Add the squadron counts
+        ContentValues values = new ContentValues();
+        values.put(FleetSquadronsTable.FLEET_ID, fleetId);
 
-        for (Map.Entry<Integer, Integer> squadCount : fleet.squadronCounts().entrySet()) {
-            values.put(FleetSquadronsTable.SQUADRON_ID, squadCount.getKey());
-            values.put(FleetSquadronsTable.COUNT, squadCount.getValue());
-            getDatabase().insert(FleetSquadronsTable.TABLE_NAME, null, values);
+        SQLiteDatabase db = getDatabase();
+        FleetSquadronsQueryBuilder squadQueryBuilder = new FleetSquadronsQueryBuilder();
+
+        for (Map.Entry<Squadron, Integer> squadCount : fleet.squadronCounts().entrySet()) {
+            int squadId = squadCount.getKey().id();
+            int count = squadCount.getValue();
+
+            values.put(FleetSquadronsTable.SQUADRON_ID, squadId);
+            values.put(FleetSquadronsTable.COUNT, count);
+
+            // Check if this fleet already has an entry for this squadron
+            if (db.rawQuery(squadQueryBuilder.queryWhereFleetAndSquadronId(fleetId, squadId), null).getCount() != 0){
+                // if so, update it
+                db.update(FleetSquadronsTable.TABLE_NAME, values, squadQueryBuilder.getFleetAndSquadronIdWhereClause(fleetId, squadId), null);
+            } else{
+                db.insert(FleetSquadronsTable.TABLE_NAME, null, values);
+            }
         }
-
         closeDatabase();
-        return fleetId;
+    }
+
+    public void addOrUpdateSquadronsForFleet(Fleet fleet){
+        addOrUpdateSquadronsForFleet(fleet, fleet.id());
+    }
+
+    public boolean hasFleet(int fleetId){
+        SQLiteDatabase db = getDatabase();
+        FleetQueryBuilder fleetQueryBuilder = new FleetQueryBuilder();
+        Cursor cursor = (Cursor) db.rawQuery(fleetQueryBuilder.queryWhereFleetId(fleetId), null);
+
+        return cursor.getCount() != 0;
     }
 
     public Fleet getFleet(int fleetId){
@@ -218,13 +278,35 @@ public class FleetDatabaseFacade {
         FleetQueryBuilder fleetQueryBuilder = new FleetQueryBuilder();
         Cursor cursor = (Cursor) db.rawQuery(fleetQueryBuilder.queryWhereFleetId(fleetId), null);
 
+        if (cursor.getCount() == 0){
+            return null;
+        }
+
         Fleet fleet = new Fleet();
         fleet.populate(cursor);
 
         fleet.mShips = getShipsForFleet(fleetId);
+        fleet.mSquadronCounts = getSquadronsForFleet(fleetId);
         cursor.close();
 
         return fleet;
+    }
+
+    public void updateFleet(Fleet fleet){
+        SQLiteDatabase db = getDatabase();
+        FleetQueryBuilder fleetQueryBuilder = new FleetQueryBuilder();
+        ContentValues values = new ContentValues();
+
+        values.put(FleetTable.NAME, fleet.name());
+        values.put(FleetTable.FLEET_POINT_TOTAL, fleet.fleetPoints());
+        values.put(FleetTable.FLEET_POINT_LIMIT, fleet.fleetPointLimit());
+        values.put(FleetTable.COMMANDER_ID, fleet.commander().id());
+
+        db.update(FleetTable.TABLE_NAME, values, fleetQueryBuilder.queryWhereFleetId(fleet.id()), null);
+        db.close();
+
+        addShipBuildsForFleet(fleet);
+        addOrUpdateSquadronsForFleet(fleet);
     }
 
     public List<Fleet> getFleetsForFaction(int factionId){
