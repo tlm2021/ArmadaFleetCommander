@@ -8,7 +8,8 @@ import android.widget.TextView;
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * ArrayAdaptor for Squadron lists
@@ -17,10 +18,14 @@ import java.util.List;
 public class SquadronsAdapter extends ComponentListAdapter<Squadron> {
     /* Adapts a Squadron objects for a ListView */
 
+    Map<Squadron, Integer> mSquadCounts;
+
     private final static String LOG_TAG = SquadronsAdapter.class.getSimpleName();
 
-    public SquadronsAdapter(Context context, List<Squadron> squadrons) {
-        super(context, squadrons);
+    public SquadronsAdapter(Context context, Map<Squadron,Integer> squadCounts) {
+
+        super(context, new ArrayList<>(squadCounts.keySet()));
+        mSquadCounts = squadCounts;
     }
 
     public void populateView(View squadView, Squadron squad) {

@@ -131,7 +131,7 @@ public class FleetOverviewFragment extends Fragment {
 
         // Get a SquadronAdapter, and set it on the list
         mSquadListView = (ListView) mFleetFragment.findViewById(R.id.list_squadrons);
-        mSquadronsAdapter = new SquadronsAdapter(getActivity(), getFleet().mSquadrons);
+        mSquadronsAdapter = new SquadronsAdapter(getActivity(), getFleet().mSquadronCounts);
         ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(mSquadronsAdapter);
         animationAdapter.setAbsListView(mSquadListView);
         mSquadListView.setAdapter(animationAdapter);
