@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.SquadronTable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class encapsulating an Armada Squadron
  */
@@ -14,6 +17,7 @@ public class Squadron extends Vehicle {
     private final static String LOG_TAG = Squadron.class.getSimpleName();
 
     protected boolean mUnique;
+    protected List<SquadronKeyword> mKeywords;
 
     public Squadron(){}
 
@@ -34,16 +38,27 @@ public class Squadron extends Vehicle {
         mUnique = cursor.getBoolean(SquadronTable.IS_UNIQUE);
     }
 
+    public void setKeywords(List<SquadronKeyword> keywords) {
+        mKeywords = keywords;
+    }
+
+    public List<SquadronKeyword> keywords() {
+        return mKeywords;
+    }
+
     // Parcel support
     protected Squadron(Parcel in) {
         super(in);
         mUnique = in.readByte() != 0x00;
+        mKeywords = new ArrayList<>();
+        in.readTypedList(mKeywords, SquadronKeyword.CREATOR);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeByte((byte) (mUnique ? 0x01 : 0x00));
+        dest.writeTypedList(mKeywords);
     }
 
     @SuppressWarnings("unused")

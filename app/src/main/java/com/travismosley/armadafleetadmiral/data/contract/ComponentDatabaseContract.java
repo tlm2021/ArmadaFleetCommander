@@ -61,5 +61,12 @@ public class ComponentDatabaseContract {
         public static final String SQUADRON_ID = "squadron_id";
     }
 
+    public static abstract class SquadronKeywordTable implements BaseColumns {
+        public static final String TABLE_NAME = "squadron_keyword_view";
+        public static final String SQUADRON_ID = "squadron_id";
+        public static final String SQUADRON_KEYWORD_ID = "squadron_keyword_id";
+        public static final String TITLE = "title";
+    }
+
 
 }

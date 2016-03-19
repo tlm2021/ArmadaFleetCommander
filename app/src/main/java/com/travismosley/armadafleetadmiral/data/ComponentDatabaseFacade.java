@@ -10,12 +10,14 @@ import com.travismosley.armadafleetadmiral.data.query.component.ShipQueryBuilder
 import com.travismosley.armadafleetadmiral.data.query.component.ShipTitleQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.ShipUpgradeSlotQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.SquadronDefenseTokenQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.SquadronKeywordQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.SquadronQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.UpgradeQueryBuilder;
 import com.travismosley.armadafleetadmiral.game.component.DefenseToken;
 import com.travismosley.armadafleetadmiral.game.component.Objective;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
+import com.travismosley.armadafleetadmiral.game.component.SquadronKeyword;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.TitleUpgrade;
 import com.travismosley.armadafleetadmiral.game.component.upgrade.Upgrade;
@@ -62,6 +64,7 @@ public class ComponentDatabaseFacade {
         for (int i = 0; i < squadList.size(); i++) {
             Squadron squad = squadList.get(i);
             squad.setDefenseTokens(getDefenseTokensForSquadron(squad.id()));
+            squad.setKeywords(getSquadronKeywordsForSquadron(squad.id()));
         }
 
         return squadList;
@@ -90,6 +93,12 @@ public class ComponentDatabaseFacade {
         }
 
         return shipList;
+    }
+
+    private List<SquadronKeyword> getSquadronKeywordsForQuery(String query) {
+        // Get a SquadronKeyword factory and feed it the query
+        ComponentFactory<SquadronKeyword> factory = new ComponentFactory<>();
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), SquadronKeyword.class);
     }
 
     private List<UpgradeSlot> getUpgradeSlotsForQuery(String query){
@@ -185,6 +194,12 @@ public class ComponentDatabaseFacade {
     public Ship getShipForId(int shipId) {
         ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
         return getShipForQuery(queryBuilder.queryWhereId(shipId));
+    }
+
+    /* Squadron Keyword Queries */
+    public List<SquadronKeyword> getSquadronKeywordsForSquadron(int squadronId) {
+        SquadronKeywordQueryBuilder queryBuilder = new SquadronKeywordQueryBuilder();
+        return getSquadronKeywordsForQuery(queryBuilder.queryWhereSquadronId(squadronId));
     }
 
     /* Upgrade Slot Queries */

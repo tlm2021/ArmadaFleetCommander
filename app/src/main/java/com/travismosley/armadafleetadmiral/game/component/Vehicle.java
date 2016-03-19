@@ -5,6 +5,7 @@ import android.os.Parcel;
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetadmiral.data.contract.table.VehicleTableContract;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,6 +64,8 @@ public abstract class Vehicle extends FleetPointsGameComponent {
         mClassId = in.readInt();
         mHull = in.readInt();
         mMaxSpeed = in.readInt();
+        mDefenseTokens = new ArrayList<>();
+        in.readTypedList(mDefenseTokens, DefenseToken.CREATOR);
     }
 
     @Override
@@ -72,6 +75,7 @@ public abstract class Vehicle extends FleetPointsGameComponent {
         dest.writeInt(mClassId);
         dest.writeInt(mHull);
         dest.writeInt(mMaxSpeed);
+        dest.writeTypedList(mDefenseTokens);
     }
 
 }
