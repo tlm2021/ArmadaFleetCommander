@@ -14,4 +14,3 @@ public class ComponentDatabaseHelper extends PackagedDatabaseHelper{
         super(context, ComponentDatabaseContract.DATABASE_NAME);
     }
 }
-

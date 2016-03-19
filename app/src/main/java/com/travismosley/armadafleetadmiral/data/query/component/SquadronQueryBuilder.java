@@ -23,5 +23,4 @@ public class SquadronQueryBuilder extends VehicleQueryBuilder {
         columns.add(SquadronTable.IS_UNIQUE);
         return columns;
     }
-
 }

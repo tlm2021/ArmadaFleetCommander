@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.travismosley.android.data.database.cursor.CursorFactory;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class FleetDatabaseHelper extends SQLiteOpenHelper{
 
     public FleetDatabaseHelper(Context context){
-        super(context, FleetDatabaseContract.DATABASE_NAME, null, FleetDatabaseContract.DATABASE_VERSION);
+        super(context, FleetDatabaseContract.DATABASE_NAME, new CursorFactory(), FleetDatabaseContract.DATABASE_VERSION);
     }
 
     public void onCreate(SQLiteDatabase db){

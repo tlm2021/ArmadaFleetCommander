@@ -42,6 +42,14 @@ public class ComponentDatabaseFacade {
         return mInstance;
     }
 
+    private Squadron getSquadronForQuery(String query){
+
+        // Get a Squadron factory, and feed it the query
+        ComponentFactory<Squadron> factory = new ComponentFactory<>();
+        return factory.getSingleForQuery(query, mDbHelper.getDatabase(), Squadron.class);
+
+    }
+
     private List<Squadron> getSquadronsForQuery(String query){
 
         // Get a Squadron factory, and feed it the query
@@ -77,6 +85,13 @@ public class ComponentDatabaseFacade {
         // Get an UpgradeSlot factory and feed it the query
         ComponentFactory<UpgradeSlot> factory = new ComponentFactory<>();
         return factory.getAllForQuery(query, mDbHelper.getDatabase(), UpgradeSlot.class);
+    }
+
+    private Upgrade getUpgradeForQuery(String query) {
+
+        // Get an UpgradeFactory, and feed it the query
+        ComponentFactory<Upgrade> factory = new ComponentFactory<>();
+        return factory.getSingleForQuery(query, mDbHelper.getDatabase(), Upgrade.class);
     }
 
     private List<Upgrade> getUpgradesForQuery(String query){
@@ -117,6 +132,10 @@ public class ComponentDatabaseFacade {
         return getSquadronsForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
+    public Squadron getSquadronForId(int squadId) {
+        SquadronQueryBuilder queryBuilder = new SquadronQueryBuilder();
+        return getSquadronForQuery(queryBuilder.queryWhereId(squadId));
+    }
 
     /* Ship Queries */
 
@@ -130,9 +149,9 @@ public class ComponentDatabaseFacade {
         return getShipsForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
-    public Ship getShipForShipId(int shipId){
+    public Ship getShipForId(int shipId) {
         ShipQueryBuilder queryBuilder = new ShipQueryBuilder();
-        return getShipForQuery(queryBuilder.queryWhereShipId(shipId));
+        return getShipForQuery(queryBuilder.queryWhereId(shipId));
     }
 
     /* Upgrade Slot Queries */
@@ -158,6 +177,11 @@ public class ComponentDatabaseFacade {
     public List<Commander> getCommandersForFaction(int factionId){
         CommanderQueryBuilder queryBuilder = new CommanderQueryBuilder();
         return getCommandersForQuery(queryBuilder.queryWhereFactionId(factionId));
+    }
+
+    public Upgrade getUpgradeForId(int upgradeId) {
+        UpgradeQueryBuilder queryBuilder = new UpgradeQueryBuilder();
+        return getUpgradeForQuery(queryBuilder.queryWhereId(upgradeId));
     }
 
     /* Objective Queries */

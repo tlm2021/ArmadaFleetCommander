@@ -20,6 +20,7 @@ public class FleetShipQueryBuilder extends QueryBuilder {
         return new ArrayList<>(Arrays.asList(
                 FleetDatabaseContract.FleetShipView.FLEET_ID,
                 FleetDatabaseContract.FleetShipView.SHIP_BUILD_ID,
+                FleetDatabaseContract.FleetShipView.SHIP_ID,
                 FleetDatabaseContract.FleetShipView.CUSTOM_TITLE,
                 FleetDatabaseContract.FleetShipView.TITLE_UPGRADE_ID));
     }
@@ -34,7 +35,7 @@ public class FleetShipQueryBuilder extends QueryBuilder {
         return FleetDatabaseContract.FleetShipView.CUSTOM_TITLE;
     }
 
-    private String getFleetIdWhereClause(int fleetId){
+    public String getFleetIdWhereClause(int fleetId) {
         return FleetDatabaseContract.FleetShipView.FLEET_ID + "='" + fleetId + "'";
     }
 

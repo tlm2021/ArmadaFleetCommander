@@ -1,8 +1,8 @@
 package com.travismosley.armadafleetadmiral.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,31 +10,27 @@ import android.widget.Button;
 
 import com.travismosley.armadafleetadmiral.R;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 public class MainActivityFragment extends Fragment {
 
-    OnFleetBuilderRequestedCallback mFleetBuilderRequestedCallback;
+    OnFleetSelectorRequestedListener mFleetListSelectedCallback;
 
-    // onAddSquadronClicked callback
-    public interface OnFleetBuilderRequestedCallback{
-        void onFleetBuilderRequested(int factionId);
+    public interface OnFleetSelectorRequestedListener{
+        void onFleetListRequested(int factionId);
     }
 
-    public MainActivityFragment() {
-    }
+    public MainActivityFragment() {}
 
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
+    public void onAttach(Context context){
+        super.onAttach(context);
 
         // Make sure the attaching activity has implemented the interface
         try{
-            mFleetBuilderRequestedCallback = (OnFleetBuilderRequestedCallback) activity;
+            mFleetListSelectedCallback = (OnFleetSelectorRequestedListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFleetBuilderRequestedCallback");
+            throw new ClassCastException(context.toString()
+                    + " must implement OnFleetListRequestedListener");
         }
     }
 
@@ -49,19 +45,17 @@ public class MainActivityFragment extends Fragment {
         rebelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFleetBuilderRequestedCallback.onFleetBuilderRequested(0);
+                mFleetListSelectedCallback.onFleetListRequested(0);
             }
         });
 
         imperialBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFleetBuilderRequestedCallback.onFleetBuilderRequested(1);
+                mFleetListSelectedCallback.onFleetListRequested(1);
             }
         });
 
         return view;
     }
-
-
 }

@@ -16,7 +16,7 @@
     <string name="fleet_points_used_default">399</string>
 
     <string name="squadron_list_title">Squadrons</string>
-    <string name="squadron_selector_title_default">Select A Squadron...</string>
+    <string name="squadron_selector_title_default">Select A Squadron…</string>
     <string name="squadron_points_allowed_default">133</string>
     <string name="squadron_points_used_default">56</string>
     <string name="squadron_points_divider_default">/</string>
@@ -46,9 +46,12 @@
     <string name="upgrade_points_default">8</string>
     <string name="upgrade_title_default">Enhanced Armaments</string>
     <string name="upgrade_mod_default">Modification</string>
-    <string name="upgrade_desc_default">The battery armaments for your left and right hull zones are increased by 1 red die. Now I'm gonna type more to fill up this space with stuff. But now I need a fourth line.</string>
+    <string name="upgrade_desc_default">The battery armaments for your left and right hull zones are increased by 1 red die. Now I\'m gonna type more to fill up this space with stuff. But now I need a fourth line.</string>
     <string name="upgrade_unique">*</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_fleet">New Fleet</string>
 
 
 </resources>

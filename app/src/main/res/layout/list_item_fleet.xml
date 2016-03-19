@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="@style/ComponentListItem">
+
+    <com.travismosley.android.ui.view.FitTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/textLarge"
+        android:text="@string/ship_title_default"
+        android:id="@+id/txt_fleet_name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="false"
+        android:layout_toLeftOf="@+id/txt_fleet_points" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/textLarge"
+        android:id="@+id/txt_fleet_points"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="@string/ship_points_default"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

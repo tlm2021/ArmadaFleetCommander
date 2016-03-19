@@ -37,15 +37,15 @@ public class FleetQueryBuilder extends QueryBuilder {
     }
 
     private String getFactionIdWhereClause(int factionId){
-        return FleetDatabaseContract.FleetTable.FACTION_ID + "='" + factionId + "'";
+        return FleetDatabaseContract.FleetTable.FACTION_ID + "=" + factionId + "";
     }
 
     public String queryWhereFactionId(int factionId){
         return queryWhere(getFactionIdWhereClause(factionId));
     }
 
-    private String getFleetIdWhereClause(int fleetId){
-        return FleetDatabaseContract.FleetTable._ID + "='" + fleetId + "'";
+    public String getFleetIdWhereClause(int fleetId) {
+        return FleetDatabaseContract.FleetTable._ID + "=" + fleetId + "";
     }
 
     public String queryWhereFleetId(int fleetId){

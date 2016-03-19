@@ -28,8 +28,8 @@ public class UpgradesAdapter extends ComponentListAdapter<Upgrade> {
         nameView.setText(upgrade.title());
 
         // Set the point value
-        TextView pointsView = (TextView) upgradeView.findViewById(R.id.txt_point_cost);
-        pointsView.setText(Integer.toString(upgrade.pointCost()));
+        TextView pointsView = (TextView) upgradeView.findViewById(R.id.txt_upgrade_points);
+        pointsView.setText(String.format("%d", upgrade.pointCost()));
     }
 
     protected int getItemLayoutId(){

@@ -12,11 +12,30 @@ import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContra
  */
 public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
 
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UpgradeSlot> CREATOR = new Parcelable.Creator<UpgradeSlot>() {
+        @Override
+        public UpgradeSlot createFromParcel(Parcel in) {
+            return new UpgradeSlot(in);
+        }
+
+        @Override
+        public UpgradeSlot[] newArray(int size) {
+            return new UpgradeSlot[size];
+        }
+    };
     private int mUpgradeTypeId;
     private String mUpgradeTypeName;
     private Upgrade mEquippedUpgrade;
 
     public UpgradeSlot(){}
+
+    // Parcel support
+    protected UpgradeSlot(Parcel in) {
+        mUpgradeTypeId = in.readInt();
+        mUpgradeTypeName = in.readString();
+        mEquippedUpgrade = in.readParcelable(Upgrade.class.getClassLoader());
+    }
 
     public void populate(Cursor cursor){
 
@@ -38,7 +57,7 @@ public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
     }
 
     public boolean isEquipped(){
-        return (mEquippedUpgrade != null);
+        return mEquippedUpgrade != null;
     }
 
     public void equip(Upgrade upgrade){
@@ -47,19 +66,12 @@ public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
         }
     }
 
-    public Upgrade getEquipped(){
+    public Upgrade getEquipped() {
         return mEquippedUpgrade;
     }
 
-    public void clear(){
+    public void clear() {
         mEquippedUpgrade = null;
-    }
-
-    // Parcel support
-    protected UpgradeSlot(Parcel in) {
-        mUpgradeTypeId = in.readInt();
-        mUpgradeTypeName = in.readString();
-        mEquippedUpgrade = in.readParcelable(Upgrade.class.getClassLoader());
     }
 
     @Override
@@ -73,17 +85,4 @@ public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
     public int describeContents() {
         return 0;
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UpgradeSlot> CREATOR = new Parcelable.Creator<UpgradeSlot>() {
-        @Override
-        public UpgradeSlot createFromParcel(Parcel in) {
-            return new UpgradeSlot(in);
-        }
-
-        @Override
-        public UpgradeSlot[] newArray(int size) {
-            return new UpgradeSlot[size];
-        }
-    };
 }
