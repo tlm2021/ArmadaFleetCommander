@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.travismosley.armadafleetadmiral.R;
-import com.travismosley.armadafleetadmiral.adaptor.list.ComponentListAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.list.UpgradesAdapter;
 import com.travismosley.armadafleetadmiral.data.ComponentDatabaseFacade;
 import com.travismosley.armadafleetadmiral.game.Fleet;
@@ -16,28 +15,12 @@ import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
 /**
  * An ArrayAdapter for ship titles
  */
-public class CommanderAdapter extends ComponentListAdapter<Commander> {
+public class CommanderAdapter extends ComponentSpinnerAdapter<Commander> {
 
     private final static String LOG_TAG = UpgradesAdapter.class.getSimpleName();
-    private final Fleet mFleet;
 
     public CommanderAdapter(Context context, Fleet fleet) {
         super(context, ComponentDatabaseFacade.getInstance(context).getCommandersForFaction(fleet.mFactionId));
-        mFleet = fleet;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View view = inflateView(convertView, parent);
-        if(position == 0){
-            populateView(view, null);
-        }else{
-            Commander titleUpgrade = getItem(position);
-            populateView(view, titleUpgrade);
-        }
-
-        return view;
     }
 
     @Override
@@ -48,7 +31,6 @@ public class CommanderAdapter extends ComponentListAdapter<Commander> {
 
     public void populateView(View commanderView, Commander commander) {
 
-        Log.d(LOG_TAG, "populateView");
         TextView nameView = (TextView) commanderView.findViewById(R.id.txt_upgrade_title);
         TextView pointsView = (TextView) commanderView.findViewById(R.id.txt_upgrade_points);
 
@@ -65,36 +47,5 @@ public class CommanderAdapter extends ComponentListAdapter<Commander> {
     protected int getItemLayoutId(){
         Log.d(LOG_TAG, "getItemLayoutId");
         return R.layout.list_item_upgrade;
-    }
-
-    /*
-    This class dynamically generates the first item in the spinner, which acts as a
-    "Select None" item. Because of that, all the superclass methods that index the list
-    of objects directly will be off-by-one. These overridden methods account for that.
-
-    These overrides adjust that
-     */
-
-    @Override
-    public int getCount(){
-        return super.getCount() + 1;
-    }
-
-    @Override
-    public int getPosition(Commander item) {
-        int pos = super.getPosition(item);
-        if (pos == -1){
-            return pos;
-        } else {
-            return pos + 1;
-        }
-    }
-
-    @Override
-    public Commander getItem(int position){
-        if (position == 0){
-            return null;
-        }
-        return super.getItem(position - 1);
     }
 }

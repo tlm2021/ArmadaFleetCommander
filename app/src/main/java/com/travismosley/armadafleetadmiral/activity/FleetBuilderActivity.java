@@ -222,6 +222,8 @@ public class FleetBuilderActivity extends AppCompatActivity
         fragment.setAllowReturnTransitionOverlap(false);
     }
 
+    /* Component Selection Listeners */
+
     private class ShipSelectedListener implements OnComponentSelectedListener<Ship> {
 
         @Override
@@ -245,8 +247,8 @@ public class FleetBuilderActivity extends AppCompatActivity
         @Override
         public void onComponentSelected(Upgrade upgrade, UpgradeSlot slot) {
             if (mFleet.canAddComponent(upgrade)) {
-                slot.equip(upgrade);
                 getSupportFragmentManager().popBackStack();
+                slot.equip(upgrade);
             }
         }
     }

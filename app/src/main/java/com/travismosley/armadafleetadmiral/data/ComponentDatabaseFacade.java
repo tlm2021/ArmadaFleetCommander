@@ -115,7 +115,14 @@ public class ComponentDatabaseFacade {
         return factory.getAllForQuery(query, mDbHelper.getDatabase(), Commander.class);
     }
 
+    private Commander getCommanderForQuery(String query){
+        ComponentFactory<Commander> factory = new ComponentFactory<>();
+        return factory.getSingleForQuery(query, mDbHelper.getDatabase(), Commander.class);
+    }
+
     private List<Objective> getObjectivesForQuery(String query){
+
+        // Get a Commander factory and feed it the query
         ComponentFactory<Objective> factory = new ComponentFactory<>();
         return factory.getAllForQuery(query, mDbHelper.getDatabase(), Objective.class);
     }
@@ -169,6 +176,12 @@ public class ComponentDatabaseFacade {
         return getUpgradesForQuery(queryBuilder.queryWhereTypeIdAndFactionId(typeId, factionId));
     }
 
+    public Upgrade getUpgradeForId(int upgradeId) {
+        UpgradeQueryBuilder queryBuilder = new UpgradeQueryBuilder();
+        return getUpgradeForQuery(queryBuilder.queryWhereId(upgradeId));
+    }
+
+
     public List<TitleUpgrade> getTitlesForShipClass(int shipClassId){
         ShipTitleQueryBuilder queryBuilder = new ShipTitleQueryBuilder();
         return getTitleUpgradesForQuery(queryBuilder.queryWhereShipClassId(shipClassId));
@@ -179,9 +192,9 @@ public class ComponentDatabaseFacade {
         return getCommandersForQuery(queryBuilder.queryWhereFactionId(factionId));
     }
 
-    public Upgrade getUpgradeForId(int upgradeId) {
-        UpgradeQueryBuilder queryBuilder = new UpgradeQueryBuilder();
-        return getUpgradeForQuery(queryBuilder.queryWhereId(upgradeId));
+    public Commander getCommanderForId(int commanderId){
+        CommanderQueryBuilder queryBuilder = new CommanderQueryBuilder();
+        return getCommanderForQuery(queryBuilder.queryWhereId(commanderId));
     }
 
     /* Objective Queries */

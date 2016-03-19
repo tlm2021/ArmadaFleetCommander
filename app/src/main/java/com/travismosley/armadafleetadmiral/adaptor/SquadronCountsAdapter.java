@@ -2,6 +2,7 @@ package com.travismosley.armadafleetadmiral.adaptor;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import java.util.Map;
  * ListAdapter modified to support a map of a list of components and an instance count
  */
 public class SquadronCountsAdapter extends ComponentListAdapter<Squadron> {
+
+    private static final String LOG_TAG = SquadronCountsAdapter.class.getSimpleName();
 
     public Map<Squadron, Integer> mSquadronCounts;
 
@@ -65,5 +68,14 @@ public class SquadronCountsAdapter extends ComponentListAdapter<Squadron> {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public void addComponent(Squadron squadron) {
+        Log.d(LOG_TAG, "addComponent on " + squadron);
+
+        int count = mSquadronCounts.containsKey(squadron) ? mSquadronCounts.get(squadron) : 0;
+        mSquadronCounts.put(squadron, count + 1);
+        notifyDataSetChanged();
     }
 }

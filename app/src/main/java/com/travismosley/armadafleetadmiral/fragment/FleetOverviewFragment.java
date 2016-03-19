@@ -85,7 +85,10 @@ public class FleetOverviewFragment extends Fragment {
 
         // Get a CommanderAdapter and set it on the commander spinner
         Spinner spnCommander = (Spinner) mFleetFragment.findViewById(R.id.spinner_commander);
-        spnCommander.setAdapter(new CommanderAdapter(getActivity(), getFleet()));
+
+        CommanderAdapter commanderAdapter = new CommanderAdapter(getActivity(), getFleet());
+        spnCommander.setAdapter(commanderAdapter);
+
         spnCommander.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -103,6 +106,10 @@ public class FleetOverviewFragment extends Fragment {
 
             }
         });
+
+        if (getFleet().commander() != null) {
+            spnCommander.setSelection(commanderAdapter.getPosition(getFleet().commander()), false);
+        }
 
         // Add the click listener for the add_squadron button
         Button btnAddSquadron = (Button) mFleetFragment.findViewById(R.id.btn_add_squadron);

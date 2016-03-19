@@ -16,6 +16,7 @@ import com.travismosley.armadafleetadmiral.game.component.upgrade.Upgrade;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -67,11 +68,18 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
         mFleetName = in.readString();
         mFactionId = in.readInt();
         mPointLimit = in.readInt();
+        mCommander = in.readParcelable(Commander.class.getClassLoader());
 
         mSquadronCounts = new HashMap<>();
-        if (in.readByte() == 0x01) {
-            in.readMap(mSquadronCounts, HashMap.class.getClassLoader());
+
+        int mapSize = in.readInt();
+
+        for (int i = 0; i < mapSize; i++) {
+            Squadron squad = in.readParcelable(Squadron.class.getClassLoader());
+            int count = in.readInt();
+            mSquadronCounts.put(squad, count);
         }
+
         if (in.readByte() == 0x01) {
             mShips = new ArrayList<>();
             in.readList(mShips, Ship.class.getClassLoader());
@@ -220,7 +228,6 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
     public void clearCommander() {
         mCommander = null;
     }
-    /* Parcel support */
 
     public void setCommander(Commander commander) {
         mCommander = commander;
@@ -229,6 +236,8 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
     public Commander commander() {
         return mCommander;
     }
+
+    /* Parcel support */
 
     @Override
     public int describeContents() {
@@ -241,13 +250,18 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
         dest.writeString(mFleetName);
         dest.writeInt(mFactionId);
         dest.writeInt(mPointLimit);
+        dest.writeParcelable(mCommander, flags);
 
-        if (mSquadronCounts.isEmpty()) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeMap(mSquadronCounts);
+        dest.writeInt(mSquadronCounts.size());
+
+        Iterator<Map.Entry<Squadron, Integer>> squadIter = mSquadronCounts.entrySet().iterator();
+
+        while (squadIter.hasNext()) {
+            Map.Entry<Squadron, Integer> entry = squadIter.next();
+            dest.writeParcelable(entry.getKey(), flags);
+            dest.writeInt(entry.getValue());
         }
+
         if (mShips == null) {
             dest.writeByte((byte) (0x00));
         } else {

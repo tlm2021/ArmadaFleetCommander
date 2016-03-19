@@ -179,9 +179,7 @@ public class FleetDatabaseFacade {
                 Upgrade upgrade = mComponentDbFacade.getUpgradeForId(upgradeIds.get(k));
                 ship.addUpgrade(upgrade);
             }
-
             shipList.add(ship);
-
         }
 
         return shipList;
@@ -303,10 +301,12 @@ public class FleetDatabaseFacade {
         Fleet fleet = new Fleet();
         fleet.populate(cursor);
 
-
         fleet.mShips = getShipsForFleet(fleetId);
         fleet.mSquadronCounts = getSquadronsForFleet(fleetId);
+        fleet.setCommander(mComponentDbFacade.getCommanderForId(cursor.getInt(FleetTable.COMMANDER_ID)));
         cursor.close();
+
+        Log.d(LOG_TAG, "getFleet: " + fleet.commander());
 
         return fleet;
     }

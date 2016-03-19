@@ -20,7 +20,6 @@ public class SquadronsAdapter extends ComponentListAdapter<Squadron> {
     private final static String LOG_TAG = SquadronsAdapter.class.getSimpleName();
 
     public SquadronsAdapter(Context context, List<Squadron> squadrons) {
-
         super(context, squadrons);
     }
 
