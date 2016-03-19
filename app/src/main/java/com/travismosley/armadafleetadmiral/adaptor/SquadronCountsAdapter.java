@@ -1,4 +1,4 @@
-package com.travismosley.armadafleetadmiral.adaptor.list;
+package com.travismosley.armadafleetadmiral.adaptor;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,22 +6,23 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.travismosley.armadafleetadmiral.R;
+import com.travismosley.armadafleetadmiral.adaptor.list.ComponentListAdapter;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
- * ArrayAdaptor for Squadron lists
+ * ListAdapter modified to support a map of a list of components and an instance count
  */
+public class SquadronCountsAdapter extends ComponentListAdapter<Squadron> {
 
-public class SquadronsAdapter extends ComponentListAdapter<Squadron> {
-    /* Adapts a Squadron objects for a ListView */
+    public Map<Squadron, Integer> mSquadronCounts;
 
-    private final static String LOG_TAG = SquadronsAdapter.class.getSimpleName();
+    public SquadronCountsAdapter(Context context, Map<Squadron, Integer> squadCounts) {
 
-    public SquadronsAdapter(Context context, List<Squadron> squadrons) {
-
-        super(context, squadrons);
+        super(context, new ArrayList<>(squadCounts.keySet()));
+        mSquadronCounts = squadCounts;
     }
 
     public void populateView(View squadView, Squadron squad) {
@@ -42,14 +43,27 @@ public class SquadronsAdapter extends ComponentListAdapter<Squadron> {
         TextView pointsView = (TextView) squadView.findViewById(R.id.txt_squadron_points);
         pointsView.setText(String.format("%d", squad.pointCost()));
 
-        if (squad.isUnique()){
+        if (squad.isUnique()) {
             squadView.setBackgroundColor(Color.parseColor("#FFFFC9"));
         } else {
             squadView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
     }
 
-    protected int getItemLayoutId(){
+    protected int getItemLayoutId() {
         return R.layout.list_item_squadron;
+    }
+
+    public int getCount(int position) {
+        Squadron squad = super.getItem(position);
+        return getCount(squad);
+    }
+
+    public int getCount(Squadron squad) {
+        if (mSquadronCounts.containsKey(squad)) {
+            return mSquadronCounts.get(squad);
+        } else {
+            return 0;
+        }
     }
 }

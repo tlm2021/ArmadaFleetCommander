@@ -35,7 +35,7 @@ public class FleetShipQueryBuilder extends QueryBuilder {
         return FleetDatabaseContract.FleetShipView.CUSTOM_TITLE;
     }
 
-    private String getFleetIdWhereClause(int fleetId){
+    public String getFleetIdWhereClause(int fleetId) {
         return FleetDatabaseContract.FleetShipView.FLEET_ID + "='" + fleetId + "'";
     }
 

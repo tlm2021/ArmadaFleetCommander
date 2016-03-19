@@ -19,8 +19,7 @@ public class FleetSquadronsQueryBuilder extends QueryBuilder {
     protected List<String> getColumns(){
         return new ArrayList<>(Arrays.asList(
                 FleetDatabaseContract.FleetSquadronsTable.FLEET_ID,
-                FleetDatabaseContract.FleetSquadronsTable.SQUADRON_ID,
-                FleetDatabaseContract.FleetSquadronsTable.TABLE_NAME));
+                FleetDatabaseContract.FleetSquadronsTable.SQUADRON_ID));
     }
 
     @Override

@@ -71,7 +71,7 @@ public class FleetDatabaseFacade {
         }
 
         cursor.close();
-        db.close();
+        closeDatabase();
 
         Collections.sort(upgradeIds);
 
@@ -125,7 +125,7 @@ public class FleetDatabaseFacade {
         int matchedShipBuildId = cursor.getInt(ShipBuildUpgradesTable.SHIP_BUILD_ID);
 
         cursor.close();
-        db.close();
+        closeDatabase();
         return matchedShipBuildId;
     }
 
@@ -152,7 +152,6 @@ public class FleetDatabaseFacade {
 
         values.clear();
         values.put(ShipBuildUpgradesTable.SHIP_BUILD_ID, shipBuildId);
-        closeDatabase();
 
         List<Upgrade> shipUpgrades = ship.getEquippedUpgrades();
         for (int i=0; i < shipUpgrades.size(); i++){
@@ -167,15 +166,22 @@ public class FleetDatabaseFacade {
     public List<Ship> getShipsForFleet(int fleetId){
 
         ArrayList<Ship> shipList = new ArrayList<>();
-        SQLiteDatabase db = getDatabase();
 
         FleetShipQueryBuilder shipQueryBuilder = new FleetShipQueryBuilder();
-        Cursor cursor = (Cursor) db.rawQuery(shipQueryBuilder.queryWhereFleetId(fleetId), null);
+        Cursor cursor = (Cursor) getDatabase().rawQuery(shipQueryBuilder.queryWhereFleetId(fleetId), null);
 
         for (int i=0; i<cursor.getCount(); i++){
             cursor.moveToPosition(i);
-            Ship ship = mComponentDbFacade.getShipForShipId(cursor.getInt(FleetShipView.SHIP_ID));
+            Ship ship = mComponentDbFacade.getShipForId(cursor.getInt(FleetShipView.SHIP_ID));
+            List<Integer> upgradeIds = getUpgradeIdsForShipBuild(cursor.getInt(FleetShipView.SHIP_BUILD_ID));
+
+            for (int k = 0; k < upgradeIds.size(); k++) {
+                Upgrade upgrade = mComponentDbFacade.getUpgradeForId(upgradeIds.get(k));
+                ship.addUpgrade(upgrade);
+            }
+
             shipList.add(ship);
+
         }
 
         return shipList;
@@ -190,7 +196,7 @@ public class FleetDatabaseFacade {
 
         for (int i=0; i < cursor.getCount(); i++){
             cursor.moveToPosition(i);
-            Squadron squad = mComponentDbFacade.getSquadronForSquadronId(cursor.getInt(FleetSquadronsTable.SQUADRON_ID));
+            Squadron squad = mComponentDbFacade.getSquadronForId(cursor.getInt(FleetSquadronsTable.SQUADRON_ID));
             int count = cursor.getInt(FleetSquadronsTable.COUNT);
             squadCounts.put(squad, count);
         }
@@ -232,6 +238,17 @@ public class FleetDatabaseFacade {
 
         // If no fleet id provided, use the one assigned to the fleet
         addShipBuildsForFleet(fleet, fleet.id());
+    }
+
+    public void updateShipBuildsForFleet(Fleet fleet) {
+        clearShipBuildsForFleet(fleet);
+        addShipBuildsForFleet(fleet);
+    }
+
+    public void clearShipBuildsForFleet(Fleet fleet) {
+
+        getDatabase().delete(FleetShipBuildTable.TABLE_NAME, FleetShipBuildTable.FLEET_ID + "='" + fleet.id() + "'", null);
+
     }
 
     public void addOrUpdateSquadronsForFleet(Fleet fleet, int fleetId ){
@@ -282,8 +299,10 @@ public class FleetDatabaseFacade {
             return null;
         }
 
+        cursor.moveToPosition(0);
         Fleet fleet = new Fleet();
         fleet.populate(cursor);
+
 
         fleet.mShips = getShipsForFleet(fleetId);
         fleet.mSquadronCounts = getSquadronsForFleet(fleetId);
@@ -293,7 +312,6 @@ public class FleetDatabaseFacade {
     }
 
     public void updateFleet(Fleet fleet){
-        SQLiteDatabase db = getDatabase();
         FleetQueryBuilder fleetQueryBuilder = new FleetQueryBuilder();
         ContentValues values = new ContentValues();
 
@@ -302,27 +320,22 @@ public class FleetDatabaseFacade {
         values.put(FleetTable.FLEET_POINT_LIMIT, fleet.fleetPointLimit());
         values.put(FleetTable.COMMANDER_ID, fleet.commander().id());
 
-        db.update(FleetTable.TABLE_NAME, values, fleetQueryBuilder.queryWhereFleetId(fleet.id()), null);
-        db.close();
+        getDatabase().update(FleetTable.TABLE_NAME, values, fleetQueryBuilder.getFleetIdWhereClause(fleet.id()), null);
+        closeDatabase();
 
-        addShipBuildsForFleet(fleet);
+        updateShipBuildsForFleet(fleet);
         addOrUpdateSquadronsForFleet(fleet);
     }
 
     public List<Fleet> getFleetsForFaction(int factionId){
-        SQLiteDatabase db = getDatabase();
         FleetQueryBuilder fleetQueryBuilder = new FleetQueryBuilder();
-        Cursor cursor = (Cursor) db.rawQuery(fleetQueryBuilder.queryWhereFactionId(factionId), null);
+        Cursor cursor = (Cursor) getDatabase().rawQuery(fleetQueryBuilder.queryWhereFactionId(factionId), null);
 
         List<Fleet> fleets = new ArrayList<>();
 
         for (int i=0; i < cursor.getCount(); i++){
             cursor.moveToPosition(i);
-
-            Fleet fleet = new Fleet();
-            fleet.populate(cursor);
-            fleet.mShips = getShipsForFleet(cursor.getInt(FleetTable._ID));
-            fleets.add(fleet);
+            fleets.add(getFleet(cursor.getInt(FleetTable._ID)));
         }
 
         cursor.close();
@@ -330,7 +343,7 @@ public class FleetDatabaseFacade {
     }
 
     private SQLiteDatabase getDatabase(){
-        if (mDb == null) {
+        if (mDb == null || !mDb.isOpen()) {
             mDb = mFleetDbHelper.getWritableDatabase();
         }
         return mDb;

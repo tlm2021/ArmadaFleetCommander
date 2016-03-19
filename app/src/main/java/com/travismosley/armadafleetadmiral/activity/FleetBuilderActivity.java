@@ -11,12 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.travismosley.android.ui.Gravity;
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.data.FleetDatabaseFacade;
 import com.travismosley.armadafleetadmiral.fragment.FleetOverviewFragment;
@@ -58,6 +58,7 @@ public class FleetBuilderActivity extends AppCompatActivity
         Bundle args = getIntent().getExtras();
         mFleet = args.getParcelable(getString(R.string.key_fleet));
 
+        assert mFleet != null;
         if (mFleet.mFactionId == 0) {
             this.setTheme(R.style.AppThemeRebel);
         } else {
@@ -149,7 +150,7 @@ public class FleetBuilderActivity extends AppCompatActivity
             if (fleetDatabase.hasFleet(mFleet.id())){
                 fleetDatabase.updateFleet(mFleet);
             } else{
-                fleetDatabase.addFleet(mFleet);
+                mFleet.setId(fleetDatabase.addFleet(mFleet));
             }
         }
 
@@ -195,12 +196,12 @@ public class FleetBuilderActivity extends AppCompatActivity
         Log.d(LOG_TAG, "onShipClicked for " + ship);
 
         ShipDetailFragment shipDetailFragment = ShipDetailFragment.newInstance(ship, mFleet);
-        transitionToFragment(shipDetailFragment, new Slide(Gravity.END));
+        transitionToFragment(shipDetailFragment, new Slide(Gravity.end()));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void transitionToFragment(Fragment fragment) {
-        transitionToFragment(fragment, new Slide(Gravity.START));
+        transitionToFragment(fragment, new Slide(Gravity.start()));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

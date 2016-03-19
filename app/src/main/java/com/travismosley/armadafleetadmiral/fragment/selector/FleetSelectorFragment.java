@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -69,7 +70,7 @@ public class FleetSelectorFragment extends Fragment {
             }
         });
 
-        ListView fleetListView = (ListView) fleetSelectorFragment.findViewById(R.id.list_fleets);
+        final ListView fleetListView = (ListView) fleetSelectorFragment.findViewById(R.id.list_fleets);
         List<Fleet> fleets = mFleetDb.getFleetsForFaction(mFactionId);
 
         for (int i=0; i < fleets.size(); i++){
@@ -77,6 +78,14 @@ public class FleetSelectorFragment extends Fragment {
         }
         mFleetsAdapter = new FleetAdapter(getActivity(), new ArrayList<Fleet>());
         fleetListView.setAdapter(mFleetsAdapter);
+
+        fleetListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fleet fleet = mFleetsAdapter.getItem(position);
+                mFleetSelectedListener.onFleetBuilderRequested(fleet);
+            }
+        });
 
         return fleetSelectorFragment;
     }

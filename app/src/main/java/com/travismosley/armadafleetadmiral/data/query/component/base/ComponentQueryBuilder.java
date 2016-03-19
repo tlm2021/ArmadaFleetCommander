@@ -34,8 +34,16 @@ public abstract class ComponentQueryBuilder extends QueryBuilder {
                 " OR " + ComponentTableContract.FACTION_ID + " is NULL";
     }
 
+    protected String getIdWhereClause(int id) {
+        return ComponentTableContract._ID + "=" + String.valueOf(id);
+    }
+
     public String queryWhereFactionId(int factionId){
         return queryWhere(getFactionWhereClause(factionId));
+    }
+
+    public String queryWhereId(int id) {
+        return queryWhere(getIdWhereClause(id));
     }
 
 }

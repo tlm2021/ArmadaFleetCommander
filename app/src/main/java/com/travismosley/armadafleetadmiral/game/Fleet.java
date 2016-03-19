@@ -25,14 +25,25 @@ import java.util.Map;
 
 public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
-    String LOG_TAG = Fleet.class.getSimpleName();
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Fleet> CREATOR = new Parcelable.Creator<Fleet>() {
+        @Override
+        public Fleet createFromParcel(Parcel in) {
+            return new Fleet(in);
+        }
 
+        @Override
+        public Fleet[] newArray(int size) {
+            return new Fleet[size];
+        }
+    };
+    public int mFactionId;
+    public Map<Squadron, Integer> mSquadronCounts;
+    public List<Ship> mShips;
+    String LOG_TAG = Fleet.class.getSimpleName();
     private int mFleetId;
     private String mFleetName;
-    public int mFactionId;
     private int mPointLimit;
-    public Map<Squadron,Integer> mSquadronCounts;
-    public List<Ship> mShips;
     private Commander mCommander;
     private Objective mAssaultObjective;
     private Objective mDefenseObjective;
@@ -40,7 +51,7 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
     public Fleet(){
         mPointLimit = 400;
-        mSquadronCounts = new HashMap<Squadron,Integer>();
+        mSquadronCounts = new HashMap<>();
         mShips = new ArrayList<>();
     }
 
@@ -48,6 +59,25 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
         this();
         Log.d(LOG_TAG, "Fleet: factionId: " + factionId);
         mFactionId = factionId;
+    }
+
+    protected Fleet(Parcel in) {
+
+        mFleetId = in.readInt();
+        mFleetName = in.readString();
+        mFactionId = in.readInt();
+        mPointLimit = in.readInt();
+
+        mSquadronCounts = new HashMap<>();
+        if (in.readByte() == 0x01) {
+            in.readMap(mSquadronCounts, HashMap.class.getClassLoader());
+        }
+        if (in.readByte() == 0x01) {
+            mShips = new ArrayList<>();
+            in.readList(mShips, Ship.class.getClassLoader());
+        } else {
+            mShips = null;
+        }
     }
 
     public void populate(Cursor cursor){
@@ -64,6 +94,14 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
 
     public Integer id(){
         return mFleetId;
+    }
+
+    public void setId(int id) {
+        mFleetId = id;
+    }
+
+    public void setId(long id) {
+        setId((int) id);
     }
 
     public void setName(String name){
@@ -133,7 +171,6 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
         return mSquadronCounts;
     }
 
-
     public boolean hasComponent(Squadron squadron){
 
         // Check if this fleet already has a squadron with the same id
@@ -180,36 +217,17 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
         return component.pointCost() <= this.remainingFleetPoints();
     }
 
-    public void clearCommander(){
+    public void clearCommander() {
         mCommander = null;
-    }
-
-    public void setCommander(Commander commander){
-        mCommander = commander;
-    }
-
-    public Commander commander(){
-        return mCommander;
     }
     /* Parcel support */
 
-    protected Fleet(Parcel in) {
+    public void setCommander(Commander commander) {
+        mCommander = commander;
+    }
 
-        mFleetId = in.readInt();
-        mFleetName = in.readString();
-        mFactionId = in.readInt();
-        mPointLimit = in.readInt();
-
-        mSquadronCounts = new HashMap<>();
-        if (in.readByte() == 0x01) {
-            in.readMap(mSquadronCounts, HashMap.class.getClassLoader());
-        }
-        if (in.readByte() == 0x01) {
-            mShips = new ArrayList<>();
-            in.readList(mShips, Ship.class.getClassLoader());
-        } else {
-            mShips = null;
-        }
+    public Commander commander() {
+        return mCommander;
     }
 
     @Override
@@ -237,17 +255,4 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
             dest.writeList(mShips);
         }
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Fleet> CREATOR = new Parcelable.Creator<Fleet>() {
-        @Override
-        public Fleet createFromParcel(Parcel in) {
-            return new Fleet(in);
-        }
-
-        @Override
-        public Fleet[] newArray(int size) {
-            return new Fleet[size];
-        }
-    };
 }

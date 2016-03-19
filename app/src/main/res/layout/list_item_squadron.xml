@@ -72,8 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:elevation="@dimen/design_navigation_elevation"
-                    android:onClick="@string/squadron_desc_default" />
+                    android:elevation="@dimen/design_navigation_elevation" />
 
             </LinearLayout>
 

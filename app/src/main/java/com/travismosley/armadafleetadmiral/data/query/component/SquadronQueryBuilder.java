@@ -23,9 +23,4 @@ public class SquadronQueryBuilder extends VehicleQueryBuilder {
         columns.add(SquadronTable.IS_UNIQUE);
         return columns;
     }
-
-    public String queryWhereSquadronId(int squadId){
-        return queryWhere(SquadronTable._ID + "=" + String.valueOf(squadId));
-    }
-
 }

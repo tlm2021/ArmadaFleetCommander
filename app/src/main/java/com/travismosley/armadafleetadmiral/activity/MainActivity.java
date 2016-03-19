@@ -10,10 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.transition.Transition;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.travismosley.android.ui.Gravity;
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.fragment.MainActivityFragment;
 import com.travismosley.armadafleetadmiral.fragment.selector.FleetSelectorFragment;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void transitionToFragment(Fragment fragment){
-        transitionToFragment(fragment, new Slide(Gravity.START));
+        transitionToFragment(fragment, new Slide(Gravity.start()));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

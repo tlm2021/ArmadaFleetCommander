@@ -19,8 +19,4 @@ public class ShipQueryBuilder extends VehicleQueryBuilder {
     protected String getShipIdWhereClause(int shipId){
         return ShipTable._ID + "=" + String.valueOf(shipId);
     }
-
-    public String queryWhereShipId(int shipId) {
-        return queryWhere(getShipIdWhereClause(shipId));
-    }
 }

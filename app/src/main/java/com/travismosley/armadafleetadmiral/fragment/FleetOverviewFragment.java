@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.nhaarman.listviewanimations.appearance.simple.ScaleInAnimationAdapter;
 import com.travismosley.armadafleetadmiral.R;
 import com.travismosley.armadafleetadmiral.activity.FleetBuilderActivity;
+import com.travismosley.armadafleetadmiral.adaptor.SquadronCountsAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.list.ShipsAdapter;
-import com.travismosley.armadafleetadmiral.adaptor.list.SquadronsAdapter;
 import com.travismosley.armadafleetadmiral.adaptor.spinner.CommanderAdapter;
 import com.travismosley.armadafleetadmiral.game.Fleet;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
@@ -31,31 +31,16 @@ import com.travismosley.armadafleetadmiral.game.component.upgrade.Commander;
 public class FleetOverviewFragment extends Fragment {
 
     private final static String LOG_TAG = FleetOverviewFragment.class.getSimpleName();
-
-    private SquadronsAdapter mSquadronsAdapter;
-    private ShipsAdapter mShipsAdaptor;
-    private View mFleetFragment;
-
-    private ListView mSquadListView;
-    private ListView mShipListView;
-
     OnAddSquadronListener mAddSquadronCallback;
     OnAddShipListener mAddShipCallback;
     OnShipClickedListener mOnShipClickedCallback;
+    private SquadronCountsAdapter mSquadronsAdapter;
+    private ShipsAdapter mShipsAdaptor;
+    private View mFleetFragment;
+    private ListView mSquadListView;
+    private ListView mShipListView;
 
-    // onAddSquadron callback
-    public interface OnAddSquadronListener{
-        void onAddSquadron();
-    }
-
-    // onAddShip callback
-    public interface OnAddShipListener{
-        void onAddShip();
-    }
-
-    // onShipClicked callback
-    public interface OnShipClickedListener{
-        void onShipClicked(Ship ship);
+    public FleetOverviewFragment() {
     }
 
     @Override
@@ -90,8 +75,6 @@ public class FleetOverviewFragment extends Fragment {
                     + " must implement OnShipClickedListener");
         }
     }
-
-    public FleetOverviewFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,7 +114,7 @@ public class FleetOverviewFragment extends Fragment {
 
         // Get a SquadronAdapter, and set it on the list
         mSquadListView = (ListView) mFleetFragment.findViewById(R.id.list_squadrons);
-        mSquadronsAdapter = new SquadronsAdapter(getActivity(), getFleet().mSquadronCounts);
+        mSquadronsAdapter = new SquadronCountsAdapter(getActivity(), getFleet().squadronCounts());
         ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(mSquadronsAdapter);
         animationAdapter.setAbsListView(mSquadListView);
         mSquadListView.setAdapter(animationAdapter);
@@ -209,5 +192,20 @@ public class FleetOverviewFragment extends Fragment {
 
         TextView usedSquadPointsView = (TextView) mFleetFragment.findViewById(R.id.txt_squad_points_used);
         usedSquadPointsView.setText(String.valueOf(getFleet().squadronPoints()));
+    }
+
+    // onAddSquadron callback
+    public interface OnAddSquadronListener {
+        void onAddSquadron();
+    }
+
+    // onAddShip callback
+    public interface OnAddShipListener {
+        void onAddShip();
+    }
+
+    // onShipClicked callback
+    public interface OnShipClickedListener {
+        void onShipClicked(Ship ship);
     }
 }
