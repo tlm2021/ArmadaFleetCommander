@@ -5,67 +5,73 @@
     android:id="@+id/fragment_fleet"
     tools:context=".activity.FleetBuilderActivity">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lyt_objective_view">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            style="@style/ObjectiveItem"
+            android:id="@+id/lyt_command_view"
+            android:background="#757575">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/commander_default"
+                android:id="@+id/txt_commander"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="32"
+                android:id="@+id/txt_cmd_points"
+                android:singleLine="false"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:textAlignment="textEnd" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/assault_obj_default"
+            android:id="@+id/txt_obj_assault"
+            android:background="#d50000"
+            style="@style/ObjectiveItem"
+            android:layout_weight="2" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/defense_obj_default"
+            android:id="@+id/txt_obj_defense"
+            android:background="#0288d1"
+            style="@style/ObjectiveItem"
+            android:layout_weight="2" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nav_obj_default"
+            android:id="@+id/txt_obj_navigation"
+            android:background="#ffc107"
+            style="@style/ObjectiveItem"
+            android:layout_weight="2" />
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lyt_fleet_overview"
-        style="@style/Header">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/txt_fleet_name"
-            android:text="@string/fleet_name_default"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:clickable="false"
-            android:editable="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/fleet_points_allowed_default"
-            android:id="@+id/txt_fleet_point_allowed"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/txt_fleet_point_divider"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/txt_fleet_point_allowed"
-            android:textIsSelectable="true"
-            android:text="@string/fleet_points_divider_default" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/fleet_points_used_default"
-            android:id="@+id/txt_fleet_points_used"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@id/txt_fleet_point_divider"
-            android:phoneNumber="true" />
-
-        <Spinner
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_commander"
-            tools:listitem="@layout/list_item_upgrade"
-            android:layout_below="@+id/txt_fleet_name"
-            android:elevation="3dp"
-            android:padding="4dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_below="@+id/lyt_fleet_overview"
-        android:id="@+id/lyt_fleet_ships">
+        android:id="@+id/lyt_fleet_ships"
+        android:layout_alignParentEnd="false"
+        android:layout_below="@+id/lyt_objective_view">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -95,7 +101,7 @@
 
         <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="250dp"
             android:id="@+id/list_ships"
             tools:listitem="@layout/list_item_ship"
             android:layout_below="@+id/lyt_ships_overview"
