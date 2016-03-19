@@ -3,57 +3,36 @@ package com.travismosley.armadafleetadmiral.game.component.upgrade;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.travismosley.android.data.database.PopulateFromCursorInterface;
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.ShipUpgradeSlotsTable;
+import com.travismosley.armadafleetadmiral.game.component.GameComponent;
 
 /**
  * Class for defining and upgrade support and storage
  */
-public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
+public class UpgradeSlot extends GameComponent {
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<UpgradeSlot> CREATOR = new Parcelable.Creator<UpgradeSlot>() {
-        @Override
-        public UpgradeSlot createFromParcel(Parcel in) {
-            return new UpgradeSlot(in);
-        }
-
-        @Override
-        public UpgradeSlot[] newArray(int size) {
-            return new UpgradeSlot[size];
-        }
-    };
-    private int mUpgradeTypeId;
-    private String mUpgradeTypeName;
     private Upgrade mEquippedUpgrade;
 
     public UpgradeSlot(){}
 
-    // Parcel support
-    protected UpgradeSlot(Parcel in) {
-        mUpgradeTypeId = in.readInt();
-        mUpgradeTypeName = in.readString();
-        mEquippedUpgrade = in.readParcelable(Upgrade.class.getClassLoader());
-    }
-
     public void populate(Cursor cursor){
 
         // Base component attributes
-        mUpgradeTypeId = cursor.getInt(ShipUpgradeSlotsTable.UPGRADE_TYPE_ID);
-        mUpgradeTypeName = cursor.getString(ShipUpgradeSlotsTable.UPGRADE_TYPE_NAME);
+        mId = cursor.getInt(ShipUpgradeSlotsTable.UPGRADE_TYPE_ID);
+        mTitle = cursor.getString(ShipUpgradeSlotsTable.TITLE);
     }
 
     public String typeName(){
-        return mUpgradeTypeName;
+        return mTitle;
     }
 
     public int typeId(){
-        return mUpgradeTypeId;
+        return mId;
     }
 
     public boolean canEquip(Upgrade upgrade){
-        return upgrade.upgradeTypeId() == mUpgradeTypeId;
+        return upgrade.upgradeTypeId() == mId;
     }
 
     public boolean isEquipped(){
@@ -74,12 +53,31 @@ public class UpgradeSlot implements Parcelable, PopulateFromCursorInterface {
         mEquippedUpgrade = null;
     }
 
+
+    // Parcel support
+    protected UpgradeSlot(Parcel in) {
+        super(in);
+        mEquippedUpgrade = in.readParcelable(Upgrade.class.getClassLoader());
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mUpgradeTypeId);
-        dest.writeString(mUpgradeTypeName);
+        super.writeToParcel(dest, flags);
         dest.writeParcelable(mEquippedUpgrade, 0);
     }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UpgradeSlot> CREATOR = new Parcelable.Creator<UpgradeSlot>() {
+        @Override
+        public UpgradeSlot createFromParcel(Parcel in) {
+            return new UpgradeSlot(in);
+        }
+
+        @Override
+        public UpgradeSlot[] newArray(int size) {
+            return new UpgradeSlot[size];
+        }
+    };
 
     @Override
     public int describeContents() {

@@ -2,6 +2,7 @@ package com.travismosley.armadafleetadmiral.data.contract;
 
 import android.provider.BaseColumns;
 
+import com.travismosley.armadafleetadmiral.data.contract.table.DefenseTokenTableContract;
 import com.travismosley.armadafleetadmiral.data.contract.table.ObjectiveTableContract;
 import com.travismosley.armadafleetadmiral.data.contract.table.UpgradeTableContract;
 import com.travismosley.armadafleetadmiral.data.contract.table.VehicleTableContract;
@@ -35,7 +36,7 @@ public class ComponentDatabaseContract {
         public static final String TABLE_NAME = "ship_upgrade_slots_view";
         public static final String SHIP_ID = "ship_id";
         public static final String UPGRADE_TYPE_ID = "upgrade_type_id";
-        public static final String UPGRADE_TYPE_NAME = "upgrade_type_name";
+        public static final String TITLE = "title";
     }
 
     public static abstract class ShipTitleTable implements UpgradeTableContract {
@@ -49,5 +50,16 @@ public class ComponentDatabaseContract {
     public static abstract class ObjectiveTable implements ObjectiveTableContract{
         public static final String TABLE_NAME = "objective_view";
     }
+
+    public static abstract class ShipDefenseTokenTable implements DefenseTokenTableContract {
+        public static final String TABLE_NAME = "ship_defense_token_view";
+        public static final String SHIP_ID = "ship_id";
+    }
+
+    public static abstract class SquadronDefenseTokenTable implements DefenseTokenTableContract {
+        public static final String TABLE_NAME = "squadron_defense_token_view";
+        public static final String SQUADRON_ID = "squadron_id";
+    }
+
 
 }

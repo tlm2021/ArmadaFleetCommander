@@ -5,11 +5,14 @@ import android.content.Context;
 import com.travismosley.armadafleetadmiral.data.factory.ComponentFactory;
 import com.travismosley.armadafleetadmiral.data.query.component.CommanderQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.ObjectiveQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.ShipDefenseTokenQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.ShipQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.ShipTitleQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.ShipUpgradeSlotQueryBuilder;
+import com.travismosley.armadafleetadmiral.data.query.component.SquadronDefenseTokenQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.SquadronQueryBuilder;
 import com.travismosley.armadafleetadmiral.data.query.component.UpgradeQueryBuilder;
+import com.travismosley.armadafleetadmiral.game.component.DefenseToken;
 import com.travismosley.armadafleetadmiral.game.component.Objective;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
@@ -54,7 +57,15 @@ public class ComponentDatabaseFacade {
 
         // Get a Squadron factory, and feed it the query
         ComponentFactory<Squadron> factory = new ComponentFactory<>();
-        return factory.getAllForQuery(query, mDbHelper.getDatabase(), Squadron.class);
+        List<Squadron> squadList = factory.getAllForQuery(query, mDbHelper.getDatabase(), Squadron.class);
+
+        for (int i = 0; i < squadList.size(); i++) {
+            Squadron squad = squadList.get(i);
+            squad.setDefenseTokens(getDefenseTokensForSquadron(squad.id()));
+        }
+
+        return squadList;
+
     }
 
     private Ship getShipForQuery(String query){
@@ -75,6 +86,7 @@ public class ComponentDatabaseFacade {
         for (int i = 0; i < shipList.size(); i++) {
             Ship ship = shipList.get(i);
             ship.setUpgradeSlots(getUpgradeSlotsForShip(ship.id()));
+            ship.setDefenseTokens(getDefenseTokensForShip(ship.id()));
         }
 
         return shipList;
@@ -127,6 +139,20 @@ public class ComponentDatabaseFacade {
         return factory.getAllForQuery(query, mDbHelper.getDatabase(), Objective.class);
     }
 
+    private List<DefenseToken> getDefenseTokensForQuery(String query) {
+
+        // Get a DefenseToken factory and feed it the query
+        ComponentFactory<DefenseToken> factory = new ComponentFactory<>();
+        return factory.getAllForQuery(query, mDbHelper.getDatabase(), DefenseToken.class);
+    }
+
+    private DefenseToken getDefenseTokenForQuery(String query) {
+
+        // Get a DefenseToken factory and feed it the query
+        ComponentFactory<DefenseToken> factory = new ComponentFactory<>();
+        return factory.getSingleForQuery(query, mDbHelper.getDatabase(), DefenseToken.class);
+    }
+
     /* Squadron Queries */
 
     public List<Squadron> getSquadrons() {
@@ -163,7 +189,6 @@ public class ComponentDatabaseFacade {
 
     /* Upgrade Slot Queries */
 
-
     public List<UpgradeSlot> getUpgradeSlotsForShip(int shipId){
         ShipUpgradeSlotQueryBuilder queryBuilder = new ShipUpgradeSlotQueryBuilder();
         return getUpgradeSlotsForQuery(queryBuilder.queryWhereShipId(shipId));
@@ -180,7 +205,6 @@ public class ComponentDatabaseFacade {
         UpgradeQueryBuilder queryBuilder = new UpgradeQueryBuilder();
         return getUpgradeForQuery(queryBuilder.queryWhereId(upgradeId));
     }
-
 
     public List<TitleUpgrade> getTitlesForShipClass(int shipClassId){
         ShipTitleQueryBuilder queryBuilder = new ShipTitleQueryBuilder();
@@ -202,5 +226,15 @@ public class ComponentDatabaseFacade {
     public List<Objective> getObjectivesForType(int typeId){
         ObjectiveQueryBuilder queryBuilder = new ObjectiveQueryBuilder();
         return getObjectivesForQuery(queryBuilder.queryWhereTypeId(typeId));
+    }
+
+    public List<DefenseToken> getDefenseTokensForShip(int shipId) {
+        ShipDefenseTokenQueryBuilder queryBuilder = new ShipDefenseTokenQueryBuilder();
+        return getDefenseTokensForQuery(queryBuilder.queryWhereShipId(shipId));
+    }
+
+    public List<DefenseToken> getDefenseTokensForSquadron(int squadronId) {
+        SquadronDefenseTokenQueryBuilder queryBuilder = new SquadronDefenseTokenQueryBuilder();
+        return getDefenseTokensForQuery(queryBuilder.queryWhereSquadronId(squadronId));
     }
 }

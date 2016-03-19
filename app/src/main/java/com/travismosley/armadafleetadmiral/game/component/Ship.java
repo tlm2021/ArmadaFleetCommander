@@ -28,6 +28,7 @@ public class Ship extends Vehicle {
             return new Ship[size];
         }
     };
+
     private final static String LOG_TAG = Ship.class.getSimpleName();
     private TitleUpgrade mTitleUpgrade;
     private String mCustomTitle;

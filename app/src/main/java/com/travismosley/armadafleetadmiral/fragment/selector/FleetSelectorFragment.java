@@ -86,7 +86,6 @@ public class FleetSelectorFragment extends Fragment {
                 mFleetSelectedListener.onFleetBuilderRequested(fleet);
             }
         });
-
         return fleetSelectorFragment;
     }
 

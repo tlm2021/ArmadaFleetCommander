@@ -7,7 +7,7 @@ import android.util.Log;
 import com.travismosley.android.data.database.PopulateFromCursorInterface;
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetadmiral.data.contract.FleetDatabaseContract;
-import com.travismosley.armadafleetadmiral.game.component.GameComponent;
+import com.travismosley.armadafleetadmiral.game.component.FleetPointsGameComponent;
 import com.travismosley.armadafleetadmiral.game.component.Objective;
 import com.travismosley.armadafleetadmiral.game.component.Ship;
 import com.travismosley.armadafleetadmiral.game.component.Squadron;
@@ -217,7 +217,7 @@ public class Fleet implements Parcelable, PopulateFromCursorInterface {
         return true;
     }
 
-    public boolean canAddComponent(GameComponent component){
+    public boolean canAddComponent(FleetPointsGameComponent component) {
         Log.w(LOG_TAG, "Point-only check for component" + component);
         Log.w(LOG_TAG, "Need canAddComponent method for more specific check.");
 

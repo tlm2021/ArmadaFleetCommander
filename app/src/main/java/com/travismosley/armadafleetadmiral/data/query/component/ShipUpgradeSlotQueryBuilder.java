@@ -21,7 +21,7 @@ public class ShipUpgradeSlotQueryBuilder extends QueryBuilder {
     protected List<String> getColumns(){
         return Arrays.asList(ShipUpgradeSlotsTable.SHIP_ID,
                 ShipUpgradeSlotsTable.UPGRADE_TYPE_ID,
-                ShipUpgradeSlotsTable.UPGRADE_TYPE_NAME);
+                ShipUpgradeSlotsTable.TITLE);
     }
 
     protected String getOrderBy(){

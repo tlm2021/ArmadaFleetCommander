@@ -5,14 +5,14 @@ import android.os.Parcelable;
 
 import com.travismosley.android.data.database.cursor.Cursor;
 import com.travismosley.armadafleetadmiral.data.contract.ComponentDatabaseContract.UpgradeTable;
-import com.travismosley.armadafleetadmiral.game.component.GameComponent;
+import com.travismosley.armadafleetadmiral.game.component.FleetPointsGameComponent;
 
 import java.util.ArrayList;
 
 /**
  * GameComponent class for ship upgrade cards
  */
-public class Upgrade extends GameComponent {
+public class Upgrade extends FleetPointsGameComponent {
 
     private final static String LOG_TAG = Upgrade.class.getSimpleName();
 
