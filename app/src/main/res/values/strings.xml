@@ -28,12 +28,21 @@
     <string name="squadron_desc_default">While attacking a ship, if the defending hull zone has no shields, you may reroll any number of dice in your attack pool.</string>
     <string name="squadron_type_default">Bomber</string>
 
-    <string name="ship_list_title">Ships</string>
+    <string name="ship_list_title">Capital Ships</string>
     <string name="ship_title_default">CR90 Corvette A</string>
     <string name="ship_class_default">Corvette</string>
     <string name="ship_speed_default">4</string>
     <string name="ship_hull_default">4</string>
     <string name="ship_points_default">39</string>
+
+    <string name="commander_default">Admiral Ackbar</string>
+    <string name="assault_obj_default">AG</string>
+    <string name="defense_obj_default">HA</string>
+    <string name="nav_obj_default">NH</string>
+    <string name="objective_title_default">Advanced Gunnery</string>
+    <string name="objective_vp_points">20</string>
+    <string name="objective_desc_default">&lt;b>Setup:&lt;/b> After deploying fleets, each player chooses 1 of his ships to be an objective ship, starting with the first player. \n\n&lt;b>Special Rule:&lt;/b> The first player's objective ship may perform each of its attacks from the same hull zone. It cannot target the same hull zone or squadron more than once with that hull zone. The second player's objective ship may perform each of its attacks from the same hull zone, and it may do so against the same targets. \n\n&lt;b>End of Game:&lt;/b> The fleet point cost of a destroyed objective ship is doubled. Do not double the cost of its upgrade cards.</string>
+
 
     <!-- Bundle keys -->
     <string name="key_fleet">KEY_FLEET</string>
@@ -52,13 +61,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_fleet">New Fleet</string>
-    <string name="commander_default">Admiral Ackbar</string>
-    <string name="assault_obj_default">AG</string>
-    <string name="defense_obj_default">HA</string>
-    <string name="nav_obj_default">NH</string>
-    <string name="objective_title_default">Advanced Gunnery</string>
-    <string name="objective_vp_points">20</string>
-    <string name="objective_desc_default">&lt;b>Setup:&lt;/b> After deploying fleets, each player chooses 1 of his ships to be an objective ship, starting with the first player. \n\n&lt;b>Special Rule:&lt;/b> The first player's objective ship may perform each of its attacks from the same hull zone. It cannot target the same hull zone or squadron more than once with that hull zone. The second player's objective ship may perform each of its attacks from the same hull zone, and it may do so against the same targets. \n\n&lt;b>End of Game:&lt;/b> The fleet point cost of a destroyed objective ship is doubled. Do not double the cost of its upgrade cards.</string>
+    <string name="ship_cmd_value_default">1</string>
+    <string name="ship_sqd_value_default">3</string>
+    <string name="ship_eng_value_default">2</string>
+    <string name="ship_spd_value_default">4</string>
 
 
 </resources>

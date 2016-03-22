@@ -1,84 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/ComponentListItem"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:id="@+id/lyt_values"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical|bottom|end"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/txt_ship_speed"
-            style="@style/textMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/ship_speed_default" />
-
-        <TextView
-            android:id="@+id/txt_ship_hull"
-            style="@style/textMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/ship_hull_default" />
-
-        <TextView
-            android:id="@+id/txt_ship_points"
-            style="@style/textLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/ship_points_default" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lyt_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/lyt_values"
-        android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants"
+    android:background="#757575">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:id="@+id/lyt_type_cost"
+            android:paddingRight="10dp">
 
-            <TextView
-                android:id="@+id/txt_unique_indicator"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="*"
-                android:visibility="visible" />
+                android:id="@+id/img_ship_class"
+                android:src="@mipmap/squadron"
+                android:layout_weight="1" />
 
-            <com.travismosley.android.ui.view.FitTextView
-                android:id="@+id/txt_ship_title"
-                style="@style/textLarge"
-                android:layout_width="fill_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ship_title_default" />
+                android:text="@string/ship_points_default"
+                android:id="@+id/txt_ship_points"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_ship_class"
-            style="@style/textSmall"
+        <LinearLayout
+            android:id="@+id/lyt_ship_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ship_class_default" />
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/txt_ship_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/ship_title_default"
+                android:layout_gravity="top" />
+
+            <LinearLayout
+                android:id="@+id/lyt_ship_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:id="@+id/img_ship_hull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/squadron_hull" />
+
+                <TextView
+                    android:id="@+id/txt_ship_hull"
+                    style="@style/textSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="1dp"
+                    android:text="@string/ship_hull_default" />
+
+                <ImageView
+                    android:id="@+id/img_squadron_anti_dice_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/squadron_anti" />
+
+                <ImageView
+                    android:id="@+id/img_ship_squadron_dice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="15dp"
+                    android:src="@mipmap/squadron_dice" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/placeholder"
+            android:src="@mipmap/ic_launcher"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <GridLayout
+                android:id="@+id/grid_command_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:orientation="horizontal"
+                android:rowCount="2"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ship_cmd_value_default"
+                    android:id="@+id/txt_cmd_value" />
+
+                <TextView
+                    android:id="@+id/txt_command"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="1dp"
+                    android:text="CMD"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ship_sqd_value_default"
+                    android:id="@+id/txt_sqd_value" />
+
+                <TextView
+                    android:id="@+id/txt_squadrons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="SQD"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ship_eng_value_default"
+                    android:id="@+id/txt_eng_value" />
+
+                <TextView
+                    android:id="@+id/txt_engineering"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="1dp"
+                    android:text="ENG"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ship_spd_value_default"
+                    android:id="@+id/txt_spd_value" />
+
+                <TextView
+                    android:id="@+id/txt_max_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="SPD"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp" />
+            </GridLayout>
+
+            <GridLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/lyt_ship_defense"
+                android:padding="10dp"
+                android:columnCount="2"
+                android:rowCount="2">
+
+                <ImageView
+                    android:id="@+id/img_ship_defense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/brace" />
+
+                <ImageView
+                    android:id="@+id/img_ship_defense_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/brace" />
+
+                <ImageView
+                    android:id="@+id/img_ship_defense_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/brace"
+                    android:longClickable="false" />
+
+                <ImageView
+                    android:id="@+id/img_ship_defense_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/brace" />
+            </GridLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
